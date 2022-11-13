@@ -430,6 +430,8 @@ function pagBuscar() {
         
         //Metemos el formulario en el HTML
         content.appendChild(formulario)
+    
+        
 
 
 
@@ -444,14 +446,33 @@ function pagBuscar() {
 
 
 
-
-
-
-
-
+        function busqueda(){
+            var input = getElementById("busq").value;
+    
+            for(i=0; i<listaIngredientes; i++){
+                if (listaIngredientes[i] == input){
+                    alert(listaIngredientes[i]);
+                    return;    
+                }
+            alert("Este ingrediente no ha sido añadido");    
+            }
+            
+        }
+       }
 
     }
-}
+
+
+    
+    
+    
+    
+    
+    
+    
+
+
+
 
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
