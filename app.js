@@ -427,44 +427,43 @@ function pagBuscar() {
         BusqGroup.appendChild(BusqLabel)
         BusqGroup.appendChild(BusqInput)
         formulario.appendChild(BusqGroup)
-        
-        //Metemos el formulario en el HTML
+    
+        //SUBMIT
+        let submitButton = document.createElement("button")
+        submitButton.setAttribute('type', 'button')  
+        submitButton.setAttribute('class', 'btn btn-default')  
+        submitButton.setAttribute('onclick', 'busqueda()')  
+        submitButton.innerText = 'Enviar'
+        //SUBMIT        
+
+        formulario.appendChild(submitButton)
         content.appendChild(formulario)
-    
-        
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        function busqueda(){
-            var input = getElementById("busq").value;
-    
-            for(i=0; i<listaIngredientes; i++){
-                if (listaIngredientes[i] == input){
-                    alert(listaIngredientes[i]);
-                    return;    
-                }
-            alert("Este ingrediente no ha sido añadido");    
-            }
-            
-        }
        }
 
     }
 
-
-    
-    
+    function busqueda(){
+        let input = document.getElementById("busq").value;
+        let ingrediente = document.createElement("ul")
+        let receta = document.createElement("ul")
+        for (i=0; i<listaIngredientes.length; i++) {  
+            if (listaIngredientes[i].getName() === input){
+                    var ingfounded = document.createElement("li")
+                    ingfounded.innerText=listaIngredientes[i].getName()
+                    ingrediente.appendChild(ingfounded)
+                }                
+            }  
+        for (i=0; i<listaRecetas.length; i++) {   
+            if (listaRecetas[i].getName() === input){  
+                var recfounded = document.createElement("li")
+                recfounded.innerText=listaRecetas[i].getName()
+                receta.appendChild(recfounded)              
+            }   
+        content.appendChild(ingrediente)
+        content.appendChild(receta)
+    }
+}
     
     
     
