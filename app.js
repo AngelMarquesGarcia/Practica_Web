@@ -2,10 +2,11 @@
 // para que se vean las recetas al cargar la pagina, debemos usar el operador $, que llame a pagRecetas
 
 class objReceta {
-    constructor(n, d, i){
+    constructor(n, d, i,f){
         this.nombre=n
         this.descripcion=d
         this.ingredientes=i
+        this.foto=f
         }
 
     getName(){
@@ -82,10 +83,14 @@ function pagRecetas() {
         var elemento = document.createElement("div")
         elemento.setAttribute("class",  "receta")
         elemento.setAttribute("onclick",  "mostrarReceta("+i+")")
-        let nombre = document.createElement("h2")
+        let foto = document.createElement("img")
+        foto.setAttribute('src',listaRecetas[i].foto)
+        foto.setAttribute('class', 'img-responsive')
+        elemento.appendChild(foto)
+        let nombre = document.createElement("h2")                 //nombre
         nombre.innerText = listaRecetas[i].getName() 
         elemento.appendChild(nombre)
-        let desc = document.createElement("p")
+        let desc = document.createElement("p")                    //descripcion
         desc.innerText = listaRecetas[i].getDescription()
         elemento.appendChild(desc)
         elementos.appendChild(elemento)
@@ -234,6 +239,14 @@ function pagCrearReceta() {
         formulario.appendChild(descGroup)
         //DESCRIPCION
 
+        //FOTO
+        let foto = document.createElement("input")           //CAMPO DE LA DESCRIPCION
+        foto.setAttribute('type', 'file')                    //Type
+        foto.setAttribute('id', 'fotoInput')                 //Id
+        foto.setAttribute('accept', 'image/png, image/jpeg') //accept
+        //FOTO
+
+
         //INGREDIENTES
         let ingGroup = document.createElement("div")
         ingGroup.setAttribute('class', 'form-group') 
@@ -277,7 +290,18 @@ function pagCrearReceta() {
 function crearReceta(){
     let nombre = document.getElementById('rName').value
     let descripcion = document.getElementById('rDesc').value
+    let foto = document.getElementById('fotoInput')
     let ingredientes = []
+
+    foto = undefinedLocation //////////////////////////////CAMBIAR ESTO CUANDO DESCUBRAMOS COMO UTILIZAR IMAGENES SUBIDAS POR EL USUARIO
+
+    for (rec of listaRecetas){
+        if (rec.getName()===nombre) {
+            if (!confirm('Ya existe una receta con ese nombre, ¿seguro que quieres crear otra?')){
+            return}
+        }
+    }
+
     let n=0
     for (let i=0;i<listaIngredientes.length;i++){
         var ingrediente = document.getElementById('ing'+i)
@@ -292,7 +316,7 @@ function crearReceta(){
         alert('Ambos campos deben estar rellenos')
     } else if (ingredientes.length==0){alert('La receta debe tener al menos un ingrediente')
     } else {
-        let receta = new objReceta(nombre,descripcion, ingredientes)
+        let receta = new objReceta(nombre,descripcion, ingredientes, foto)
         listaRecetas[listaRecetas.length] = receta
     }
 
@@ -379,6 +403,12 @@ function pagCrearIngrediente() {
 function crearIngrediente(){
     let nombre = document.getElementById('iName').value
     let descripcion = document.getElementById('iDesc').value
+    for (ing of listaIngredientes){
+        if (ing.getName()===nombre) {
+            alert('Ya existe un ingredinete con ese nombre')
+            return
+        }
+    }
     if (nombre==='' || descripcion===''){
         alert('Ambos campos deben estar rellenos')
     } else {
@@ -478,17 +508,24 @@ function pagBuscar() {
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
+let undefinedLocation = 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/undefined.jpeg'
+
 let miel = new objIngrediente("miel","dulce, pegajosa")
 let curry = new objIngrediente("Curry","to rico, ligeramente picante")
 let pollo = new objIngrediente("Pollo","genérico. Incinera cualquier cosa que toque mientras esté crudo")
 let avena = new objIngrediente("Avena","Excelente para desayunos")
-let listaIngredientes = [miel, curry, pollo, avena]
+let bistec = new objIngrediente("Bistec","De alta calidad, mejor dejar medio crudo")
+let harina = new objIngrediente("Harina","Imprescindible para bollos y panes")
+let leche = new objIngrediente("Leche","Universal bebida de desayuno")
+let patatasFritas = new objIngrediente("Patatas Fritas","El mejor acompañante jamás creado")
+
+let listaIngredientes = [miel, curry, pollo, avena, bistec, harina, leche, patatasFritas]
 
 
-let a = new objReceta("a","a",[listaIngredientes[0].getName()])
-let b = new objReceta("b","b",[listaIngredientes[1].getName()])
-let c = new objReceta("c","c",[listaIngredientes[2].getName()])
-let d = new objReceta("d","d",[listaIngredientes[3].getName()])
+let a = new objReceta("Pollo al Curry","Pollo con curry, suele ir acompañado de arroz",[listaIngredientes[1].getName(),listaIngredientes[2].getName()], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/pollo al curry.jpg')
+let b = new objReceta("Desayuno de Avena","Avena con leche y miel, llena más de lo que esperarías. Sientete libre de acompañarlo con frutas de cualquier tipo",[listaIngredientes[3].getName(),listaIngredientes[6].getName(), listaIngredientes[0].getName()], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/avena.png')
+let c = new objReceta("Pollo con patatas al horno","Algo simple, para cuando vas corto de tiempo",[listaIngredientes[2].getName(),listaIngredientes[2].getName(7)], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/Pollo con patatas.jpg')
+let d = new objReceta("Bistec con patatas","Recomendamos acompañarlo de alguna salsa sencillita",[listaIngredientes[4].getName(),listaIngredientes[2].getName(7)], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/bistec.jpg')
 let listaRecetas = [a,b,c,d]
 
 
