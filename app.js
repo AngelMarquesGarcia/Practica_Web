@@ -191,18 +191,126 @@ function pagCrearReceta() {
 
 
 function pagCrearIngrediente() {
-    setActiveNavTab('crearIngrediente')
+    let tab = document.getElementById('crearIngrediente') 
+    
+    if (tab.getAttribute("class") == 'inactive'){
+    
+    
+        //making the active nav-tab show properly
+        setActiveNavTab('crearIngrediente')
+        //making the active nav-tab show properly
 
-    let content = document.getElementById('content');
-    content.innerHTML = 'Crear Ingrediente' 
+        let content = document.getElementById('content')
+        content.innerHTML = ""
+        //quitar todo el contenido anterior
+
+        let titulo = document.createElement("h2")
+        titulo.innerText = 'Crea un nuevo Ingrediente!'
+        content.appendChild(titulo)
+        
+
+        //Creamos el formulario
+        let formulario = document.createElement("form")
+        formulario.setAttribute('role', 'form')
+        
+        //Creamos el campo de texto donde introducir el nombre
+        let nameGroup = document.createElement("div")
+        nameGroup.setAttribute('class', 'form-group') 
+        let nameLabel = document.createElement("label")
+        nameLabel.setAttribute('for', 'name')  
+        nameLabel.innerText = 'Nombre: '    
+        let nameInput = document.createElement("input")
+        nameInput.setAttribute('type', 'text')  
+        nameInput.setAttribute('class', 'form-control')
+        nameInput.setAttribute('id', 'name')
+        nameInput.setAttribute('placeholder', 'Un nombre bonito')
+
+        //Hacemos que el campo de nombre pertenezca a el formulario
+        nameGroup.appendChild(nameLabel)
+        nameGroup.appendChild(nameInput)
+        formulario.appendChild(nameGroup)
+
+        //Creamos el campo de texto donde introducir el descripción
+        let descGroup = document.createElement("div")
+        descGroup.setAttribute('class', 'form-group') 
+        let descLabel = document.createElement("label")
+        descLabel.setAttribute('for', 'desc')  
+        descLabel.innerText = 'Descripción: '    
+        let descInput = document.createElement("input")
+        descInput.setAttribute('type', 'text')  
+        descInput.setAttribute('class', 'form-control')
+        descInput.setAttribute('id', 'desc')
+        descInput.setAttribute('placeholder', 'Una descripción detallada')
+
+        //Hacemos que el campo de descripción pertenezca a el formulario
+        descGroup.appendChild(descLabel)
+        descGroup.appendChild(descInput)
+        formulario.appendChild(descGroup)
+        
+        //Metemos el formulario en el HTML
+        content.appendChild(formulario)
+
+    }
 }
 
 
 function pagBuscar() {
-    setActiveNavTab('buscar')
+    let tab = document.getElementById('buscar') 
 
-    let content = document.getElementById('content');
-    content.innerHTML = 'Buscar' 
+    if (tab.getAttribute("class") == 'inactive'){
+    
+    
+        //making the active nav-tab show properly
+        setActiveNavTab('buscar')
+        //making the active nav-tab show properly
+
+        let content = document.getElementById('content')
+        content.innerHTML = ""
+        //quitar todo el contenido anterior
+
+        //Creamos el formulario
+        let formulario = document.createElement("form")
+        formulario.setAttribute('role', 'form')
+        
+        let BusqGroup = document.createElement("div")
+        BusqGroup.setAttribute('class', 'form-group') 
+        let BusqLabel = document.createElement("label")
+        BusqLabel.setAttribute('for', 'busq')  
+        BusqLabel.innerText = 'Busca: '    
+        let BusqInput = document.createElement("input")
+        BusqInput.setAttribute('type', 'search')  
+        BusqInput.setAttribute('class', 'form-control')
+        BusqInput.setAttribute('id', 'busq')
+        BusqInput.setAttribute('placeholder', 'Busca un ingrediente o una receta')
+
+        //Hacemos que el campo de busqueda pertenezca a el formulario
+        BusqGroup.appendChild(BusqLabel)
+        BusqGroup.appendChild(BusqInput)
+        formulario.appendChild(BusqGroup)
+        
+        //Metemos el formulario en el HTML
+        content.appendChild(formulario)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 }
 
 let miel = new objIngrediente("miel","dulce, pegajosa")
