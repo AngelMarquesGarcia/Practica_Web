@@ -66,6 +66,9 @@ function pagRecetas() {
     let content = document.getElementById('content')
     
     content.innerHTML = ""
+    let titulo = document.createElement("h2")
+    titulo.innerText = '¡He aquí tus preciadas recetas!'
+    content.appendChild(titulo)
 
     var elementos = document.createElement("div")
     elementos.setAttribute("class",  "wrapper")
@@ -126,10 +129,51 @@ function pagIngredientes() {
 }
 
 function pagCrearReceta() {
-    setActiveNavTab('crearReceta')
+    let tab = document.getElementById('crearReceta') 
+    
+    if (tab.getAttribute("class") == 'inactive'){
+    
+    
+        //making the active nav-tab show properly
+        setActiveNavTab('crearReceta')
+        //making the active nav-tab show properly
 
-    let content = document.getElementById('content');
-    content.innerHTML = 'Crear Receta' 
+        let content = document.getElementById('content')
+        content.innerHTML = ""
+
+        let titulo = document.createElement("h2")
+        titulo.innerText = 'Crea una nueva receta!'
+        content.appendChild(titulo)
+
+        let formulario = document.createElement("form")
+        formulario.setAttribute('role', 'form')
+
+        let nameGroup = document.createElement("div")
+        nameGroup.setAttribute('class', 'form-group') 
+        let nameLabel = document.createElement("label")
+        nameLabel.setAttribute('for', 'name')  
+        nameLabel.innerText = 'Nombre: '    
+        let nameInput = document.createElement("input")
+        nameInput.setAttribute('type', 'text')  
+        nameInput.setAttribute('class', 'form-control')
+        nameInput.setAttribute('id', 'name')
+        nameInput.setAttribute('placeholder', 'Un nombre bonito')
+
+        nameGroup.appendChild(nameLabel)
+        nameGroup.appendChild(nameInput)
+        formulario.appendChild(nameGroup)
+        
+
+
+        let descGroup = document.createElement("div")
+        descGroup.setAttribute('class', 'form-group')  
+        
+
+        let ingGroup = document.createElement("div")
+        ingGroup.setAttribute('class', 'form-group')   
+
+
+    }
 }
 
 
