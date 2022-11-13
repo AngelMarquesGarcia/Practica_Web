@@ -85,6 +85,7 @@ function pagRecetas() {
     content.appendChild(elementos)
         
 
+
     }
 
 
@@ -92,7 +93,26 @@ function pagIngredientes() {
     setActiveNavTab('ingredientes')
 
     let content = document.getElementById('content');
-    content.innerHTML = 'Ingredientes' 
+    let a = documet.createelement("div")
+    
+    var elementos = document.createElement("div")
+    elementos.setAttribute("class", "container")
+    for(let i = 0; i < n; i++){
+        
+        var elemento = document.createElement("div")
+        let nombre = document.createElement("h3")
+        nombre.innerText = "nombre"
+        elemento.appendChild(nombre)
+        let desc = document.createElement("p")
+        desc.innerText = "descripcion"
+        elemento.appendChild(desc)
+        elementos.appendChild(elemento)
+    }
+
+
+    content.appendChild(elementos)
+
+
 }
 
 function pagCrearReceta() {
@@ -117,11 +137,6 @@ function pagBuscar() {
     let content = document.getElementById('content');
     content.innerHTML = 'Buscar' 
 }
-
-
-
-
-
 
 
 let miel = new objIngrediente("miel","dulce, pegajosa")
