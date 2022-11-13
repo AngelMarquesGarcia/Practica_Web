@@ -1,12 +1,47 @@
 
 // para que se vean las recetas al cargar la pagina, debemos usar el operador $, que llame a pagRecetas
 
+class objReceta {
+    constructor(n, d, i){
+        this.nombre=n
+        this.descripcion=d
+        this.ingredientes=i
+        }
 
+    getName(){
+        return this.nombre
+    }
+    getDescription(){
+        return this.descripcion
+    }
+    getIngredientes(){
+        return this.ingredientes
+    }
+}
+
+class objIngrediente {
+
+    constructor(n, d){
+        this.nombre=n
+        this.descripcion=d
+        }
+    getName(){
+        return this.nombre
+    }
+    getDescripcion(){
+        return this.descripcion
+    }
+
+}
 
 $('Index.html').ready(function() {
+
     setActiveNavTab('recetas')
-    pagRecetas(12) // habrá que poner aquí la lista ejemplo cuando sepamos cómo
+    pagRecetas()
+    
 })
+
+   
 
 function setActiveNavTab(targetTab){ //could be done better by giving current and previous tab, so that only the previous tab is accesed and disabled
     let tabs = ['recetas', 'ingredientes', 'crearReceta', 'crearIngrediente', 'buscar']
@@ -21,7 +56,7 @@ function setActiveNavTab(targetTab){ //could be done better by giving current an
     content.setAttribute("class",  "active")
 }
 
-function pagRecetas(n) {
+function pagRecetas() {
 
     //making the active nav-tab show properly
     setActiveNavTab('recetas')
@@ -32,15 +67,15 @@ function pagRecetas(n) {
 
     var elementos = document.createElement("div")
     elementos.setAttribute("class",  "wrapper")
-    for (let i = 0; i < n; i++){
+    for (let i = 0; i < listaRecetas.length; i++){
 
         var elemento = document.createElement("div")
         elemento.setAttribute("class",  "receta")
         let nombre = document.createElement("h2")
-        nombre.innerText = "nombre" //listaRecetas[i].getName() 
+        nombre.innerText = listaRecetas[i].getName() 
         elemento.appendChild(nombre)
         let desc = document.createElement("p")
-        desc.innerText = "descripcion"//listaRecetas[i].getDescription()
+        desc.innerText = listaRecetas[i].getDescription()
         elemento.appendChild(desc)
         elementos.appendChild(elemento)
     }
@@ -86,50 +121,15 @@ function pagBuscar() {
 
 
 
-class objReceta {
-    constructor(n, d, i){
-        this.nombre=n
-        this.descripcion=d
-        this.ingredientes=i
-        }
-
-    getName(){
-        return this.nombre
-    }
-    getDescription(){
-        return this.descripcion
-    }
-    getIngredientes(){
-        return this.ingredientes
-    }
-}
-
-class objIngrediente {
-
-    constructor(n, d){
-        this.nombre=n
-        this.descripcion=d
-        }
-    getName(){
-        return this.nombre
-    }
-    getDescripcion(){
-        return this.descripcion
-    }
-
-}
-
-miel = objIngrediente.constructor("miel","dulce y pegajosa")
-a = objReceta.constructor("a","a",miel)
-b = objReceta.constructor("b","b",miel)
-c = objReceta.constructor("c","c",miel)
-d = objReceta.constructor("d","d",miel)
-
-
-listaRecetas=[a,b,c,d]
 
 
 
+let miel = new objIngrediente("miel","dulce, pegajosa")
+let a = new objReceta("a","a",miel)
+let b = new objReceta("b","b",miel)
+let c = new objReceta("c","c",miel)
+let d = new objReceta("d","d",miel)
+let listaRecetas=[a,b,c,d]
 
 
 
