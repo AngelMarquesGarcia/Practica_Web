@@ -91,7 +91,7 @@ function pagRecetas() {
     }
 
 
-function pagIngredientes(n) {
+function pagIngredientes() {
     let tab = document.getElementById('ingredientes') 
     
     if (tab.getAttribute("class") == 'inactive'){
@@ -101,25 +101,24 @@ function pagIngredientes(n) {
 
     let content = document.getElementById('content');
     content.innerHTML = ""
-    
     var elementos = document.createElement("div")
     elementos.setAttribute("class", "container")
-    for(let i = 0; i < n; i++){
+    elementos.setAttribute("class", "scrollbar")
+    for(let ingrediente of listaIngredientes){
         
     var elemento = document.createElement("div") //creamos el "ingrediente"
     elemento.setAttribute("class",  "ingrediente")
 
     let nombre = document.createElement("h3") //damos nombre al ingrediente
-    nombre.innerText = "nombre"
+    nombre.innerText = ingrediente.getName()
     elemento.appendChild(nombre)
 
     let desc = document.createElement("p") //damos desc al ingrediente
-    desc.innerText = "descripcion"
+    desc.innerText = ingrediente.getDescripcion()
     elemento.appendChild(desc)
 
     elementos.appendChild(elemento) //añadimos el ingrediente a la lista
     }
-
 
     content.appendChild(elementos)
 }
@@ -154,7 +153,7 @@ let curry = new objIngrediente("Curry","to rico, ligeramente picante")
 let pollo = new objIngrediente("Pollo","genérico. Incinera cualquier cosa que toque mientras esté crudo")
 let avena = new objIngrediente("Avena","Excelente para desayunos")
 let pollas = new objIngrediente("Pollas","La comida preferida de Daniel")
-let listaIngredientes = [miel, curry, pollo, avena, pollas]
+let listaIngredientes = [miel, curry, pollo, avena, pollas, pollas]
 
 
 let a = new objReceta("a","a",listaIngredientes[0])

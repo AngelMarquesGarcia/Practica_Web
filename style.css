@@ -27,9 +27,13 @@
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+  border:2px solid;
 }
 
   .scrollbar{
-    overflow-y: auto;
+    margin: 20px;
+    border: 5px solid;
+    overflow-y: scroll;
     overflow-x: hidden;
+    height: 400px;
   }
