@@ -148,12 +148,13 @@ function pagCrearReceta() {
         let formulario = document.createElement("form")
         formulario.setAttribute('role', 'form')
 
+        //NOMBRE
         let nameGroup = document.createElement("div")
         nameGroup.setAttribute('class', 'form-group') 
-        let nameLabel = document.createElement("label")
+        let nameLabel = document.createElement("label") //ETIQUETA DEL NOMBRE
         nameLabel.setAttribute('for', 'name')  
         nameLabel.innerText = 'Nombre: '    
-        let nameInput = document.createElement("input")
+        let nameInput = document.createElement("input") //CAMPO DEL NOMBRE
         nameInput.setAttribute('type', 'text')  
         nameInput.setAttribute('class', 'form-control')
         nameInput.setAttribute('id', 'name')
@@ -162,13 +163,15 @@ function pagCrearReceta() {
         nameGroup.appendChild(nameLabel)
         nameGroup.appendChild(nameInput)
         formulario.appendChild(nameGroup)
-    
+        //NOMBRE
+
+        //DESCRIPCION
         let descGroup = document.createElement("div")
         descGroup.setAttribute('class', 'form-group') 
-        let descLabel = document.createElement("label")
+        let descLabel = document.createElement("label") //ETIQUETA DE LA DESCRIPCION
         descLabel.setAttribute('for', 'desc')  
         descLabel.innerText = 'Descripción: '    
-        let descInput = document.createElement("input")
+        let descInput = document.createElement("input") //CAMPO DE LA DESCRIPCION
         descInput.setAttribute('type', 'text')  
         descInput.setAttribute('class', 'form-control')
         descInput.setAttribute('id', 'desc')
@@ -177,13 +180,32 @@ function pagCrearReceta() {
         descGroup.appendChild(descLabel)
         descGroup.appendChild(descInput)
         formulario.appendChild(descGroup)
-        
+        //DESCRIPCION
+
+        let ingGroup = document.createElement("div")
+        ingGroup.setAttribute('class', 'form-group') 
+
+        for (let i=0;i<listaIngredientes.length;i++){
+            var ingLabel = document.createElement("label")
+            ingLabel.setAttribute('for', 'ing'+i)  
+            ingLabel.innerText = listaIngredientes[i].getName() 
+            var ingInput = document.createElement("input")
+            ingInput.setAttribute('type', 'checkbox')  
+            ingInput.setAttribute('id', 'ing'+i)  
+            ingInput.setAttribute('value', i)  
+
+            ingGroup.appendChild(ingLabel)
+            ingGroup.appendChild(ingInput)
+
+        }
+
+
+
+        formulario.appendChild(ingGroup)
         
         content.appendChild(formulario)
         
 
-        let ingGroup = document.createElement("div")
-        ingGroup.setAttribute('class', 'form-group')   
 
 
     }
@@ -210,7 +232,7 @@ let curry = new objIngrediente("Curry","to rico, ligeramente picante")
 let pollo = new objIngrediente("Pollo","genérico. Incinera cualquier cosa que toque mientras esté crudo")
 let avena = new objIngrediente("Avena","Excelente para desayunos")
 let pollas = new objIngrediente("Pollas","La comida preferida de Daniel")
-let listaIngredientes = [miel, curry, pollo, avena, pollas, pollas]
+let listaIngredientes = [miel, curry, pollo, avena, pollas, pollas, miel, pollo, avena]
 
 
 let a = new objReceta("a","a",listaIngredientes[0])
