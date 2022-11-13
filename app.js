@@ -48,11 +48,16 @@ function setActiveNavTab(targetTab){ //could be done better by giving current an
         let content = document.getElementById(tab) //previously tabs[i]
         content.setAttribute("class",  "inactive")
     } 
-    
+    if (targetTab==='disable'){return}else{ ////////////////////////////////////////////////////SE HAY QUE MIRAR ESTO
     let content = document.getElementById(targetTab) //makes current tab active
-    content.setAttribute("class",  "active")
+    content.setAttribute("class",  "active")}
 }
 
+////////////////////////////////////////////////////////////////MOSTRAR RECETA/INGREDIENTE////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////MOSTRAR RECETA/INGREDIENTE////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////MOSTRAR RECETA/INGREDIENTE////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////MOSTRAR RECETA/INGREDIENTE////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////MOSTRAR RECETA/INGREDIENTE////////////////////////////////////////////////////////////////
 function pagRecetas() {
     let tab = document.getElementById('recetas') 
     
@@ -76,6 +81,7 @@ function pagRecetas() {
 
         var elemento = document.createElement("div")
         elemento.setAttribute("class",  "receta")
+        elemento.setAttribute("onclick",  "mostrarReceta("+i+")")
         let nombre = document.createElement("h2")
         nombre.innerText = listaRecetas[i].getName() 
         elemento.appendChild(nombre)
@@ -128,6 +134,52 @@ function pagIngredientes() {
 
 }
 
+function mostrarReceta(i){
+    setActiveNavTab('disable')
+    let content = document.getElementById('content')
+    content.innerHTML = ''
+    
+    var elemento = document.createElement("div")
+    elemento.setAttribute("class",  "receta")
+
+    //añadir nombre
+    let nombre = document.createElement("h2")
+    nombre.innerText = listaRecetas[i].getName() 
+    elemento.appendChild(nombre)
+    
+    //añadir descripcion
+    let desc = document.createElement("p")
+    desc.innerText = listaRecetas[i].getDescription()
+    elemento.appendChild(desc)
+
+    //Añadir ingredientes
+    let ingredientes = document.createElement("ul")
+    for (let ing of listaRecetas[i].ingredientes){
+        console.log(ing)
+        var ingrediente = document.createElement("li")
+        ingrediente.innerText=ing
+        ingredientes.appendChild(ingrediente)
+    }
+    elemento.appendChild(ingredientes)
+
+
+
+    let goBackButton = document.createElement("button")
+    goBackButton.setAttribute("type",  "button")
+    goBackButton.setAttribute("onclick",  "pagRecetas()")
+    goBackButton.innerText = 'Volver'
+    content.appendChild(elemento)
+    content.appendChild(goBackButton)
+
+
+    
+
+}
+////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
 function pagCrearReceta() {
     let tab = document.getElementById('crearReceta') 
     
@@ -155,10 +207,10 @@ function pagCrearReceta() {
         nameLabel.setAttribute('for', 'name')  
         nameLabel.innerText = 'Nombre: '    
         let nameInput = document.createElement("input") //CAMPO DEL NOMBRE
-        nameInput.setAttribute('type', 'text')  
-        nameInput.setAttribute('class', 'form-control')
-        nameInput.setAttribute('id', 'name')
-        nameInput.setAttribute('placeholder', 'Un nombre bonito')
+        nameInput.setAttribute('type', 'text')          //Type
+        nameInput.setAttribute('class', 'form-control') //Class
+        nameInput.setAttribute('id', 'rName')            //Id
+        nameInput.setAttribute('placeholder', 'Un nombre bonito') //Placeholder
 
         nameGroup.appendChild(nameLabel)
         nameGroup.appendChild(nameInput)
@@ -172,16 +224,17 @@ function pagCrearReceta() {
         descLabel.setAttribute('for', 'desc')  
         descLabel.innerText = 'Descripción: '    
         let descInput = document.createElement("input") //CAMPO DE LA DESCRIPCION
-        descInput.setAttribute('type', 'text')  
-        descInput.setAttribute('class', 'form-control')
-        descInput.setAttribute('id', 'desc')
-        descInput.setAttribute('placeholder', 'Una descripción detallada')
+        descInput.setAttribute('type', 'text')          //Type
+        descInput.setAttribute('class', 'form-control') //Class
+        descInput.setAttribute('id', 'rDesc')            //Id
+        descInput.setAttribute('placeholder', 'Una descripción detallada') //Placeholder
 
         descGroup.appendChild(descLabel)
         descGroup.appendChild(descInput)
         formulario.appendChild(descGroup)
         //DESCRIPCION
 
+        //INGREDIENTES
         let ingGroup = document.createElement("div")
         ingGroup.setAttribute('class', 'form-group') 
 
@@ -189,20 +242,30 @@ function pagCrearReceta() {
             var ingLabel = document.createElement("label")
             ingLabel.setAttribute('for', 'ing'+i)  
             ingLabel.innerText = listaIngredientes[i].getName() 
-            var ingInput = document.createElement("input")
-            ingInput.setAttribute('type', 'checkbox')  
-            ingInput.setAttribute('id', 'ing'+i)  
-            ingInput.setAttribute('value', i)  
+            var ingInput = document.createElement("input")      
+            ingInput.setAttribute('type', 'checkbox')           //Type
+            ingInput.setAttribute('id', 'ing'+i)                //Id
+            ingInput.setAttribute('value', i)                   //Value
 
-            ingGroup.appendChild(ingLabel)
+            
             ingGroup.appendChild(ingInput)
-
+            ingGroup.appendChild(ingLabel)
+            ingGroup.appendChild(document.createElement("br"))
         }
-
-
-
-        formulario.appendChild(ingGroup)
         
+        formulario.appendChild(ingGroup)
+        //INGREDIENTES
+
+
+        //SUBMIT
+        let submitButton = document.createElement("button")
+        submitButton.setAttribute('type', 'reset')
+        submitButton.setAttribute('class', 'btn btn-default')  
+        submitButton.setAttribute('onclick', 'crearReceta()')  
+        submitButton.innerText = 'Enviar'
+        //SUBMIT
+        formulario.appendChild(submitButton)
+
         content.appendChild(formulario)
         
 
@@ -211,7 +274,34 @@ function pagCrearReceta() {
     }
 }
 
+function crearReceta(){
+    let nombre = document.getElementById('rName').value
+    let descripcion = document.getElementById('rDesc').value
+    let ingredientes = []
+    let n=0
+    for (let i=0;i<listaIngredientes.length;i++){
+        var ingrediente = document.getElementById('ing'+i)
+        if (ingrediente.checked){
+            ingredientes[n] = listaIngredientes[ingrediente.value].getName()
+            n++
+        }
+    }
 
+
+    if (nombre==='' || descripcion==='' ){
+        alert('Ambos campos deben estar rellenos')
+    } else if (ingredientes.length==0){alert('La receta debe tener al menos un ingrediente')
+    } else {
+        let receta = new objReceta(nombre,descripcion, ingredientes)
+        listaRecetas[listaRecetas.length] = receta
+    }
+
+}
+////////////////////////////////////////////////////////////////CREAR INGREDIENTE////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////CREAR INGREDIENTE////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////CREAR INGREDIENTE////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////CREAR INGREDIENTE////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////CREAR INGREDIENTE////////////////////////////////////////////////////////////////
 function pagCrearIngrediente() {
     let tab = document.getElementById('crearIngrediente') 
     
@@ -244,7 +334,7 @@ function pagCrearIngrediente() {
         let nameInput = document.createElement("input")
         nameInput.setAttribute('type', 'text')  
         nameInput.setAttribute('class', 'form-control')
-        nameInput.setAttribute('id', 'name')
+        nameInput.setAttribute('id', 'iName')
         nameInput.setAttribute('placeholder', 'Un nombre bonito')
 
         //Hacemos que el campo de nombre pertenezca a el formulario
@@ -261,13 +351,24 @@ function pagCrearIngrediente() {
         let descInput = document.createElement("input")
         descInput.setAttribute('type', 'text')  
         descInput.setAttribute('class', 'form-control')
-        descInput.setAttribute('id', 'desc')
+        descInput.setAttribute('id', 'iDesc')
         descInput.setAttribute('placeholder', 'Una descripción detallada')
+
+
+        //SUBMIT
+        let submitButton = document.createElement("button")
+        submitButton.setAttribute('type', 'reset')  
+        submitButton.setAttribute('class', 'btn btn-default')  
+        submitButton.setAttribute('onclick', 'crearIngrediente()')  
+        submitButton.innerText = 'Enviar'
+        //SUBMIT
 
         //Hacemos que el campo de descripción pertenezca a el formulario
         descGroup.appendChild(descLabel)
         descGroup.appendChild(descInput)
+        descGroup.appendChild(submitButton)
         formulario.appendChild(descGroup)
+        
         
         //Metemos el formulario en el HTML
         content.appendChild(formulario)
@@ -275,6 +376,23 @@ function pagCrearIngrediente() {
     }
 }
 
+function crearIngrediente(){
+    let nombre = document.getElementById('iName').value
+    let descripcion = document.getElementById('iDesc').value
+    if (nombre==='' || descripcion===''){
+        alert('Ambos campos deben estar rellenos')
+    } else {
+        let ingrediente = new objIngrediente(nombre,descripcion)
+        listaIngredientes[listaIngredientes.length] = ingrediente
+    }
+
+}
+
+////////////////////////////////////////////////////////////////BUSCAR////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////BUSCAR////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////BUSCAR////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////BUSCAR////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////BUSCAR////////////////////////////////////////////////////////////////
 
 function pagBuscar() {
     let tab = document.getElementById('buscar') 
@@ -335,18 +453,22 @@ function pagBuscar() {
     }
 }
 
+////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
 let miel = new objIngrediente("miel","dulce, pegajosa")
 let curry = new objIngrediente("Curry","to rico, ligeramente picante")
 let pollo = new objIngrediente("Pollo","genérico. Incinera cualquier cosa que toque mientras esté crudo")
 let avena = new objIngrediente("Avena","Excelente para desayunos")
-let pollas = new objIngrediente("Pollas","La comida preferida de Daniel")
-let listaIngredientes = [miel, curry, pollo, avena, pollas, pollas, miel, pollo, avena]
+let listaIngredientes = [miel, curry, pollo, avena]
 
 
-let a = new objReceta("a","a",listaIngredientes[0])
-let b = new objReceta("b","b",listaIngredientes[1])
-let c = new objReceta("c","c",listaIngredientes[2])
-let d = new objReceta("d","d",listaIngredientes[3])
+let a = new objReceta("a","a",[listaIngredientes[0].getName()])
+let b = new objReceta("b","b",[listaIngredientes[1].getName()])
+let c = new objReceta("c","c",[listaIngredientes[2].getName()])
+let d = new objReceta("d","d",[listaIngredientes[3].getName()])
 let listaRecetas = [a,b,c,d]
 
 
