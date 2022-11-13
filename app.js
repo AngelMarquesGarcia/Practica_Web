@@ -162,11 +162,24 @@ function pagCrearReceta() {
         nameGroup.appendChild(nameLabel)
         nameGroup.appendChild(nameInput)
         formulario.appendChild(nameGroup)
-        
-
-
+    
         let descGroup = document.createElement("div")
-        descGroup.setAttribute('class', 'form-group')  
+        descGroup.setAttribute('class', 'form-group') 
+        let descLabel = document.createElement("label")
+        descLabel.setAttribute('for', 'desc')  
+        descLabel.innerText = 'Descripción: '    
+        let descInput = document.createElement("input")
+        descInput.setAttribute('type', 'text')  
+        descInput.setAttribute('class', 'form-control')
+        descInput.setAttribute('id', 'desc')
+        descInput.setAttribute('placeholder', 'Una descripción detallada')
+
+        descGroup.appendChild(descLabel)
+        descGroup.appendChild(descInput)
+        formulario.appendChild(descGroup)
+        
+        
+        content.appendChild(formulario)
         
 
         let ingGroup = document.createElement("div")
