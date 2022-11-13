@@ -22,3 +22,14 @@
     grid-column: span 3;
   }
   */
+  
+.container{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+  .scrollbar{
+    overflow-y: auto;
+    overflow-x: hidden;
+  }

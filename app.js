@@ -43,6 +43,7 @@ function pagRecetas(n) {
     content.appendChild(elementos)
         
 
+
     }
 
 
@@ -50,7 +51,26 @@ function pagIngredientes() {
     setActiveNavTab('ingredientes')
 
     let content = document.getElementById('content');
-    content.innerHTML = 'Ingredientes' 
+    let a = documet.createelement("div")
+    
+    var elementos = document.createElement("div")
+    elementos.setAttribute("class", "container")
+    for(let i = 0; i < n; i++){
+        
+        var elemento = document.createElement("div")
+        let nombre = document.createElement("h3")
+        nombre.innerText = "nombre"
+        elemento.appendChild(nombre)
+        let desc = document.createElement("p")
+        desc.innerText = "descripcion"
+        elemento.appendChild(desc)
+        elementos.appendChild(elemento)
+    }
+
+
+    content.appendChild(elementos)
+
+
 }
 
 function pagCrearReceta() {
@@ -87,7 +107,7 @@ class objReceta {
     getName(){
         return this.nombre
     }
-    getDescription(){
+    get Description(){
         return this.descripcion
     }
     getIngredientes(){
@@ -119,6 +139,14 @@ d = objReceta.constructor("d","d",miel)
 
 listaRecetas=[a,b,c,d]
 
+miel = objIngrediente.constructor("miel","dulce y pegajosa")
+a = objIngrediente.constructor("a","a")
+b = objIngrediente.constructor("b","b")
+c = objIngrediente.constructor("c","c")
+d = objIngrediente.constructor("d","d")
+
+
+listaIngredientes=[a,b,c,d]
 
 
 
