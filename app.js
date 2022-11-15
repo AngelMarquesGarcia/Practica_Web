@@ -485,23 +485,39 @@ function pagBuscar() {
         submitButton.setAttribute('onclick', 'busqueda()')  
         submitButton.innerText = 'Enviar'
         //SUBMIT        
+        let result = document.createElement('div')
+        result.setAttribute('id', 'result')
 
         formulario.appendChild(submitButton)
         content.appendChild(formulario)
+        content.appendChild(result)
 
        }
-
     }
+    
 
 function busqueda(){
-        let input = document.getElementById("busq").value;
+
+        let input = document.getElementById("busq").value;  
+        
+        var resultados = document.getElementById('result')
+        resultados.innerHTML = ''
+
         let ingrediente = document.createElement("ul")
         let receta = document.createElement("ul")
+
+        var titIngredientes = document.createElement('p');
+        titIngredientes.innerText = 'Ingredientes:'
+        var titRecetas = document.createElement('p');
+        titRecetas.innerText = 'Recetas:'
+
         for (i=0; i<listaIngredientes.length; i++) {  
             if (listaIngredientes[i].getName() === input){
                     var ingFound = document.createElement("li")
+                    var ingDesc = document.createElement('p')
                     ingFound.innerText=listaIngredientes[i].getName()
-                    recFound.setAttribute('onclick', 'mostrarReceta('+i+')')
+                    ingDesc.innerText=listaIngredientes[i].getDescripcion()
+                    ingFound.appendChild(ingDesc)
                     ingrediente.appendChild(ingFound)
                 }                
             }  
@@ -511,14 +527,17 @@ function busqueda(){
                 recFound.innerText=listaRecetas[i].getName()
                 recFound.setAttribute('onclick', 'mostrarReceta('+i+')')
                 receta.appendChild(recFound)              
-            }   
-        content.appendChild(ingrediente)
-        content.appendChild(receta)
+            } 
+        resultados.appendChild(titIngredientes)  
+        resultados.appendChild(ingrediente)
+        resultados.appendChild(titRecetas) 
+        resultados.appendChild(receta)
+        content.appendChild(resultados)
     }
 }
+
     
-    
-    
+
     
     
 
