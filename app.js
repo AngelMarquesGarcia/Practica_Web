@@ -479,16 +479,18 @@ function pagBuscar() {
         let receta = document.createElement("ul")
         for (i=0; i<listaIngredientes.length; i++) {  
             if (listaIngredientes[i].getName() === input){
-                    var ingfounded = document.createElement("li")
-                    ingfounded.innerText=listaIngredientes[i].getName()
-                    ingrediente.appendChild(ingfounded)
+                    var ingFound = document.createElement("li")
+                    ingFound.innerText=listaIngredientes[i].getName()
+                    recFound.setAttribute('onclick', 'mostrarReceta('+i+')')
+                    ingrediente.appendChild(ingFound)
                 }                
             }  
         for (i=0; i<listaRecetas.length; i++) {   
             if (listaRecetas[i].getName() === input){  
-                var recfounded = document.createElement("li")
-                recfounded.innerText=listaRecetas[i].getName()
-                receta.appendChild(recfounded)              
+                var recFound = document.createElement("li")
+                recFound.innerText=listaRecetas[i].getName()
+                recFound.setAttribute('onclick', 'mostrarReceta('+i+')')
+                receta.appendChild(recFound)              
             }   
         content.appendChild(ingrediente)
         content.appendChild(receta)
