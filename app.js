@@ -18,6 +18,9 @@ class objReceta {
     getIngredientes(){
         return this.ingredientes
     }
+    getFoto(){
+        return this.foto
+    }
 }
 
 class objIngrediente {
@@ -147,6 +150,11 @@ function mostrarReceta(i){
     var elemento = document.createElement("div")
     elemento.setAttribute("class",  "receta")
 
+    //añadir foto
+    let foto = document.createElement("img")
+    foto.setAttribute('src', listaRecetas[i].getFoto()) 
+    elemento.appendChild(foto)
+
     //añadir nombre
     let nombre = document.createElement("h2")
     nombre.innerText = listaRecetas[i].getName() 
@@ -209,7 +217,7 @@ function pagCrearReceta() {
         let nameGroup = document.createElement("div")
         nameGroup.setAttribute('class', 'form-group') 
         let nameLabel = document.createElement("label") //ETIQUETA DEL NOMBRE
-        nameLabel.setAttribute('for', 'name')  
+        nameLabel.setAttribute('for', 'rName')  
         nameLabel.innerText = 'Nombre: '    
         let nameInput = document.createElement("input") //CAMPO DEL NOMBRE
         nameInput.setAttribute('type', 'text')          //Type
@@ -226,7 +234,7 @@ function pagCrearReceta() {
         let descGroup = document.createElement("div")
         descGroup.setAttribute('class', 'form-group') 
         let descLabel = document.createElement("label") //ETIQUETA DE LA DESCRIPCION
-        descLabel.setAttribute('for', 'desc')  
+        descLabel.setAttribute('for', 'rDesc')  
         descLabel.innerText = 'Descripción: '    
         let descInput = document.createElement("input") //CAMPO DE LA DESCRIPCION
         descInput.setAttribute('type', 'text')          //Type
@@ -240,10 +248,20 @@ function pagCrearReceta() {
         //DESCRIPCION
 
         //FOTO
-        let foto = document.createElement("input")           //CAMPO DE LA DESCRIPCION
-        foto.setAttribute('type', 'file')                    //Type
-        foto.setAttribute('id', 'fotoInput')                 //Id
-        foto.setAttribute('accept', 'image/png, image/jpeg') //accept
+        let fotoGroup = document.createElement("div")
+        fotoGroup.setAttribute('class', 'form-group') 
+        let fotoLabel = document.createElement("label") //ETIQUETA DE LA DESCRIPCION
+        fotoLabel.setAttribute('for', 'rFoto')  
+        fotoLabel.innerText = 'Introduzca la URL de una foto (opcional): '    
+        let fotoInput = document.createElement("input") //CAMPO DE LA DESCRIPCION
+        fotoInput.setAttribute('type', 'text')          //Type
+        fotoInput.setAttribute('class', 'form-control') //Class
+        fotoInput.setAttribute('id', 'rFoto')            //Id
+        fotoInput.setAttribute('placeholder', 'https://imagenes.20minutos.es/uploads/imagenes/2020/06/19/rick-astley-en-su-cancion-never-gonna-give-you-up.gif') //Placeholder
+
+        fotoGroup.appendChild(fotoLabel)
+        fotoGroup.appendChild(fotoInput)
+        formulario.appendChild(fotoGroup)
         //FOTO
 
 
@@ -290,10 +308,12 @@ function pagCrearReceta() {
 function crearReceta(){
     let nombre = document.getElementById('rName').value
     let descripcion = document.getElementById('rDesc').value
-    let foto = document.getElementById('fotoInput')
+    let foto = document.getElementById('rFoto').value
     let ingredientes = []
 
-    foto = undefinedLocation //////////////////////////////CAMBIAR ESTO CUANDO DESCUBRAMOS COMO UTILIZAR IMAGENES SUBIDAS POR EL USUARIO
+    if (foto === ''){
+        foto = undefinedLocation //////////////////////////////CAMBIAR ESTO CUANDO DESCUBRAMOS COMO UTILIZAR IMAGENES SUBIDAS POR EL USUARIO
+    }
 
     for (rec of listaRecetas){
         if (rec.getName()===nombre) {
@@ -473,7 +493,7 @@ function pagBuscar() {
 
     }
 
-    function busqueda(){
+function busqueda(){
         let input = document.getElementById("busq").value;
         let ingrediente = document.createElement("ul")
         let receta = document.createElement("ul")
