@@ -2,11 +2,12 @@
 // para que se vean las recetas al cargar la pagina, debemos usar el operador $, que llame a pagRecetas
 
 class objReceta {
-    constructor(n, d, i,f){
+    constructor(n, d, i,f,p){
         this.nombre=n
         this.descripcion=d
         this.ingredientes=i
         this.foto=f
+        this.pasos=p
         }
 
     getName(){
@@ -20,6 +21,9 @@ class objReceta {
     }
     getFoto(){
         return this.foto
+    }
+    getPasos(){
+        return this.pasos
     }
 }
 
@@ -165,14 +169,30 @@ function mostrarReceta(i){
     desc.innerText = listaRecetas[i].getDescription()
     elemento.appendChild(desc)
 
+    //Añadir pasos
+    let pasosTitulo = document.createElement("h3")
+    pasosTitulo.innerText = 'Pasos:'
+
+    let pasos = document.createElement("ol")
+    for (let p of listaRecetas[i].getPasos()){
+        var paso = document.createElement("li")
+        paso.innerText=p
+        pasos.appendChild(paso)
+    }
+    elemento.appendChild(pasosTitulo)
+    elemento.appendChild(pasos)
+
     //Añadir ingredientes
+    let ingTitulo = document.createElement("h3")
+    ingTitulo.innerText = 'Ingredientes:'
+
     let ingredientes = document.createElement("ul")
-    for (let ing of listaRecetas[i].ingredientes){
-        console.log(ing)
+    for (let ing of listaRecetas[i].getIngredientes()){
         var ingrediente = document.createElement("li")
         ingrediente.innerText=ing
         ingredientes.appendChild(ingrediente)
     }
+    elemento.appendChild(ingTitulo)
     elemento.appendChild(ingredientes)
 
 
@@ -264,6 +284,40 @@ function pagCrearReceta() {
         formulario.appendChild(fotoGroup)
         //FOTO
 
+        //PASOS
+        let pasosGroup = document.createElement("div")
+        pasosGroup.setAttribute('class', 'form-group') 
+        let pasosLabel = document.createElement("label") //ETIQUETA DE LA DESCRIPCION
+        pasosLabel.setAttribute('id', 'pasosLabel')  
+        pasosLabel.setAttribute('for', 'rPasos')  
+        pasosLabel.innerText = 'Introduce el paso 1 de la receta: '    
+        let pasosInput = document.createElement("input")   //CAMPO DE LA DESCRIPCION
+        pasosInput.setAttribute('type', 'text')            //Type
+        pasosInput.setAttribute('class', 'form-control')   //Class
+        pasosInput.setAttribute('id', 'rPasos')            //Id
+        pasosInput.setAttribute('placeholder', 'Paso 1')   //Placeholder
+
+        //SUBMIT PASO
+        let submitPaso = document.createElement("button")
+        submitPaso.setAttribute('id', 'pasosBtn')
+        submitPaso.setAttribute('type', 'button')
+        submitPaso.setAttribute('class', 'btn btn-default')  
+        submitPaso.setAttribute('onclick', 'crearPaso(1)')  
+        submitPaso.innerText = 'Enviar paso 1'
+        //SUBMIT PASO
+
+        //lista de pasos
+        let pasos = document.createElement("ol")
+        pasos.setAttribute('id', 'pasosList')
+        //lista de pasos
+    
+        pasosGroup.appendChild(pasosLabel)
+        pasosGroup.appendChild(pasosInput)
+        pasosGroup.appendChild(submitPaso)
+        pasosGroup.appendChild(pasos)
+        formulario.appendChild(pasosGroup)
+        //PASOS
+
 
         //INGREDIENTES
         let ingGroup = document.createElement("div")
@@ -305,14 +359,79 @@ function pagCrearReceta() {
     }
 }
 
+function incrementarPaso(i){
+    console.log(i)
+    //cambiar label
+    let pLabel = document.getElementById('pasosLabel')
+    pLabel.innerText = 'Introduce el paso '+(i+1)+' de la receta'
+
+    //cambiar button
+    let pBtn = document.getElementById('pasosBtn')
+    pBtn.innerText = 'Enviar paso '+(i+1)
+    pBtn.setAttribute('onclick', 'crearPaso('+(i+1)+')')
+
+    //Modificar <input>
+    let inpPasos = document.getElementById('rPasos')
+    inpPasos.setAttribute('placeholder','Paso '+ (i+1))
+
+    //modificar botones de los pasos existentes si estamos eliminando
+    /////////////////////////////////////////////////////////////////////////////////////DANGER
+    asdfhgsdhsfjsfdgjfsg, Si meto 6 elementos, y borro el cuarto y luego el quinto, no lo hace bien, porque al borrar el quinto borra el paso que esté en la posición 5,
+    pero como hemos borrado antes el cuarto, no debe borrar el quinto, sino el cuarto. Para que esto funcione, debemos actualizar los botones
+    para que llamen a la función con los parámetros adecuados.
+    let pasosActualizar = document.getElementById('pasosList').children
+    if (i<pasosActualizar.length){
+        for (let n=i;n<pasosActualizar.length;n++){
+            pasosActualizar[n].setAttribute('id', 'idPaso'+n)
+        }
+
+    }
+
+}
+
+function crearPaso(i){
+
+    incrementarPaso(i)
+
+    //Guardar el paso
+    let inpPasos = document.getElementById('rPasos')
+    pasosPlaceholder[i-1] = inpPasos.value 
+
+    //añadir el paso i a la lista
+    let listaPasos = document.getElementById('pasosList')
+    let pasoI = document.createElement('li')
+    pasoI.setAttribute('id','idPaso'+i)
+    pasoI.innerText = inpPasos.value
+    
+    let btnPasoI = document.createElement('button')
+    btnPasoI.setAttribute('onclick','borrarPaso('+i+')')
+    btnPasoI.setAttribute('type','button')
+    btnPasoI.innerText = 'Borrar paso '+ i //igual queda mejor solo 'borrar'
+
+    pasoI.appendChild(btnPasoI)
+
+    listaPasos.appendChild(pasoI)
+}
+
+function borrarPaso(i) {
+
+    let parent = document.getElementById('pasosList')
+    let child = document.getElementById('idPaso'+i)
+    parent.removeChild(child)
+    pasosPlaceholder.splice(i,0)
+    incrementarPaso(i-1)
+}
+
 function crearReceta(){
     let nombre = document.getElementById('rName').value
     let descripcion = document.getElementById('rDesc').value
     let foto = document.getElementById('rFoto').value
+    let pasos = []
     let ingredientes = []
+    
 
     if (foto === ''){
-        foto = undefinedLocation //////////////////////////////CAMBIAR ESTO CUANDO DESCUBRAMOS COMO UTILIZAR IMAGENES SUBIDAS POR EL USUARIO
+        foto = undefinedLocation 
     }
 
     for (rec of listaRecetas){
@@ -331,14 +450,42 @@ function crearReceta(){
         }
     }
 
+    if (pasosPlaceholder.length == 0){
+        alert('La receta debe tener al menos un paso')
+        return
+    } else { 
+        for (let i=0;i<pasosPlaceholder.length;i++){
+            pasos[i]=pasosPlaceholder[i]
+        }
+    }
+
+    resetPasos() //Se podría poner más abajo para que solo resetee al enviar los datos, por comodidad
 
     if (nombre==='' || descripcion==='' ){
         alert('Ambos campos deben estar rellenos')
     } else if (ingredientes.length==0){alert('La receta debe tener al menos un ingrediente')
     } else {
-        let receta = new objReceta(nombre,descripcion, ingredientes, foto)
+        let receta = new objReceta(nombre,descripcion, ingredientes, foto, pasos)
         listaRecetas[listaRecetas.length] = receta
+        
     }
+
+}
+
+function resetPasos(){
+    pasosPlaceholder.length = 0
+    let listaPasos = document.getElementById('pasosList')
+    listaPasos.innerHTML = ''
+
+
+    let pasosLabel = document.getElementById("pasosLabel") //ETIQUETA DE LA DESCRIPCION
+    pasosLabel.innerText = 'Introduce el paso 1 de la receta: '    
+    let pasosInput = document.getElementById("rPasos")   //CAMPO DE LA DESCRIPCION
+    pasosInput.setAttribute('placeholder', 'Paso 1')   //Placeholder
+
+    let submitPaso = document.getElementById("pasosBtn")
+    submitPaso.setAttribute('onclick', 'crearPaso(1)')  
+    submitPaso.innerText = 'Enviar paso 1'
 
 }
 ////////////////////////////////////////////////////////////////CREAR INGREDIENTE////////////////////////////////////////////////////////////////
@@ -563,15 +710,15 @@ let patatasFritas = new objIngrediente("Patatas Fritas","El mejor acompañante j
 let listaIngredientes = [miel, curry, pollo, avena, bistec, harina, leche, patatasFritas]
 
 
-let a = new objReceta("Pollo al Curry","Pollo con curry, suele ir acompañado de arroz",[listaIngredientes[1].getName(),listaIngredientes[2].getName()], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/pollo al curry.jpg')
-let b = new objReceta("Desayuno de Avena","Avena con leche y miel, llena más de lo que esperarías. Sientete libre de acompañarlo con frutas de cualquier tipo",[listaIngredientes[3].getName(),listaIngredientes[6].getName(), listaIngredientes[0].getName()], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/avena.png')
-let c = new objReceta("Pollo con patatas al horno","Algo simple, para cuando vas corto de tiempo",[listaIngredientes[2].getName(),listaIngredientes[2].getName(7)], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/Pollo con patatas.jpg')
-let d = new objReceta("Bistec con patatas","Recomendamos acompañarlo de alguna salsa sencillita",[listaIngredientes[4].getName(),listaIngredientes[2].getName(7)], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/bistec.jpg')
+let a = new objReceta("Pollo al Curry","Pollo con curry, suele ir acompañado de arroz",[listaIngredientes[1].getName(),listaIngredientes[2].getName()], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/pollo al curry.jpg', ['Paso 1', 'Paso 2', 'Paso 3', '...', 'Paso n'])
+let b = new objReceta("Desayuno de Avena","Avena con leche y miel, llena más de lo que esperarías. Sientete libre de acompañarlo con frutas de cualquier tipo",[listaIngredientes[3].getName(),listaIngredientes[6].getName(), listaIngredientes[0].getName()], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/avena.png', ['Paso 1', 'Paso 2', 'Paso 3', '...', 'Paso n'])
+let c = new objReceta("Pollo con patatas al horno","Algo simple, para cuando vas corto de tiempo",[listaIngredientes[2].getName(),listaIngredientes[2].getName(7)], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/Pollo con patatas.jpg', ['Paso 1', 'Paso 2', 'Paso 3', '...', 'Paso n'])
+let d = new objReceta("Bistec con patatas","Recomendamos acompañarlo de alguna salsa sencillita",[listaIngredientes[4].getName(),listaIngredientes[2].getName(7)], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/bistec.jpg', ['Paso 1', 'Paso 2', 'Paso 3', '...', 'Paso n'])
 let listaRecetas = [a,b,c,d]
 
 
 
-
+let pasosPlaceholder = []
 
 
 
