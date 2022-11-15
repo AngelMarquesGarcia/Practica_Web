@@ -302,7 +302,7 @@ function pagCrearReceta() {
         submitPaso.setAttribute('id', 'pasosBtn')
         submitPaso.setAttribute('type', 'button')
         submitPaso.setAttribute('class', 'btn btn-default')  
-        submitPaso.setAttribute('onclick', 'crearPaso(1)')  
+        submitPaso.setAttribute('onclick', 'crearPaso(0)')  
         submitPaso.innerText = 'Enviar paso 1'
         //SUBMIT PASO
 
@@ -360,42 +360,49 @@ function pagCrearReceta() {
 }
 
 function incrementarPaso(i){
-    console.log(i)
+    let pasosActualizar = document.getElementById('pasosList').children
+    let siguientePaso = pasosActualizar.length + 1
+    if (siguientePaso===undefined){siguientePaso=1}
+    if (i===undefined){ siguientePaso++}
     //cambiar label
     let pLabel = document.getElementById('pasosLabel')
-    pLabel.innerText = 'Introduce el paso '+(i+1)+' de la receta'
+    pLabel.innerText = 'Introduce el paso '+(siguientePaso)+' de la receta'
 
     //cambiar button
     let pBtn = document.getElementById('pasosBtn')
-    pBtn.innerText = 'Enviar paso '+(i+1)
-    pBtn.setAttribute('onclick', 'crearPaso('+(i+1)+')')
+    pBtn.innerText = 'Enviar paso '+(siguientePaso)
+    pBtn.setAttribute('onclick', 'crearPaso('+(siguientePaso-1)+')')
 
     //Modificar <input>
     let inpPasos = document.getElementById('rPasos')
-    inpPasos.setAttribute('placeholder','Paso '+ (i+1))
+    inpPasos.setAttribute('placeholder','Paso '+ (siguientePaso))
 
     //modificar botones de los pasos existentes si estamos eliminando
     /////////////////////////////////////////////////////////////////////////////////////DANGER
-    asdfhgsdhsfjsfdgjfsg, Si meto 6 elementos, y borro el cuarto y luego el quinto, no lo hace bien, porque al borrar el quinto borra el paso que esté en la posición 5,
-    pero como hemos borrado antes el cuarto, no debe borrar el quinto, sino el cuarto. Para que esto funcione, debemos actualizar los botones
-    para que llamen a la función con los parámetros adecuados.
-    let pasosActualizar = document.getElementById('pasosList').children
-    if (i<pasosActualizar.length){
-        for (let n=i;n<pasosActualizar.length;n++){
-            pasosActualizar[n].setAttribute('id', 'idPaso'+n)
+    //asdfhgsdhsfjsfdgjfsg, Si meto 6 elementos, y borro el cuarto y luego el quinto, no lo hace bien, porque al borrar el quinto borra el paso que esté en la posición 5,
+    //pero como hemos borrado antes el cuarto, no debe borrar el quinto, sino el cuarto. Para que esto funcione, debemos actualizar los botones
+    //para que llamen a la función con los parámetros adecuados.
+    
+    if (i!=undefined){
+        for (let n=0;n<pasosActualizar.length;n++){  ////////////igual se puede optimizar haciendo que cambie solo los que tengan indice superior al elemento eliminado
+            var li = pasosActualizar.item(n)
+            li.setAttribute('id', 'idPaso'+n)
+            li.firstElementChild.setAttribute('onclick','borrarPaso('+n+')')
+            li.firstElementChild.innerText = 'Borar paso ' + (n+1)
         }
 
     }
+    console.log('break')
 
 }
 
 function crearPaso(i){
 
-    incrementarPaso(i)
+    incrementarPaso()
 
     //Guardar el paso
     let inpPasos = document.getElementById('rPasos')
-    pasosPlaceholder[i-1] = inpPasos.value 
+    pasosPlaceholder[i] = inpPasos.value 
 
     //añadir el paso i a la lista
     let listaPasos = document.getElementById('pasosList')
@@ -406,7 +413,7 @@ function crearPaso(i){
     let btnPasoI = document.createElement('button')
     btnPasoI.setAttribute('onclick','borrarPaso('+i+')')
     btnPasoI.setAttribute('type','button')
-    btnPasoI.innerText = 'Borrar paso '+ i //igual queda mejor solo 'borrar'
+    btnPasoI.innerText = 'Borrar paso '+ (i+1) //igual queda mejor solo 'borrar'
 
     pasoI.appendChild(btnPasoI)
 
@@ -418,8 +425,8 @@ function borrarPaso(i) {
     let parent = document.getElementById('pasosList')
     let child = document.getElementById('idPaso'+i)
     parent.removeChild(child)
-    pasosPlaceholder.splice(i,0)
-    incrementarPaso(i-1)
+    pasosPlaceholder.splice(i,1)
+    incrementarPaso(i)
 }
 
 function crearReceta(){
@@ -683,20 +690,13 @@ function busqueda(){
     }
 }
 
-    
-
-    
-    
-
-
-
 
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
-let undefinedLocation = 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/undefined.jpeg'
+let undefinedLocation = 'fotos/undefined.jpeg'
 
 let miel = new objIngrediente("miel","dulce, pegajosa")
 let curry = new objIngrediente("Curry","to rico, ligeramente picante")
@@ -710,10 +710,10 @@ let patatasFritas = new objIngrediente("Patatas Fritas","El mejor acompañante j
 let listaIngredientes = [miel, curry, pollo, avena, bistec, harina, leche, patatasFritas]
 
 
-let a = new objReceta("Pollo al Curry","Pollo con curry, suele ir acompañado de arroz",[listaIngredientes[1].getName(),listaIngredientes[2].getName()], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/pollo al curry.jpg', ['Paso 1', 'Paso 2', 'Paso 3', '...', 'Paso n'])
-let b = new objReceta("Desayuno de Avena","Avena con leche y miel, llena más de lo que esperarías. Sientete libre de acompañarlo con frutas de cualquier tipo",[listaIngredientes[3].getName(),listaIngredientes[6].getName(), listaIngredientes[0].getName()], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/avena.png', ['Paso 1', 'Paso 2', 'Paso 3', '...', 'Paso n'])
-let c = new objReceta("Pollo con patatas al horno","Algo simple, para cuando vas corto de tiempo",[listaIngredientes[2].getName(),listaIngredientes[2].getName(7)], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/Pollo con patatas.jpg', ['Paso 1', 'Paso 2', 'Paso 3', '...', 'Paso n'])
-let d = new objReceta("Bistec con patatas","Recomendamos acompañarlo de alguna salsa sencillita",[listaIngredientes[4].getName(),listaIngredientes[2].getName(7)], 'C:/Users/burak/OneDrive - Universidad Rey Juan Carlos/Curso 2/Web/_Practica/Practica_Web/fotos/bistec.jpg', ['Paso 1', 'Paso 2', 'Paso 3', '...', 'Paso n'])
+let a = new objReceta("Pollo al Curry","Pollo con curry, suele ir acompañado de arroz",[listaIngredientes[1].getName(),listaIngredientes[2].getName()], 'fotos/pollo al curry.jpg', ['Paso 1', 'Paso 2', 'Paso 3', '...', 'Paso n'])
+let b = new objReceta("Desayuno de Avena","Avena con leche y miel, llena más de lo que esperarías. Sientete libre de acompañarlo con frutas de cualquier tipo",[listaIngredientes[3].getName(),listaIngredientes[6].getName(), listaIngredientes[0].getName()], 'fotos/avena.png', ['Paso 1', 'Paso 2', 'Paso 3', '...', 'Paso n'])
+let c = new objReceta("Pollo con patatas al horno","Algo simple, para cuando vas corto de tiempo",[listaIngredientes[2].getName(),listaIngredientes[2].getName(7)], 'fotos/Pollo con patatas.jpg', ['Paso 1', 'Paso 2', 'Paso 3', '...', 'Paso n'])
+let d = new objReceta("Bistec con patatas","Recomendamos acompañarlo de alguna salsa sencillita",[listaIngredientes[4].getName(),listaIngredientes[2].getName(7)], 'fotos/bistec.jpg', ['Paso 1', 'Paso 2', 'Paso 3', '...', 'Paso n'])
 let listaRecetas = [a,b,c,d]
 
 
