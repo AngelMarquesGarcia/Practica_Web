@@ -400,6 +400,8 @@ function crearPaso(i){
 
     incrementarPaso()
 
+    
+
     //Guardar el paso
     let inpPasos = document.getElementById('rPasos')
     pasosPlaceholder[i] = inpPasos.value 
@@ -416,8 +418,10 @@ function crearPaso(i){
     btnPasoI.innerText = 'Borrar paso '+ (i+1) //igual queda mejor solo 'borrar'
 
     pasoI.appendChild(btnPasoI)
-
     listaPasos.appendChild(pasoI)
+
+    let inpToReset = document.getElementById('rPasos')
+    inpToReset.value=''
 }
 
 function borrarPaso(i) {
