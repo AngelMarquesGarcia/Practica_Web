@@ -372,7 +372,7 @@ function pagCrearReceta() {
         let submitButton = document.createElement("button")
         submitButton.setAttribute('type', 'reset')
         submitButton.setAttribute('class', 'btn btn-default')  
-        submitButton.setAttribute('onclick', 'crearReceta()')  
+        submitButton.setAttribute('onclick', 'guardarReceta('+listaRecetas.length+')')  
         submitButton.innerText = 'Enviar'
         //SUBMIT
         formulario.appendChild(submitButton)
@@ -459,7 +459,7 @@ function borrarPaso(i) {
     incrementarPaso(i)
 }
 
-function crearReceta(){
+function guardarReceta(i){
     let nombre = document.getElementById('rName').value
     let descripcion = document.getElementById('rDesc').value
     let foto = document.getElementById('rFoto').value
@@ -479,8 +479,8 @@ function crearReceta(){
     }
 
     let n=0
-    for (let i=0;i<listaIngredientes.length;i++){
-        var ingrediente = document.getElementById('ing'+i)
+    for (let ingIndex=0;ingIndex<listaIngredientes.length;ingIndex++){
+        var ingrediente = document.getElementById('ing'+ingIndex)
         if (ingrediente.checked){
             ingredientes[n] = listaIngredientes[ingrediente.value].getName()
             n++
@@ -503,7 +503,7 @@ function crearReceta(){
     } else if (ingredientes.length==0){alert('La receta debe tener al menos un ingrediente')
     } else {
         let receta = new objReceta(nombre,descripcion, ingredientes, foto, pasos)
-        listaRecetas[listaRecetas.length] = receta
+        listaRecetas[i] = receta
         
     }
 
