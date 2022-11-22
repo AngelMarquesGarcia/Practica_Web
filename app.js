@@ -328,7 +328,7 @@ function pagCrearReceta() {
         submitPaso.setAttribute('id', 'pasosBtn')
         submitPaso.setAttribute('type', 'button')
         submitPaso.setAttribute('class', 'btn btn-default')  
-        submitPaso.setAttribute('onclick', 'crearPaso(0)')  
+        submitPaso.setAttribute('onclick', 'crearPaso(0, 0)')  
         submitPaso.innerText = 'Enviar paso 1'
         //SUBMIT PASO
 
@@ -351,7 +351,8 @@ function pagCrearReceta() {
 
         for (let i=0;i<listaIngredientes.length;i++){
             var ingLabel = document.createElement("label")
-            ingLabel.setAttribute('for', 'ing'+i)  
+            ingLabel.setAttribute('for', 'ing'+i)
+            ingLabel.setAttribute('id', 'ingLabel'+i)   
             ingLabel.innerText = listaIngredientes[i].getName() 
             var ingInput = document.createElement("input")      
             ingInput.setAttribute('type', 'checkbox')           //Type
@@ -373,7 +374,9 @@ function pagCrearReceta() {
         submitButton.setAttribute('type', 'reset')
         submitButton.setAttribute('class', 'btn btn-default')  
         submitButton.setAttribute('onclick', 'guardarReceta('+listaRecetas.length+')')  
+        submitButton.setAttribute('id', 'btnSubmit') 
         submitButton.innerText = 'Enviar'
+        
         //SUBMIT
         formulario.appendChild(submitButton)
 
@@ -397,7 +400,7 @@ function incrementarPaso(i){
     //cambiar button
     let pBtn = document.getElementById('pasosBtn')
     pBtn.innerText = 'Enviar paso '+(siguientePaso)
-    pBtn.setAttribute('onclick', 'crearPaso('+(siguientePaso-1)+')')
+    pBtn.setAttribute('onclick', 'crearPaso('+(siguientePaso-1)+',0)')
 
     //Modificar <input>
     let inpPasos = document.getElementById('rPasos')
@@ -422,21 +425,22 @@ function incrementarPaso(i){
 
 }
 
-function crearPaso(i){
+function crearPaso(i, is_Saved){
 
     incrementarPaso()
 
-    
-
     //Guardar el paso
-    let inpPasos = document.getElementById('rPasos')
-    pasosPlaceholder[i] = inpPasos.value 
-
-    //añadir el paso i a la lista
+    if(is_Saved == 0){
+        let inpPasos = document.getElementById('rPasos')
+        pasosPlaceholder[i] = inpPasos.value 
+    }  
+    let valor = pasosPlaceholder[i] 
+    
+    //añadir el paso i a la ordered list
     let listaPasos = document.getElementById('pasosList')
     let pasoI = document.createElement('li')
     pasoI.setAttribute('id','idPaso'+i)
-    pasoI.innerText = inpPasos.value
+    pasoI.innerText = valor
     
     let btnPasoI = document.createElement('button')
     btnPasoI.setAttribute('onclick','borrarPaso('+i+')')
@@ -521,7 +525,7 @@ function resetPasos(){
     pasosInput.setAttribute('placeholder', 'Paso 1')   //Placeholder
 
     let submitPaso = document.getElementById("pasosBtn")
-    submitPaso.setAttribute('onclick', 'crearPaso(1)')  
+    submitPaso.setAttribute('onclick', 'crearPaso(1, 0)')  
     submitPaso.innerText = 'Enviar paso 1'
 
 }
@@ -538,7 +542,28 @@ function borrarReceta(i){
 }
 
 function modificarReceta(i){
-    console.log('modificar receta')
+    pagCrearReceta()
+    document.getElementById('rName').value = listaRecetas[i].getName()
+    document.getElementById('rDesc').value = listaRecetas[i].getDescription()
+    document.getElementById('rFoto').value = listaRecetas[i].getFoto()
+
+    pasosPlaceholder = listaRecetas[i].getPasos()
+
+    for(let n=0; n<pasosPlaceholder.length; n++){
+        crearPaso(n, 1)
+    }
+    
+    let ingredientes = listaRecetas[i].getIngredientes()
+    for(let n=0; n<listaIngredientes.length; n++ ){
+        var ing = document.getElementById('ingLabel'+n)
+        var ingCheck = document.getElementById('ing'+n)
+        if(ingredientes.includes(ing.innerText)){
+            ingCheck.checked = true
+        } 
+    }
+    btnGuardar = document.getElementById('btnSubmit')
+    btnGuardar.setAttribute('onclick', 'guardarReceta('+i+')')
+    
 }
 
 
