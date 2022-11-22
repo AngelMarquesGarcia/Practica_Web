@@ -205,11 +205,11 @@ function mostrarReceta(i){
     goBackButton.innerText = 'Volver'                     //btn Volver
 
     let btnModificar = document.createElement("button")   //btn Modificar                  
-    btnModificar.setAttribute('onclick','modificarReceta()')   //btn Modificar          
+    btnModificar.setAttribute('onclick','modificarReceta('+i+')')   //btn Modificar          
     btnModificar.innerText = 'Modificar Receta'           //btn Modificar      
     
     let btnBorrar = document.createElement("button")      //btn Borrar           
-    btnBorrar.setAttribute('onclick','borrarReceta()')      //btn Borrar   
+    btnBorrar.setAttribute('onclick','borrarReceta('+i+')')      //btn Borrar   
     btnBorrar.innerText = 'Borrar Receta'                 //btn Borrar   
 
     content.appendChild(elemento)
@@ -517,11 +517,11 @@ function resetPasos(){
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
-function borrarReceta(){
+function borrarReceta(i){
     console.log('borrar receta')
 }
 
-function modificarReceta(){
+function modificarReceta(i){
     console.log('modificar receta')
 }
 
