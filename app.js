@@ -99,6 +99,7 @@ function pagRecetas() {
         elemento.appendChild(nombre)
         let desc = document.createElement("p")                    //descripcion
         desc.innerText = listaRecetas[i].getDescription()
+
         elemento.appendChild(desc)
         elementos.appendChild(elemento)
     }
@@ -196,13 +197,25 @@ function mostrarReceta(i){
     elemento.appendChild(ingredientes)
 
 
+    //añadir botones
 
-    let goBackButton = document.createElement("button")
-    goBackButton.setAttribute("type",  "button")
-    goBackButton.setAttribute("onclick",  "pagRecetas()")
-    goBackButton.innerText = 'Volver'
+    let goBackButton = document.createElement("button")   //btn Volver
+    goBackButton.setAttribute("type",  "button")          //btn Volver
+    goBackButton.setAttribute("onclick",  "pagRecetas()") //btn Volver
+    goBackButton.innerText = 'Volver'                     //btn Volver
+
+    let btnModificar = document.createElement("button")   //btn Modificar                  
+    btnModificar.setAttribute('onclick','modificarReceta()')   //btn Modificar          
+    btnModificar.innerText = 'Modificar Receta'           //btn Modificar      
+    
+    let btnBorrar = document.createElement("button")      //btn Borrar           
+    btnBorrar.setAttribute('onclick','borrarReceta()')      //btn Borrar   
+    btnBorrar.innerText = 'Borrar Receta'                 //btn Borrar   
+
     content.appendChild(elemento)
     content.appendChild(goBackButton)
+    content.appendChild(btnModificar)
+    content.appendChild(btnBorrar)
 
 
     
@@ -499,6 +512,20 @@ function resetPasos(){
     submitPaso.innerText = 'Enviar paso 1'
 
 }
+////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
+function borrarReceta(){
+    console.log('borrar receta')
+}
+
+function modificarReceta(){
+    console.log('modificar receta')
+}
+
+
 ////////////////////////////////////////////////////////////////CREAR INGREDIENTE////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////CREAR INGREDIENTE////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////CREAR INGREDIENTE////////////////////////////////////////////////////////////////
