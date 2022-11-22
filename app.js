@@ -77,12 +77,24 @@ function pagRecetas() {
     //making the active nav-tab show properly
 
     let content = document.getElementById('content')
-    
     content.innerHTML = ""
-    let titulo = document.createElement("h2")
-    titulo.innerText = '¡He aquí tus preciadas recetas!'
-    content.appendChild(titulo)
 
+    //lo creamos aquí para que pueda aparecer si no tienes recetas sin tener que duplicar código
+    let btnCrearReceta = document.createElement("button")  
+    btnCrearReceta.setAttribute('onclick','pagCrearReceta()')
+    btnCrearReceta.innerText = 'Crear Nueva Receta'
+
+    
+    let titulo = document.createElement("h2")
+    if (listaRecetas.length == 0){
+        titulo.innerText = 'No tienes ninguna receta! Ve a \'Crear Receta\' para empezar a usar tu recetario, o haz click en el botón Crear Nueva Receta'
+        content.appendChild(titulo)
+        content.appendChild(btnCrearReceta)
+        return}
+    else {
+        titulo.innerText = '¡He aquí tus preciadas recetas!'
+        content.appendChild(titulo)}
+    
     var elementos = document.createElement("div")
     elementos.setAttribute("class",  "wrapper")
     for (let i = 0; i < listaRecetas.length; i++){
@@ -107,6 +119,7 @@ function pagRecetas() {
     
     
     content.appendChild(elementos)
+    content.appendChild(btnCrearReceta)
         
 
 }
@@ -518,7 +531,10 @@ function resetPasos(){
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
 function borrarReceta(i){
-    console.log('borrar receta')
+    if (confirm('Seguro que quieres borrar esta receta?')){
+        listaRecetas.splice(i,1)
+        pagRecetas()
+    }
 }
 
 function modificarReceta(i){
