@@ -80,7 +80,8 @@ function pagRecetas() {
     content.innerHTML = ""
 
     //lo creamos aquí para que pueda aparecer si no tienes recetas sin tener que duplicar código
-    let btnCrearReceta = document.createElement("button")  
+    let btnCrearReceta = document.createElement("button")
+    btnCrearReceta.setAttribute('class', 'btn btn-default')  
     btnCrearReceta.setAttribute('onclick','pagCrearReceta()')
     btnCrearReceta.innerText = 'Crear Nueva Receta'
 
@@ -123,42 +124,55 @@ function pagRecetas() {
         
 
 }
-    }
+}
 
 
 function pagIngredientes() {
     let tab = document.getElementById('ingredientes') 
     
     if (tab.getAttribute("class") == 'inactive'){
-
-
-    setActiveNavTab('ingredientes')
+        setActiveNavTab('ingredientes')
+    }
 
     let content = document.getElementById('content');
     content.innerHTML = ""
     var elementos = document.createElement("div")
     elementos.setAttribute("class", "container")
     elementos.setAttribute("class", "scrollbar")
-    for(let ingrediente of listaIngredientes){
+
+    for(let i = 0; i < listaIngredientes.length; i++){
+        ingrediente = listaIngredientes[i]
+        var elemento = document.createElement("div") //creamos el "ingrediente"
+        elemento.setAttribute("class",  "ingrediente")
+
+        let nombre = document.createElement("h3") //damos nombre al ingrediente
+        nombre.innerText = ingrediente.getName()
+        elemento.appendChild(nombre)
+
+        let desc = document.createElement("p") //damos desc al ingrediente
+        desc.innerText = ingrediente.getDescripcion()
+        elemento.appendChild(desc)
+
+        let btnModificar = document.createElement("button")   //btn Modificar    
+        btnModificar.setAttribute('class', 'btn btn-default')                
+        btnModificar.setAttribute('onclick','modificarIngrediente('+i+')')   //btn Modificar          
+        btnModificar.innerText = 'Modificar Ingrediente'           //btn Modificar      
         
-    var elemento = document.createElement("div") //creamos el "ingrediente"
-    elemento.setAttribute("class",  "ingrediente")
+        let btnBorrar = document.createElement("button")                  //btn Borrar   
+        btnBorrar.setAttribute('class', 'btn btn-default')          
+        btnBorrar.setAttribute('onclick','borrarIngrediente('+i+')')      //btn Borrar   
+        btnBorrar.innerText = 'Borrar Ingrediente'                 //btn Borrar   
 
-    let nombre = document.createElement("h3") //damos nombre al ingrediente
-    nombre.innerText = ingrediente.getName()
-    elemento.appendChild(nombre)
+        elemento.appendChild(btnModificar)
+        elemento.appendChild(btnBorrar)
 
-    let desc = document.createElement("p") //damos desc al ingrediente
-    desc.innerText = ingrediente.getDescripcion()
-    elemento.appendChild(desc)
-
-    elementos.appendChild(elemento) //añadimos el ingrediente a la lista
+        elementos.appendChild(elemento) //añadimos el ingrediente a la lista
     }
 
     content.appendChild(elementos)
 }
 
-}
+//}
 
 function mostrarReceta(i){
     setActiveNavTab('disable')
@@ -213,15 +227,18 @@ function mostrarReceta(i){
     //añadir botones
 
     let goBackButton = document.createElement("button")   //btn Volver
+    goBackButton.setAttribute('class', 'btn btn-default')          
     goBackButton.setAttribute("type",  "button")          //btn Volver
     goBackButton.setAttribute("onclick",  "pagRecetas()") //btn Volver
     goBackButton.innerText = 'Volver'                     //btn Volver
 
-    let btnModificar = document.createElement("button")   //btn Modificar                  
+    let btnModificar = document.createElement("button")   //btn Modificar    
+    btnModificar.setAttribute('class', 'btn btn-default')                        
     btnModificar.setAttribute('onclick','modificarReceta('+i+')')   //btn Modificar          
     btnModificar.innerText = 'Modificar Receta'           //btn Modificar      
     
-    let btnBorrar = document.createElement("button")      //btn Borrar           
+    let btnBorrar = document.createElement("button")      //btn Borrar
+    btnBorrar.setAttribute('class', 'btn btn-default')                                  
     btnBorrar.setAttribute('onclick','borrarReceta('+i+')')      //btn Borrar   
     btnBorrar.innerText = 'Borrar Receta'                 //btn Borrar   
 
@@ -258,6 +275,8 @@ function pagCrearReceta() {
 
         let formulario = document.createElement("form")
         formulario.setAttribute('role', 'form')
+        formulario.setAttribute('id', 'recForm')
+
 
         //NOMBRE
         let nameGroup = document.createElement("div")
@@ -374,7 +393,7 @@ function pagCrearReceta() {
         submitButton.setAttribute('type', 'reset')
         submitButton.setAttribute('class', 'btn btn-default')  
         submitButton.setAttribute('onclick', 'guardarReceta('+listaRecetas.length+')')  
-        submitButton.setAttribute('id', 'btnSubmit') 
+        submitButton.setAttribute('id', 'btnSubmitRec') 
         submitButton.innerText = 'Enviar'
         
         //SUBMIT
@@ -445,6 +464,7 @@ function crearPaso(i, is_Saved){
     let btnPasoI = document.createElement('button')
     btnPasoI.setAttribute('onclick','borrarPaso('+i+')')
     btnPasoI.setAttribute('type','button')
+    btnPasoI.setAttribute('class', 'btn btn-default')  
     btnPasoI.innerText = 'Borrar paso '+ (i+1) //igual queda mejor solo 'borrar'
 
     pasoI.appendChild(btnPasoI)
@@ -535,7 +555,7 @@ function resetPasos(){
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
 function borrarReceta(i){
-    if (confirm('Seguro que quieres borrar esta receta?')){
+    if (confirm('¿Seguro que quieres borrar esta receta?')){
         listaRecetas.splice(i,1)
         pagRecetas()
     }
@@ -561,8 +581,48 @@ function modificarReceta(i){
             ingCheck.checked = true
         } 
     }
-    btnGuardar = document.getElementById('btnSubmit')
+    btnGuardar = document.getElementById('btnSubmitRec')
     btnGuardar.setAttribute('onclick', 'guardarReceta('+i+')')
+    btnGuardar.innerText = 'Guardar cambios'
+
+    formulario = document.getElementById('recForm')
+    btnCancelar = document.createElement('button')
+    btnCancelar.setAttribute('class', 'btn btn-default')  
+    btnCancelar.setAttribute('type','button')
+    btnCancelar.setAttribute('onclick','pagRecetas()')
+    btnCancelar.innerText = 'Descartar cambios'
+    formulario.appendChild(btnCancelar)
+    
+}
+
+////////////////////////////////////////////////////////////////BORRAR/MODIFICAR INGREDIENTE////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////BORRAR/MODIFICAR INGREDIENTE////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////BORRAR/MODIFICAR INGREDIENTE////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////BORRAR/MODIFICAR INGREDIENTE////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////BORRAR/MODIFICAR INGREDIENTE////////////////////////////////////////////////////////////////
+function borrarIngrediente(i){
+    if (confirm('¿Seguro que quieres borrar este ingrediente?')){
+        listaIngredientes.splice(i,1)
+        pagIngredientes()
+    }
+}
+
+function modificarIngrediente(i){
+    pagCrearIngrediente()
+    document.getElementById('iName').value = listaIngredientes[i].getName()
+    document.getElementById('iDesc').value = listaIngredientes[i].getDescripcion()
+
+    btnGuardar = document.getElementById('btnSubmitIng')
+    btnGuardar.setAttribute('onclick', 'guardarIngrediente('+i+')')
+    btnGuardar.innerText = 'Guardar cambios'
+
+    formulario = document.getElementById('ingForm')
+    btnCancelar = document.createElement('button')
+    btnCancelar.setAttribute('class', 'btn btn-default')  
+    btnCancelar.setAttribute('type','button')
+    btnCancelar.setAttribute('onclick','pagIngredientes()')
+    btnCancelar.innerText = 'Descartar cambios'
+    formulario.appendChild(btnCancelar)
     
 }
 
@@ -594,6 +654,7 @@ function pagCrearIngrediente() {
         //Creamos el formulario
         let formulario = document.createElement("form")
         formulario.setAttribute('role', 'form')
+        formulario.setAttribute('id', 'ingForm')
         
         //Creamos el campo de texto donde introducir el nombre
         let nameGroup = document.createElement("div")
@@ -612,7 +673,7 @@ function pagCrearIngrediente() {
         nameGroup.appendChild(nameInput)
         formulario.appendChild(nameGroup)
 
-        //Creamos el campo de texto donde introducir el descripción
+        //Creamos el campo de texto donde introducir la descripción
         let descGroup = document.createElement("div")
         descGroup.setAttribute('class', 'form-group') 
         let descLabel = document.createElement("label")
@@ -627,17 +688,19 @@ function pagCrearIngrediente() {
 
         //SUBMIT
         let submitButton = document.createElement("button")
+        submitButton.setAttribute('id', 'btnSubmitIng')  
         submitButton.setAttribute('type', 'reset')  
         submitButton.setAttribute('class', 'btn btn-default')  
-        submitButton.setAttribute('onclick', 'crearIngrediente()')  
+        submitButton.setAttribute('onclick', 'guardarIngrediente('+listaIngredientes.length+')')  
         submitButton.innerText = 'Enviar'
         //SUBMIT
 
         //Hacemos que el campo de descripción pertenezca a el formulario
         descGroup.appendChild(descLabel)
         descGroup.appendChild(descInput)
-        descGroup.appendChild(submitButton)
         formulario.appendChild(descGroup)
+        formulario.appendChild(submitButton) //por qué lo metemos al grupo este en vez de al formulario directamente?
+
         
         
         //Metemos el formulario en el HTML
@@ -646,7 +709,7 @@ function pagCrearIngrediente() {
     }
 }
 
-function crearIngrediente(){
+function guardarIngrediente(i){
     let nombre = document.getElementById('iName').value
     let descripcion = document.getElementById('iDesc').value
     for (ing of listaIngredientes){
@@ -659,7 +722,7 @@ function crearIngrediente(){
         alert('Ambos campos deben estar rellenos')
     } else {
         let ingrediente = new objIngrediente(nombre,descripcion)
-        listaIngredientes[listaIngredientes.length] = ingrediente
+        listaIngredientes[i] = ingrediente
     }
 
 }
@@ -719,8 +782,7 @@ function pagBuscar() {
         content.appendChild(result)
 
        }
-    }
-    
+}
 
 function busqueda(){
 
