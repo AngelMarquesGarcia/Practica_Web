@@ -347,7 +347,7 @@ function pagCrearReceta() {
         submitPaso.setAttribute('id', 'pasosBtn')
         submitPaso.setAttribute('type', 'button')
         submitPaso.setAttribute('class', 'btn btn-default')  
-        submitPaso.setAttribute('onclick', 'crearPaso(0, 0)')  
+        submitPaso.setAttribute('onclick', 'crearPaso(0)')  
         submitPaso.innerText = 'Enviar paso 1'
         //SUBMIT PASO
 
@@ -419,7 +419,7 @@ function incrementarPaso(i){
     //cambiar button
     let pBtn = document.getElementById('pasosBtn')
     pBtn.innerText = 'Enviar paso '+(siguientePaso)
-    pBtn.setAttribute('onclick', 'crearPaso('+(siguientePaso-1)+',0)')
+    pBtn.setAttribute('onclick', 'crearPaso('+(siguientePaso-1)+')')
 
     //Modificar <input>
     let inpPasos = document.getElementById('rPasos')
@@ -444,22 +444,20 @@ function incrementarPaso(i){
 
 }
 
-function crearPaso(i, is_Saved){
+function crearPaso(i,valor){
 
     incrementarPaso()
 
-    //Guardar el paso
-    if(is_Saved == 0){
-        let inpPasos = document.getElementById('rPasos')
-        pasosPlaceholder[i] = inpPasos.value 
-    }  
-    let valor = pasosPlaceholder[i] 
     
+    let inpPasos = document.getElementById('rPasos')
+
     //añadir el paso i a la ordered list
     let listaPasos = document.getElementById('pasosList')
     let pasoI = document.createElement('li')
     pasoI.setAttribute('id','idPaso'+i)
-    pasoI.innerText = valor
+    if (valor===undefined){
+        pasoI.innerText = inpPasos.value 
+    } else {pasoI.innerText = valor}
     
     let btnPasoI = document.createElement('button')
     btnPasoI.setAttribute('onclick','borrarPaso('+i+')')
@@ -475,11 +473,9 @@ function crearPaso(i, is_Saved){
 }
 
 function borrarPaso(i) {
-
-    let parent = document.getElementById('pasosList')
-    let child = document.getElementById('idPaso'+i)
-    parent.removeChild(child)
-    pasosPlaceholder.splice(i,1)
+    let listaPasos = document.getElementById('pasosList')
+    let paso = document.getElementById('idPaso'+i)
+    listaPasos.removeChild(paso)
     incrementarPaso(i)
 }
 
@@ -510,14 +506,10 @@ function guardarReceta(i){
             n++
         }
     }
-
-    if (pasosPlaceholder.length == 0){
-        alert('La receta debe tener al menos un paso')
-        return
-    } else { 
-        for (let i=0;i<pasosPlaceholder.length;i++){
-            pasos[i]=pasosPlaceholder[i]
-        }
+    //PASOS
+    let pasosArray = document.getElementById('pasosList').children
+    for (let ind = 0; ind<pasosArray.length;ind++){
+        pasos[ind] = pasosArray.item(ind).firstChild.wholeText
     }
 
     resetPasos() //Se podría poner más abajo para que solo resetee al enviar los datos, por comodidad
@@ -534,7 +526,6 @@ function guardarReceta(i){
 }
 
 function resetPasos(){
-    pasosPlaceholder.length = 0
     let listaPasos = document.getElementById('pasosList')
     listaPasos.innerHTML = ''
 
@@ -545,7 +536,7 @@ function resetPasos(){
     pasosInput.setAttribute('placeholder', 'Paso 1')   //Placeholder
 
     let submitPaso = document.getElementById("pasosBtn")
-    submitPaso.setAttribute('onclick', 'crearPaso(1, 0)')  
+    submitPaso.setAttribute('onclick', 'crearPaso(1)')  
     submitPaso.innerText = 'Enviar paso 1'
 
 }
@@ -567,10 +558,8 @@ function modificarReceta(i){
     document.getElementById('rDesc').value = listaRecetas[i].getDescription()
     document.getElementById('rFoto').value = listaRecetas[i].getFoto()
 
-    pasosPlaceholder = listaRecetas[i].getPasos()
-
-    for(let n=0; n<pasosPlaceholder.length; n++){
-        crearPaso(n, 1)
+    for(let n=0; n<listaRecetas[i].getPasos().length; n++){
+        crearPaso(n,listaRecetas[i].getPasos()[n])
     }
     
     let ingredientes = listaRecetas[i].getIngredientes()
@@ -832,7 +821,7 @@ function busqueda(){
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
 let undefinedLocation = 'fotos/undefined.jpeg'
 
-let miel = new objIngrediente("miel","dulce, pegajosa")
+let miel = new objIngrediente("Miel","dulce, pegajosa")
 let curry = new objIngrediente("Curry","to rico, ligeramente picante")
 let pollo = new objIngrediente("Pollo","genérico. Incinera cualquier cosa que toque mientras esté crudo")
 let avena = new objIngrediente("Avena","Excelente para desayunos")
