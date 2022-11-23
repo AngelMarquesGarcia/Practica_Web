@@ -271,6 +271,7 @@ function pagCrearReceta() {
 
         let titulo = document.createElement("h2")
         titulo.innerText = 'Crea una nueva receta!'
+        titulo.setAttribute('id','rTit')
         content.appendChild(titulo)
 
         let formulario = document.createElement("form")
@@ -445,11 +446,11 @@ function incrementarPaso(i){
 }
 
 function crearPaso(i,valor){
-
-    incrementarPaso()
-
     
     let inpPasos = document.getElementById('rPasos')
+    if (valor === undefined && inpPasos.value === ''){alert('El paso a introducir no puede ser vacío');return} 
+
+    incrementarPaso()
 
     //añadir el paso i a la ordered list
     let listaPasos = document.getElementById('pasosList')
@@ -557,6 +558,7 @@ function modificarReceta(i){
     document.getElementById('rName').value = listaRecetas[i].getName()
     document.getElementById('rDesc').value = listaRecetas[i].getDescription()
     document.getElementById('rFoto').value = listaRecetas[i].getFoto()
+    document.getElementById('rTit').innerText = 'Actualiza tu maravillosa receta'
 
     for(let n=0; n<listaRecetas[i].getPasos().length; n++){
         crearPaso(n,listaRecetas[i].getPasos()[n])
@@ -571,19 +573,23 @@ function modificarReceta(i){
         } 
     }
     btnGuardar = document.getElementById('btnSubmitRec')
-    btnGuardar.setAttribute('onclick', 'guardarReceta('+i+')')
+    btnGuardar.setAttribute('onclick', 'guardarYVolveraLaReceta('+i+')')
     btnGuardar.innerText = 'Guardar cambios'
 
     formulario = document.getElementById('recForm')
     btnCancelar = document.createElement('button')
     btnCancelar.setAttribute('class', 'btn btn-default')  
     btnCancelar.setAttribute('type','button')
-    btnCancelar.setAttribute('onclick','pagRecetas()')
+    btnCancelar.setAttribute('onclick','mostrarReceta('+i+')')
     btnCancelar.innerText = 'Descartar cambios'
     formulario.appendChild(btnCancelar)
     
 }
 
+function guardarYVolveraLaReceta(i){
+    guardarReceta(i)
+    mostrarReceta(i)
+}
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR INGREDIENTE////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR INGREDIENTE////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR INGREDIENTE////////////////////////////////////////////////////////////////
@@ -600,6 +606,7 @@ function modificarIngrediente(i){
     pagCrearIngrediente()
     document.getElementById('iName').value = listaIngredientes[i].getName()
     document.getElementById('iDesc').value = listaIngredientes[i].getDescripcion()
+    document.getElementById('iTit').innerText = 'Actualiza tu maravilloso ingrediente'
 
     btnGuardar = document.getElementById('btnSubmitIng')
     btnGuardar.setAttribute('onclick', 'guardarIngrediente('+i+')')
@@ -637,6 +644,7 @@ function pagCrearIngrediente() {
 
         let titulo = document.createElement("h2")
         titulo.innerText = 'Crea un nuevo Ingrediente!'
+        titulo.setAttribute('id','iTit')
         content.appendChild(titulo)
         
 
@@ -746,15 +754,27 @@ function pagBuscar() {
         BusqLabel.setAttribute('for', 'busq')  
         BusqLabel.innerText = 'Busca: '    
         let BusqInput = document.createElement("input")
-        BusqInput.setAttribute('type', 'search')  
+        BusqInput.setAttribute('type', 'text')  
         BusqInput.setAttribute('class', 'form-control')
         BusqInput.setAttribute('id', 'busq')
         BusqInput.setAttribute('placeholder', 'Busca un ingrediente o una receta')
 
+        //Placeholder, para que no ocurra nada al hacer intro
+        let phGroup = document.createElement("div")
+        phGroup.setAttribute('class', 'form-group') 
+        let phInput = document.createElement("input")
+        phInput.setAttribute('type', 'text')  
+        phInput.setAttribute('class', 'form-control')
+        phInput.style.display = 'none'
+
         //Hacemos que el campo de busqueda pertenezca a el formulario
         BusqGroup.appendChild(BusqLabel)
         BusqGroup.appendChild(BusqInput)
+
+        phGroup.appendChild(phInput)
+
         formulario.appendChild(BusqGroup)
+        formulario.appendChild(phGroup)
     
         //SUBMIT
         let submitButton = document.createElement("button")
@@ -770,6 +790,7 @@ function pagBuscar() {
         content.appendChild(formulario)
         content.appendChild(result)
 
+        $('#busq').keyup(function(e) {if (e.which == 13){busqueda()}}) //// añadimos un event handler, si la tecla soltada es intro, buscamos. Si quitamos el if, ocurre al soltar cada tecla, es decir, te van apareciendo las recetas e ingredientes según escribes.
        }
 }
 
@@ -783,13 +804,13 @@ function busqueda(){
         let ingrediente = document.createElement("ul")
         let receta = document.createElement("ul")
 
-        var titIngredientes = document.createElement('p');
+        var titIngredientes = document.createElement('h3');
         titIngredientes.innerText = 'Ingredientes:'
-        var titRecetas = document.createElement('p');
+        var titRecetas = document.createElement('h3');
         titRecetas.innerText = 'Recetas:'
 
         for (i=0; i<listaIngredientes.length; i++) {  
-            if (listaIngredientes[i].getName() === input){
+            if (listaIngredientes[i].getName().toLowerCase() === input.toLowerCase()){
                     var ingFound = document.createElement("li")
                     var ingDesc = document.createElement('p')
                     ingFound.innerText=listaIngredientes[i].getName()
@@ -799,19 +820,30 @@ function busqueda(){
                 }                
             }  
         for (i=0; i<listaRecetas.length; i++) {   
-            if (listaRecetas[i].getName() === input){  
+            if (listaRecetas[i].getName().toLowerCase() === input.toLowerCase()){  
                 var recFound = document.createElement("li")
                 recFound.innerText=listaRecetas[i].getName()
                 recFound.setAttribute('onclick', 'mostrarReceta('+i+')')
                 receta.appendChild(recFound)              
-            } 
-        resultados.appendChild(titIngredientes)  
-        resultados.appendChild(ingrediente)
-        resultados.appendChild(titRecetas) 
-        resultados.appendChild(receta)
+            } }
+        if (ingrediente.hasChildNodes()){
+            resultados.appendChild(titIngredientes)  
+            resultados.appendChild(ingrediente)
+        }
+
+        if (receta.hasChildNodes()){
+            resultados.appendChild(titRecetas) 
+            resultados.appendChild(receta)
+        }
+
+        if (!resultados.hasChildNodes()){
+            noExisten = document.createElement('h3')
+            noExisten.innerText = 'No hay ninguna receta ni ingrediente con ese nombre!'
+            resultados.appendChild(noExisten)}
         content.appendChild(resultados)
-    }
+    
 }
+
 
 
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
