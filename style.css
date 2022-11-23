@@ -13,6 +13,11 @@ h2 {font-family: 'cookie'}
 h3 {font-family: 'cookie'}
 
 
+.inputBg {
+  background-image: url("fotos/inputBG.jpg");
+  width: 560px;
+  /*background-color: #cccccc;*/
+ } 
 
 
 .wrapper {
@@ -21,8 +26,16 @@ h3 {font-family: 'cookie'}
     gap: 5px;
     border: 1px solid;
     padding: 10px;
-    margin: 10px;
-}
+    margin-left: 50PX;
+    margin-right: 50px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+  }
+  .receta {
+    grid-column: span 2;
+    
+    background: rgb(100, 119, 230);
+  }
 
 .receta {
   grid-column: span 2;
@@ -53,4 +66,10 @@ h3 {font-family: 'cookie'}
   overflow-y: scroll;
   overflow-x: hidden;
   height: 400px;
+}
+
+.image{
+  width: 100%;
+  height: 250px;
+  display: block;
 }

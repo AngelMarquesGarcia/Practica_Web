@@ -105,7 +105,7 @@ function pagRecetas() {
         elemento.setAttribute("onclick",  "mostrarReceta("+i+")")
         let foto = document.createElement("img")
         foto.setAttribute('src',listaRecetas[i].foto)
-        foto.setAttribute('class', 'img-responsive')
+        foto.setAttribute('class', 'image')
         elemento.appendChild(foto)
         let nombre = document.createElement("h2")                 //nombre
         nombre.innerText = listaRecetas[i].getName() 
