@@ -1,7 +1,17 @@
+
 body {
   background-image: url("fotos/bodyBG.jpg");
   /*background-color: #cccccc;*/
- }
+
+  font-family: 'Patrick Hand', Helvetica, sans-serif;
+  color: rgb(0, 0, 0);
+  text-shadow: 4px 4px 3px rgba(0,0,0,0.1); 
+}
+
+/*h1 {font-family: 'cookie'}*/
+h2 {font-family: 'cookie'}
+h3 {font-family: 'cookie'}
+
 
 
 
@@ -12,16 +22,16 @@ body {
     border: 1px solid;
     padding: 10px;
     margin: 10px;
-  }
-  .receta {
-    grid-column: span 2;
-    
-    background: rgb(100, 119, 230);
-  }
+}
 
-  .diente {
-      color:rgb(255, 0, 179)
-  }
+.receta {
+  grid-column: span 2;
+  background: rgb(100, 119, 230);
+}
+
+.diente {
+  color:rgb(255, 0, 179)
+}
   /* the case with 4 elements */
   /*
   .element:first-child:nth-last-child(4),
@@ -37,10 +47,10 @@ body {
   border:2px solid;
 }
 
-  .scrollbar{
-    margin: 20px;
-    border: 5px solid;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    height: 400px;
-  }
+.scrollbar{
+  margin: 20px;
+  border: 5px solid;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 400px;
+}

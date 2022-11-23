@@ -86,7 +86,7 @@ function pagRecetas() {
     btnCrearReceta.innerText = 'Crear Nueva Receta'
 
     
-    let titulo = document.createElement("h2")
+    let titulo = document.createElement("h1")
     if (listaRecetas.length == 0){
         titulo.innerText = 'No tienes ninguna receta! Ve a \'Crear Receta\' para empezar a usar tu recetario, o haz click en el botón Crear Nueva Receta'
         content.appendChild(titulo)
