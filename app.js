@@ -366,6 +366,9 @@ function pagCrearReceta() {
 
 
         //INGREDIENTES
+        let elementos = document.createElement("div")
+        elementos.setAttribute("class", "container")
+        elementos.setAttribute("class", "scrollbar")
         let ingGroup = document.createElement("div")
         ingGroup.setAttribute('class', 'form-group') 
 
@@ -380,9 +383,10 @@ function pagCrearReceta() {
             ingInput.setAttribute('value', i)                   //Value
 
             
-            ingGroup.appendChild(ingInput)
-            ingGroup.appendChild(ingLabel)
-            ingGroup.appendChild(document.createElement("br"))
+            elementos.appendChild(ingInput)
+            elementos.appendChild(ingLabel)
+            elementos.appendChild(document.createElement("br"))
+            ingGroup.appendChild(elementos)
         }
         
         formulario.appendChild(ingGroup)
