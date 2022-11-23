@@ -1,7 +1,6 @@
 
 body {
   background-image: url("fotos/bodyBG.jpg");
-  /*background-color: #cccccc;*/
 
   font-family: 'Patrick Hand', Helvetica, sans-serif;
   color: rgb(0, 0, 0);
@@ -21,21 +20,17 @@ h3 {font-family: 'cookie'}
 
 
 .wrapper {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 5px;
-    border: 1px solid;
-    padding: 10px;
-    margin-left: 50PX;
-    margin-right: 50px;
-    margin-top: 20px;
-    margin-bottom: 15px;
-  }
-  .receta {
-    grid-column: span 2;
-    
-    background: rgb(100, 119, 230);
-  }
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+  border: 1px solid;
+  padding: 10px;
+  margin-left: 50PX;
+  margin-right: 50px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
 
 .receta {
   grid-column: span 2;
@@ -47,10 +42,10 @@ h3 {font-family: 'cookie'}
 }
   /* the case with 4 elements */
   /*
-  .element:first-child:nth-last-child(4),
-  .element:first-child:nth-last-child(4) ~ *{
-    grid-column: span 3;
-  }
+.receta:first-child:nth-last-child(4),
+.receta:first-child:nth-last-child(4) ~ *{
+  grid-column: span 3;
+}
   */
   
 .container{
@@ -72,4 +67,8 @@ h3 {font-family: 'cookie'}
   width: 100%;
   height: 250px;
   display: block;
+}
+
+.transparent {
+  background-color: transparent;
 }

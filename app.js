@@ -98,6 +98,7 @@ function pagRecetas() {
     
     var elementos = document.createElement("div")
     elementos.setAttribute("class",  "wrapper")
+
     for (let i = 0; i < listaRecetas.length; i++){
 
         var elemento = document.createElement("div")
@@ -115,6 +116,17 @@ function pagRecetas() {
 
         elemento.appendChild(desc)
         elementos.appendChild(elemento)
+        //[4,7,10,13].includes(listaRecetas.length)
+        if ( listaRecetas.length%3==1 && i == listaRecetas.length-2) {
+            var extra = document.createElement("div")
+            extra.setAttribute("class",  "receta transparent")
+            elementos.appendChild(extra)
+        }
+
+        if (listaRecetas.length%3==2 && (i == listaRecetas.length-3 || i == listaRecetas.length-1)){
+            var extra1 = document.createElement('div')
+            elementos.appendChild(extra1)
+        }
     }
 
     
@@ -302,7 +314,7 @@ function pagCrearReceta() {
         let descLabel = document.createElement("label") //ETIQUETA DE LA DESCRIPCION
         descLabel.setAttribute('for', 'rDesc')  
         descLabel.innerText = 'Descripción: '    
-        let descInput = document.createElement("input") //CAMPO DE LA DESCRIPCION
+        let descInput = document.createElement("textarea") //CAMPO DE LA DESCRIPCION
         descInput.setAttribute('type', 'text')          //Type
         descInput.setAttribute('class', 'form-control') //Class
         descInput.setAttribute('id', 'rDesc')            //Id
@@ -492,7 +504,7 @@ function guardarReceta(i){
     let ingredientes = []
     
 
-    if (foto === ''){
+    if (foto === '' || foto === undefined){
         foto = undefinedLocation 
     }
 
@@ -520,9 +532,10 @@ function guardarReceta(i){
     resetPasos() //Se podría poner más abajo para que solo resetee al enviar los datos, por comodidad
 
     if (nombre==='' || descripcion==='' ){
-        alert('Ambos campos deben estar rellenos')
+        alert('Debe haber tanto nombre como descripción')
     } else if (ingredientes.length==0){alert('La receta debe tener al menos un ingrediente')
     } else {
+        console.log(nombre)
         let receta = new objReceta(nombre,descripcion, ingredientes, foto, pasos)
         listaRecetas[i] = receta
         
@@ -680,7 +693,7 @@ function pagCrearIngrediente() {
         let descLabel = document.createElement("label")
         descLabel.setAttribute('for', 'desc')  
         descLabel.innerText = 'Descripción: '    
-        let descInput = document.createElement("input")
+        let descInput = document.createElement("textarea")
         descInput.setAttribute('type', 'text')  
         descInput.setAttribute('class', 'form-control')
         descInput.setAttribute('id', 'iDesc')
@@ -878,7 +891,3 @@ let listaRecetas = [a,b,c,d]
 
 
 let pasosPlaceholder = []
-
-
-
-
