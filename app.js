@@ -81,7 +81,7 @@ function pagRecetas() {
 
     //lo creamos aquí para que pueda aparecer si no tienes recetas sin tener que duplicar código
     let btnCrearReceta = document.createElement("button")
-    btnCrearReceta.setAttribute('class', 'btn btn-default')  
+    btnCrearReceta.setAttribute('class', 'btn btn-default inputBg')  
     btnCrearReceta.setAttribute('onclick','pagCrearReceta()')
     btnCrearReceta.innerText = 'Crear Nueva Receta'
 
@@ -149,8 +149,7 @@ function pagIngredientes() {
     let content = document.getElementById('content');
     content.innerHTML = ""
     var elementos = document.createElement("div")
-    elementos.setAttribute("class", "container")
-    elementos.setAttribute("class", "scrollbar")
+    elementos.setAttribute("class", "scrollbarList container")
 
     for(let i = 0; i < listaIngredientes.length; i++){
         ingrediente = listaIngredientes[i]
@@ -159,25 +158,27 @@ function pagIngredientes() {
 
         let nombre = document.createElement("h3") //damos nombre al ingrediente
         nombre.innerText = ingrediente.getName()
-        elemento.appendChild(nombre)
+        
 
         let desc = document.createElement("p") //damos desc al ingrediente
         desc.innerText = ingrediente.getDescripcion()
-        elemento.appendChild(desc)
+        
 
         let btnModificar = document.createElement("button")   //btn Modificar    
-        btnModificar.setAttribute('class', 'btn btn-default')                
+        btnModificar.setAttribute('class', 'btn btn-default inputBg')                
         btnModificar.setAttribute('onclick','modificarIngrediente('+i+')')   //btn Modificar          
         btnModificar.innerText = 'Modificar Ingrediente'           //btn Modificar      
         
         let btnBorrar = document.createElement("button")                  //btn Borrar   
-        btnBorrar.setAttribute('class', 'btn btn-default')          
-        btnBorrar.setAttribute('onclick','borrarIngrediente('+i+')')      //btn Borrar   
-        btnBorrar.innerText = 'Borrar Ingrediente'                 //btn Borrar   
+        btnBorrar.setAttribute('class', 'btn btn-default inputBg')          
+        btnBorrar.setAttribute('onclick','borrarIngrediente('+i+')')     //btn Borrar   
+        btnBorrar.innerText = 'Borrar Ingrediente'                        //btn Borrar
 
+        elemento.setAttribute('id', 'ingredientBox')
+        elemento.appendChild(nombre)
         elemento.appendChild(btnModificar)
+        elemento.appendChild(desc)
         elemento.appendChild(btnBorrar)
-
         elementos.appendChild(elemento) //añadimos el ingrediente a la lista
     }
 
@@ -239,18 +240,18 @@ function mostrarReceta(i){
     //añadir botones
 
     let goBackButton = document.createElement("button")   //btn Volver
-    goBackButton.setAttribute('class', 'btn btn-default')          
+    goBackButton.setAttribute('class', 'btn btn-default inputBg')          
     goBackButton.setAttribute("type",  "button")          //btn Volver
     goBackButton.setAttribute("onclick",  "pagRecetas()") //btn Volver
     goBackButton.innerText = 'Volver'                     //btn Volver
 
     let btnModificar = document.createElement("button")   //btn Modificar    
-    btnModificar.setAttribute('class', 'btn btn-default')                        
+    btnModificar.setAttribute('class', 'btn btn-default inputBg')                        
     btnModificar.setAttribute('onclick','modificarReceta('+i+')')   //btn Modificar          
     btnModificar.innerText = 'Modificar Receta'           //btn Modificar      
     
     let btnBorrar = document.createElement("button")      //btn Borrar
-    btnBorrar.setAttribute('class', 'btn btn-default')                                  
+    btnBorrar.setAttribute('class', 'btn btn-default inputBg')                                  
     btnBorrar.setAttribute('onclick','borrarReceta('+i+')')      //btn Borrar   
     btnBorrar.innerText = 'Borrar Receta'                 //btn Borrar   
 
@@ -359,7 +360,7 @@ function pagCrearReceta() {
         let submitPaso = document.createElement("button")
         submitPaso.setAttribute('id', 'pasosBtn')
         submitPaso.setAttribute('type', 'button')
-        submitPaso.setAttribute('class', 'btn btn-default')  
+        submitPaso.setAttribute('class', 'btn btn-default inputBg')  
         submitPaso.setAttribute('onclick', 'crearPaso(0)')  
         submitPaso.innerText = 'Enviar paso 1'
         //SUBMIT PASO
@@ -408,7 +409,7 @@ function pagCrearReceta() {
         //SUBMIT
         let submitButton = document.createElement("button")
         submitButton.setAttribute('type', 'reset')
-        submitButton.setAttribute('class', 'btn btn-default')  
+        submitButton.setAttribute('class', 'btn btn-default inputBg')  
         submitButton.setAttribute('onclick', 'guardarReceta('+listaRecetas.length+')')  
         submitButton.setAttribute('id', 'btnSubmitRec') 
         submitButton.innerText = 'Enviar'
@@ -479,7 +480,7 @@ function crearPaso(i,valor){
     let btnPasoI = document.createElement('button')
     btnPasoI.setAttribute('onclick','borrarPaso('+i+')')
     btnPasoI.setAttribute('type','button')
-    btnPasoI.setAttribute('class', 'btn btn-default')  
+    btnPasoI.setAttribute('class', 'btn btn-default inputBg')  
     btnPasoI.innerText = 'Borrar paso '+ (i+1) //igual queda mejor solo 'borrar'
 
     pasoI.appendChild(btnPasoI)
@@ -595,7 +596,7 @@ function modificarReceta(i){
 
     formulario = document.getElementById('recForm')
     btnCancelar = document.createElement('button')
-    btnCancelar.setAttribute('class', 'btn btn-default')  
+    btnCancelar.setAttribute('class', 'btn btn-default inputBg')  
     btnCancelar.setAttribute('type','button')
     btnCancelar.setAttribute('onclick','mostrarReceta('+i+')')
     btnCancelar.innerText = 'Descartar cambios'
@@ -631,7 +632,7 @@ function modificarIngrediente(i){
 
     formulario = document.getElementById('ingForm')
     btnCancelar = document.createElement('button')
-    btnCancelar.setAttribute('class', 'btn btn-default')  
+    btnCancelar.setAttribute('class', 'btn btn-default inputBg')  
     btnCancelar.setAttribute('type','button')
     btnCancelar.setAttribute('onclick','pagIngredientes()')
     btnCancelar.innerText = 'Descartar cambios'
@@ -704,7 +705,7 @@ function pagCrearIngrediente() {
         let submitButton = document.createElement("button")
         submitButton.setAttribute('id', 'btnSubmitIng')  
         submitButton.setAttribute('type', 'reset')  
-        submitButton.setAttribute('class', 'btn btn-default')  
+        submitButton.setAttribute('class', 'btn btn-default inputBg')  
         submitButton.setAttribute('onclick', 'guardarIngrediente('+listaIngredientes.length+')')  
         submitButton.innerText = 'Enviar'
         //SUBMIT
@@ -796,7 +797,7 @@ function pagBuscar() {
         //SUBMIT
         let submitButton = document.createElement("button")
         submitButton.setAttribute('type', 'button')  
-        submitButton.setAttribute('class', 'btn btn-default')  
+        submitButton.setAttribute('class', 'btn btn-default inputBg')  
         submitButton.setAttribute('onclick', 'busqueda()')  
         submitButton.innerText = 'Enviar'
         //SUBMIT        

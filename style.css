@@ -14,7 +14,6 @@ h3 {font-family: 'cookie'}
 
 .inputBg {
   background-image: url("fotos/inputBG.jpg");
-  width: 560px;
   /*background-color: #cccccc;*/
  } 
 
@@ -31,7 +30,6 @@ h3 {font-family: 'cookie'}
   margin-bottom: 15px;
 }
 
-
 .receta {
   grid-column: span 2;
   background: rgb(100, 119, 230);
@@ -40,19 +38,50 @@ h3 {font-family: 'cookie'}
 .diente {
   color:rgb(255, 0, 179)
 }
-  /* the case with 4 elements */
-  /*
+
+/* the case with 4 elements */
+/*
 .receta:first-child:nth-last-child(4),
 .receta:first-child:nth-last-child(4) ~ *{
   grid-column: span 3;
+*/
+
+.item-a {
+  grid-area: header;
 }
-  */
-  
+.item-d {
+  grid-area: footer;
+}
+
+#ingredientBox{
+  border-style: solid;
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-color: peru;
+  display: grid;
+    grid-template-columns: 7fr 1fr;
+    grid-template-rows: 1fr minmax(1fr, 3fr);
+    grid-auto-flow: row;
+    grid-template-areas: 
+      "header header"
+      "footer footer";
+}
+
 .container{
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  border:2px solid;
+  justify-content: space-between;  
+}
+
+.scrollbarList{
+  margin: 20px;
+  border: 5px solid;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 650px;
+  border-color: peru;
 }
 
 .scrollbar{
