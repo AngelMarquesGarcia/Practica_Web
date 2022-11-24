@@ -1,7 +1,7 @@
 
 body {
   background-image: url("fotos/bodyBG.jpg");
-
+  margin-left: 10px;
   font-family: 'Patrick Hand', Helvetica, sans-serif;
   color: rgb(0, 0, 0);
   text-shadow: 4px 4px 3px rgba(0,0,0,0.1); 
@@ -42,6 +42,7 @@ h3 {font-family: 'cookie'}
 .receta {
   grid-column: span 2;
   background: rgb(191, 170, 140);
+  
 }
 
 .diente {
@@ -53,13 +54,6 @@ li a {
   font-weight: bold;
   font-size: 16;
 }
-
-/* the case with 4 elements */
-/*
-.receta:first-child:nth-last-child(4),
-.receta:first-child:nth-last-child(4) ~ *{
-  grid-column: span 3;
-*/
 
 .item-a {
   grid-area: header;
@@ -90,6 +84,7 @@ li a {
   justify-content: space-between;  
 }
 
+
 .scrollbarList{
   margin: 20px;
   border: 5px solid;
@@ -105,6 +100,7 @@ li a {
   overflow-y: scroll;
   overflow-x: hidden;
   height: 400px;
+  width: 30%;
 }
 
 .image{
@@ -115,4 +111,8 @@ li a {
 
 .transparent {
   background-color: transparent;
+}
+
+h1, h2, h3, p, input[type=checkbox] {
+  margin-left: 10px;
 }
