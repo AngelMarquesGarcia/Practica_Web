@@ -23,7 +23,7 @@ h3 {font-family: 'cookie'}
 
 .inputBg {
   background-image: url("fotos/inputBG.jpg");
-  /*background-color: #cccccc;*/
+  font-weight: bold;
  } 
 
 
@@ -41,11 +41,17 @@ h3 {font-family: 'cookie'}
 
 .receta {
   grid-column: span 2;
-  background: rgb(100, 119, 230);
+  background: rgb(191, 170, 140);
 }
 
 .diente {
   color:rgb(255, 0, 179)
+}
+
+li a {
+  color: black;
+  font-weight: bold;
+  font-size: 16;
 }
 
 /* the case with 4 elements */
