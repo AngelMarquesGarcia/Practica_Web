@@ -365,10 +365,10 @@ function pagCrearReceta() {
         submitPaso.innerText = 'Enviar paso 1'
         //SUBMIT PASO
 
-        //lista de pasos
+            //lista de pasos
         let pasos = document.createElement("ol")
         pasos.setAttribute('id', 'pasosList')
-        //lista de pasos
+            //lista de pasos
     
         pasosGroup.appendChild(pasosLabel)
         pasosGroup.appendChild(pasosInput)
@@ -401,6 +401,9 @@ function pagCrearReceta() {
             elementos.appendChild(document.createElement("br"))
             ingGroup.appendChild(elementos)
         }
+        let btnCrearNuevoIng = document.createElement("div")
+        btnCrearNuevoIng.setAttribute('class', 'btn btn-default') 
+        btnCrearNuevoIng.setAttribute('onclick', 'formCrearIngrediente()')
         
         formulario.appendChild(ingGroup)
         //INGREDIENTES
@@ -455,6 +458,8 @@ function incrementarPaso(i){
             li.setAttribute('id', 'idPaso'+n)
             li.firstElementChild.setAttribute('onclick','borrarPaso('+n+')')
             li.firstElementChild.innerText = 'Borar paso ' + (n+1)
+            li.children.item(1).setAttribute('onclick','modificarPaso('+n+')')
+            li.children.item(1).innerText = 'Modificar paso ' + (n+1)
         }
 
     }
@@ -477,23 +482,96 @@ function crearPaso(i,valor){
         pasoI.innerText = inpPasos.value 
     } else {pasoI.innerText = valor}
     
-    let btnPasoI = document.createElement('button')
-    btnPasoI.setAttribute('onclick','borrarPaso('+i+')')
-    btnPasoI.setAttribute('type','button')
-    btnPasoI.setAttribute('class', 'btn btn-default inputBg')  
-    btnPasoI.innerText = 'Borrar paso '+ (i+1) //igual queda mejor solo 'borrar'
+    let btnBorrarPasoI = document.createElement('button')
+    btnBorrarPasoI.setAttribute('onclick','borrarPaso('+i+')')
+    btnBorrarPasoI.setAttribute('type','button')
+    btnBorrarPasoI.setAttribute('class', 'btn btn-default')  
+    btnBorrarPasoI.innerText = 'Borrar paso '+ (i+1) //igual queda mejor solo 'borrar'
 
-    pasoI.appendChild(btnPasoI)
+    let btnModificarPasoI = document.createElement('button')
+    btnModificarPasoI.setAttribute('onclick','modificarPaso('+i+')')
+    btnModificarPasoI.setAttribute('type','button')
+    btnModificarPasoI.setAttribute('class', 'btn btn-default')  
+    btnModificarPasoI.innerText = 'Modificar paso '+ (i+1) //igual queda mejor solo 'borrar'
+
+    pasoI.appendChild(btnBorrarPasoI)
+    pasoI.appendChild(btnModificarPasoI)
     listaPasos.appendChild(pasoI)
 
     let inpToReset = document.getElementById('rPasos')
     inpToReset.value=''
 }
 
+function modificarPaso(i){
+    let listaPasos = document.getElementById('pasosList')
+    let paso = listaPasos.children.item(i)
+
+    let inpPaso = document.createElement('input')
+    inpPaso.setAttribute('type','text')
+    inpPaso.setAttribute('id','inpPasos')
+    inpPaso.setAttribute('value',paso.firstChild.wholeText)
+
+    let inpBtnEnviar = document.createElement('button')
+    inpBtnEnviar.setAttribute('id','inpBtnEnviar')
+    inpBtnEnviar.setAttribute('type','button')
+    inpBtnEnviar.setAttribute('onclick','sendModifiedPaso('+i+',1)')
+    inpBtnEnviar.innerText = 'Guardar cambios'
+
+    let inpBtnCancelar = document.createElement('button')
+    inpBtnCancelar.setAttribute('type','button')
+    inpBtnCancelar.setAttribute('id','inpBtnCancelar')
+    inpBtnCancelar.setAttribute('onclick','sendModifiedPaso('+i+',0)')
+    inpBtnCancelar.innerText = 'Cancelar'
+
+    listaPasos.insertBefore(inpPaso,paso)
+    listaPasos.insertBefore(inpBtnEnviar,paso)
+    listaPasos.insertBefore(inpBtnCancelar,paso)
+
+    placeholderString = paso.firstChild.wholeText //guardamos el contenido en una variable global por si quiere cancelar
+
+    listaPasos.removeChild(paso)
+
+}
+
+function sendModifiedPaso(i,send){
+    let listaPasos = document.getElementById('pasosList')
+    let pasoI = document.createElement('li')
+    let valor = 'Error al modificar'
+    if (send===1){valor = document.getElementById('inpPasos').value}
+    else {valor = placeholderString}
+    pasoI.setAttribute('id','idPaso'+i) // not sure this is the right id, need to verify
+    pasoI.innerText = valor
+
+    let btnBorrarPasoI = document.createElement('button')
+    btnBorrarPasoI.setAttribute('onclick','borrarPaso('+i+')')
+    btnBorrarPasoI.setAttribute('type','button')
+    btnBorrarPasoI.setAttribute('class', 'btn btn-default')  
+    btnBorrarPasoI.innerText = 'Borrar paso '+ (i+1) //igual queda mejor solo 'borrar'
+
+    let btnModificarPasoI = document.createElement('button')
+    btnModificarPasoI.setAttribute('onclick','modificarPaso('+i+')')
+    btnModificarPasoI.setAttribute('type','button')
+    btnModificarPasoI.setAttribute('class', 'btn btn-default')  
+    btnModificarPasoI.innerText = 'Modificar paso '+ (i+1) //igual queda mejor solo 'borrar'
+
+    pasoI.appendChild(btnBorrarPasoI)
+    pasoI.appendChild(btnModificarPasoI)
+    listaPasos.insertBefore(pasoI,document.getElementById('inpPasos'))
+
+    borrarFormPaso()
+}
+
+function borrarFormPaso(){
+    let listaPasos = document.getElementById('pasosList')
+    listaPasos.removeChild(document.getElementById('inpPasos'))
+    listaPasos.removeChild(document.getElementById('inpBtnEnviar'))
+    listaPasos.removeChild(document.getElementById('inpBtnCancelar'))
+}
+
 function borrarPaso(i) {
     let listaPasos = document.getElementById('pasosList')
-    let paso = document.getElementById('idPaso'+i)
-    listaPasos.removeChild(paso)
+    //let paso = document.getElementById('idPaso'+i) estaba puesto con esto, y luego listaPasos.removeChild(paso)
+    listaPasos.removeChild(listaPasos.children.item(i))
     incrementarPaso(i)
 }
 
@@ -524,8 +602,10 @@ function guardarReceta(i){
             n++
         }
     }
+
     //PASOS
     let pasosArray = document.getElementById('pasosList').children
+    if (pasosArray.length === 0 || pasosArray.length === undefined) {alert('La receta debe tener al menos un paso'); return}
     for (let ind = 0; ind<pasosArray.length;ind++){
         pasos[ind] = pasosArray.item(ind).firstChild.wholeText
     }
@@ -762,6 +842,9 @@ function pagBuscar() {
         content.innerHTML = ""
         //quitar todo el contenido anterior
 
+        let titulo = document.createElement("h2")
+        titulo.innerText = 'Busca entre tus recetas e ingredientes!'
+        content.appendChild(titulo)
         //Creamos el formulario
         let formulario = document.createElement("form")
         formulario.setAttribute('role', 'form')
@@ -891,4 +974,4 @@ let listaRecetas = [a,b,c,d]
 
 
 
-let pasosPlaceholder = []
+let placeholderString = ''
