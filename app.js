@@ -552,6 +552,7 @@ function crearPaso(i,valor){
 
 //borra el paso con índice i de la ol
 function borrarPaso(i) {
+    if (!confirm('Seguro que quieres eliminar este paso?')){return}
     let listaPasos = document.getElementById('pasosList')
     listaPasos.removeChild(listaPasos.children.item(i))
     incrementarPaso(i) //como hemos borrado un paso, hay que actualizar el formulario, restándole uno
