@@ -1,6 +1,5 @@
 
-// para que se vean las recetas al cargar la pagina, debemos usar el operador $, que llame a pagRecetas
-
+//Es nuestro elemento principal. Tiene nombre, descripción (string), ingredientes (array of objIngrediente), foto (string), y pasos (array of string)
 class objReceta {
     constructor(n, d, i,f,p){
         this.nombre=n
@@ -27,6 +26,7 @@ class objReceta {
     }
 }
 
+//Es nuestro elemento secundario. Tiene nombre, descripción (string)
 class objIngrediente {
 
     constructor(n, d){
@@ -39,26 +39,29 @@ class objIngrediente {
     getDescripcion(){
         return this.descripcion
     }
-
 }
 
+//Cuando haya cargado el html, llamamos a pagRecetas, que cargará las recetas de ejemplo
 $('Index.html').ready(function() {
-    pagRecetas()
-})
+    pagRecetas()}
+)
 
    
-
+//Cambia la clase de targetTab a activa, y todas las otras tabs a inactiva
 function setActiveNavTab(targetTab){ //could be done better by giving current and previous tab, so that only the previous tab is accesed and disabled
     let tabs = ['recetas', 'ingredientes', 'crearReceta', 'crearIngrediente', 'buscar']
     
     
-    for (let tab of tabs) { //makes all tabs inactive || Previously (let i = 0; i < tabs.length; i++)
-        let content = document.getElementById(tab) //previously tabs[i]
+    for (let tab of tabs) { //makes all tabs inactive
+        let content = document.getElementById(tab)
         content.setAttribute("class",  "inactive")
     } 
-    if (targetTab==='disable'){return}else{ ////////////////////////////////////////////////////SE HAY QUE MIRAR ESTO
-    let content = document.getElementById(targetTab) //makes current tab active
-    content.setAttribute("class",  "active")}
+
+    //Si estamos accediendo a la vista detallada de alguna receta, podemos pasar 'disable' para que no active ningun navtab
+    if (targetTab!=='disable'){ 
+        let content = document.getElementById(targetTab) //makes current tab active
+        content.setAttribute("class",  "active")
+    }
 }
 
 ////////////////////////////////////////////////////////////////MOSTRAR RECETA/INGREDIENTE////////////////////////////////////////////////////////////////
@@ -66,57 +69,71 @@ function setActiveNavTab(targetTab){ //could be done better by giving current an
 ////////////////////////////////////////////////////////////////MOSTRAR RECETA/INGREDIENTE////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////MOSTRAR RECETA/INGREDIENTE////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////MOSTRAR RECETA/INGREDIENTE////////////////////////////////////////////////////////////////
+
+//Se encarga de cargar las recetas ejemplo, y cualquiera que haya guardado el usuario y mostrarlas en html 
 function pagRecetas() {
+
+    //Cogemos el nav-tab de recetas y comprobamos si está activo. Si lo está, no hacemos nada
     let tab = document.getElementById('recetas') 
-    
     if (tab.getAttribute("class") == 'inactive'){
     
     
-    //making the active nav-tab show properly
+    //Activa la nav-tab de recetas
     setActiveNavTab('recetas')
-    //making the active nav-tab show properly
 
+    //Quita todo lo que hubiera antes
     let content = document.getElementById('content')
     content.innerHTML = ""
 
-    //lo creamos aquí para que pueda aparecer si no tienes recetas sin tener que duplicar código
+    //creamos el boton de crear receta. Se mostrará debajo de todos los demás elementos, 
+    //pero lo creamos aquí para que pueda aparecer si no tienes recetas sin tener que duplicar código
     let btnCrearReceta = document.createElement("button")
     btnCrearReceta.setAttribute('class', 'btn btn-default inputBg')  
     btnCrearReceta.setAttribute('onclick','pagCrearReceta()')
     btnCrearReceta.innerText = 'Crear Nueva Receta'
 
-    
+    //Comprobar si hay al menos una receta, y en caso negativo, poner un texto que lo indique. En caso afirmativo, escribe el titulo
     let titulo = document.createElement("h1")
     if (listaRecetas.length == 0){
         titulo.innerText = 'No tienes ninguna receta! Ve a \'Crear Receta\' para empezar a usar tu recetario, o haz click en el botón Crear Nueva Receta'
         content.appendChild(titulo)
         content.appendChild(btnCrearReceta)
-        return}
-    else {
+        return
+    } else {
         titulo.innerText = '¡He aquí tus preciadas recetas!'
-        content.appendChild(titulo)}
+        content.appendChild(titulo)
+    }
     
+    //Creamos el div que contendrá las recetas
     var elementos = document.createElement("div")
     elementos.setAttribute("class",  "wrapper")
 
+    //Para cada receta guardada, creamos un div y le metemos todos los elementos de la receta
     for (let i = 0; i < listaRecetas.length; i++){
 
-        var elemento = document.createElement("div")
-        elemento.setAttribute("class",  "receta")
-        elemento.setAttribute("onclick",  "mostrarReceta("+i+")")
-        let foto = document.createElement("img")
-        foto.setAttribute('src',listaRecetas[i].foto)
-        foto.setAttribute('class', 'image')
-        elemento.appendChild(foto)
-        let nombre = document.createElement("h2")                 //nombre
-        nombre.innerText = listaRecetas[i].getName() 
-        elemento.appendChild(nombre)
-        let desc = document.createElement("p")                    //descripcion
-        desc.innerText = listaRecetas[i].getDescription()
+        var elemento = document.createElement("div")               //Div contenedor
+        elemento.setAttribute("class",  "receta")                  //Clase   
+        elemento.setAttribute("onclick",  "mostrarReceta("+i+")")  //onclick
 
+        let foto = document.createElement("img")                   //imagen
+        foto.setAttribute('src',listaRecetas[i].foto)              //source
+        foto.setAttribute('class', 'image')                        //clase
+
+        let nombre = document.createElement("h2")                 //nombre
+        nombre.innerText = listaRecetas[i].getName()              //contenidos
+  
+        let desc = document.createElement("p")                    //descripcion
+        desc.innerText = listaRecetas[i].getDescription()         //contenidos
+
+        //añadimos todos los elementos de la receta al div contenedor, y este al que contiene todas las recetas
+        elemento.appendChild(foto)                                 
+        elemento.appendChild(nombre)
         elemento.appendChild(desc)
         elementos.appendChild(elemento)
-        //[4,7,10,13].includes(listaRecetas.length)
+
+        //Si no hay suficientes elementos para llenar la última fila, centramos los elementos que haya
+        //Para ello, si sólo hay un elemento, añadimos antes de él un elemento vacío transparente (span 2)
+        //Si hay dos elementos, añadimos antes de ambos y después suya, dos div vacíos transparentes (span 1)
         if ( listaRecetas.length%3==1 && i == listaRecetas.length-2) {
             var extra = document.createElement("div")
             extra.setAttribute("class",  "receta transparent")
@@ -128,70 +145,77 @@ function pagRecetas() {
             elementos.appendChild(extra1)
         }
     }
-
     
-    
+    //añadimos a la pagina la lista de las recetas y el botón que creamos al principio de la función
     content.appendChild(elementos)
     content.appendChild(btnCrearReceta)
-        
-
 }
 }
 
-
+//Se encarga de cargar los ingredientes ejemplo, y cualquiera que haya guardado el usuario, y mostrarlas en html
 function pagIngredientes() {
-    let tab = document.getElementById('ingredientes') 
     
+    //Activamos el nav-tab de ingredientes si no lo está
+    //No podemos hacer que no haga nada si está activa como con los otros, ya que, borramos elementos desde esta misma página,
+    //y debe actualizarse cada vez que borremos uno
+    let tab = document.getElementById('ingredientes') 
     if (tab.getAttribute("class") == 'inactive'){
         setActiveNavTab('ingredientes')
     }
 
+    //Borramos lo que hubiera antes
     let content = document.getElementById('content');
     content.innerHTML = ""
+
+    //Creamos el div que contendrá todos los ingredientes
     var elementos = document.createElement("div")
     elementos.setAttribute("class", "scrollbarList container")
 
+    //por cada ingrediente ejemplo o creado, creamos un div, metemos nombre y descripción en él, y lo añadimos a la lista
     for(let i = 0; i < listaIngredientes.length; i++){
-        ingrediente = listaIngredientes[i]
-        var elemento = document.createElement("div") //creamos el "ingrediente"
-        elemento.setAttribute("class",  "ingrediente")
-
-        let nombre = document.createElement("h3") //damos nombre al ingrediente
-        nombre.innerText = ingrediente.getName()
         
+        ingrediente = listaIngredientes[i]
+        var elemento = document.createElement("div")     //creamos el "ingrediente"
+        elemento.setAttribute("class",  "ingrediente")   //añadimos la clase
+        elemento.setAttribute('id', 'ingredientBox')     //añadimos el id para que tenga estilo
 
-        let desc = document.createElement("p") //damos desc al ingrediente
+        let nombre = document.createElement("h3")        //damos nombre al ingrediente
+        nombre.innerText = ingrediente.getName()
+
+        let desc = document.createElement("p")            //damos desc al ingrediente
         desc.innerText = ingrediente.getDescripcion()
         
 
-        let btnModificar = document.createElement("button")   //btn Modificar    
-        btnModificar.setAttribute('class', 'btn btn-default inputBg')                
-        btnModificar.setAttribute('onclick','modificarIngrediente('+i+')')   //btn Modificar          
-        btnModificar.innerText = 'Modificar Ingrediente'           //btn Modificar      
+        let btnModificar = document.createElement("button")                 //Creamos botón         btn Modificar    
+        btnModificar.setAttribute('class', 'btn btn-default inputBg')       //clase                 btn Modificar    
+        btnModificar.setAttribute('onclick','modificarIngrediente('+i+')')  //onclick               btn Modificar    
+        btnModificar.innerText = 'Modificar Ingrediente'                    //contenido             btn Modificar    
         
-        let btnBorrar = document.createElement("button")                  //btn Borrar   
-        btnBorrar.setAttribute('class', 'btn btn-default inputBg')          
-        btnBorrar.setAttribute('onclick','borrarIngrediente('+i+')')     //btn Borrar   
-        btnBorrar.innerText = 'Borrar Ingrediente'                        //btn Borrar
+        let btnBorrar = document.createElement("button")                    //Creamos botón         btn Borrar   
+        btnBorrar.setAttribute('class', 'btn btn-default inputBg')          //clase                 btn Borrar
+        btnBorrar.setAttribute('onclick','borrarIngrediente('+i+')')        //onclick               btn Borrar   
+        btnBorrar.innerText = 'Borrar Ingrediente'                          //contenido             btn Borrar
 
-        elemento.setAttribute('id', 'ingredientBox')
+        //añadimos todos los elementos al ingrediente
         elemento.appendChild(nombre)
         elemento.appendChild(btnModificar)
         elemento.appendChild(desc)
         elemento.appendChild(btnBorrar)
-        elementos.appendChild(elemento) //añadimos el ingrediente a la lista
+        elementos.appendChild(elemento) //añadimos le ingrediente a la lista 
     }
-
+    //añadimos la lista de ingredientes a la página
     content.appendChild(elementos)
 }
 
-//}
-
+//Muestra los detalles de una receta dado su index
 function mostrarReceta(i){
-    setActiveNavTab('disable')
-    let content = document.getElementById('content')
+    setActiveNavTab('disable') //desactivamos todas las nav-tabs
+
+    //Borramos lo que hubiera antes 
+    let content = document.getElementById('content') 
     content.innerHTML = ''
     
+    //Creamos el div al que meteremos los elementos de la receta
     var elemento = document.createElement("div")
     elemento.setAttribute("class",  "receta")
 
@@ -214,7 +238,8 @@ function mostrarReceta(i){
     let pasosTitulo = document.createElement("h3")
     pasosTitulo.innerText = 'Pasos:'
 
-    let pasos = document.createElement("ol")
+        //iteramos por los pasos de la receta, y los vamos añadiendo como elementos de una ordered list
+    let pasos = document.createElement("ol") 
     for (let p of listaRecetas[i].getPasos()){
         var paso = document.createElement("li")
         paso.innerText=p
@@ -227,6 +252,7 @@ function mostrarReceta(i){
     let ingTitulo = document.createElement("h3")
     ingTitulo.innerText = 'Ingredientes:'
 
+        //iteramos por los ingredientes de la receta, y los vamos añadiendo como elementos de una unordered list
     let ingredientes = document.createElement("ul")
     for (let ing of listaRecetas[i].getIngredientes()){
         var ingrediente = document.createElement("li")
@@ -237,74 +263,77 @@ function mostrarReceta(i){
     elemento.appendChild(ingredientes)
 
 
-    //añadir botones
+    //crear botones
+    let goBackButton = document.createElement("button")           //Creamos el boton    btn Volver
+    goBackButton.setAttribute('class', 'btn btn-default inputBg') //Clase               btn Volver         
+    goBackButton.setAttribute("type",  "button")                  //Tipo                btn Volver
+    goBackButton.setAttribute("onclick",  "pagRecetas()")         //Onclick             btn Volver
+    goBackButton.innerText = 'Volver'                             //Contenido           btn Volver
 
-    let goBackButton = document.createElement("button")   //btn Volver
-    goBackButton.setAttribute('class', 'btn btn-default inputBg')          
-    goBackButton.setAttribute("type",  "button")          //btn Volver
-    goBackButton.setAttribute("onclick",  "pagRecetas()") //btn Volver
-    goBackButton.innerText = 'Volver'                     //btn Volver
-
-    let btnModificar = document.createElement("button")   //btn Modificar    
-    btnModificar.setAttribute('class', 'btn btn-default inputBg')                        
-    btnModificar.setAttribute('onclick','modificarReceta('+i+')')   //btn Modificar          
-    btnModificar.innerText = 'Modificar Receta'           //btn Modificar      
+    let btnModificar = document.createElement("button")            //Creamos el boton    btn Modificar
+    btnModificar.setAttribute('class', 'btn btn-default inputBg')  //Clase               btn Modificar                             
+    btnModificar.setAttribute('onclick','modificarReceta('+i+')')  //Onclick             btn Modificar        
+    btnModificar.innerText = 'Modificar Receta'                    //Contenido           btn Modificar      
     
-    let btnBorrar = document.createElement("button")      //btn Borrar
-    btnBorrar.setAttribute('class', 'btn btn-default inputBg')                                  
-    btnBorrar.setAttribute('onclick','borrarReceta('+i+')')      //btn Borrar   
-    btnBorrar.innerText = 'Borrar Receta'                 //btn Borrar   
+    let btnBorrar = document.createElement("button")               //Creamos el boton   btn Borrar
+    btnBorrar.setAttribute('class', 'btn btn-default inputBg')     //Clase              btn Borrar                             
+    btnBorrar.setAttribute('onclick','borrarReceta('+i+')')        //Onclick            btn Borrar   
+    btnBorrar.innerText = 'Borrar Receta'                          //Contenido          btn Borrar   
 
+    //añadimos la receta y los botones a la página
     content.appendChild(elemento)
     content.appendChild(goBackButton)
     content.appendChild(btnModificar)
     content.appendChild(btnBorrar)
-
-
-    
-
 }
-////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
-function pagCrearReceta() {
-    let tab = document.getElementById('crearReceta') 
-    
-    if (tab.getAttribute("class") == 'inactive'){
-    
-    
-        //making the active nav-tab show properly
-        setActiveNavTab('crearReceta')
-        //making the active nav-tab show properly
 
+////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////CREAR RECETA////////////////////////////////////////////////////////////////
+
+//Crea y carga el formulario utilizado para crear recetas nuevas
+function pagCrearReceta() {
+
+    //Cogemos el nav-tab de Crear Receta y comprobamos si está activo. Si lo está, no hacemos nada
+    let tab = document.getElementById('crearReceta')
+    if (tab.getAttribute("class") == 'inactive'){
+
+        setActiveNavTab('crearReceta')
+
+        //Borramos todo lo de antes
         let content = document.getElementById('content')
         content.innerHTML = ""
 
+        //Añadimos el título
         let titulo = document.createElement("h2")
         titulo.innerText = 'Crea una nueva receta!'
         titulo.setAttribute('id','rTit')
         content.appendChild(titulo)
 
+        //Creamos el formulario
         let formulario = document.createElement("form")
         formulario.setAttribute('role', 'form')
         formulario.setAttribute('id', 'recForm')
 
-
+        //Creamos los distintos campos del formulario
         //NOMBRE
-        let nameGroup = document.createElement("div")
-        nameGroup.setAttribute('class', 'form-group') 
-        let nameLabel = document.createElement("label") //ETIQUETA DEL NOMBRE
-        nameLabel.setAttribute('for', 'rName')  
-        nameLabel.innerText = 'Nombre: '    
-        let nameInput = document.createElement("input") //CAMPO DEL NOMBRE
-        nameInput.setAttribute('type', 'text')          //Type
-        nameInput.setAttribute('class', 'form-control') //Class
-        nameInput.setAttribute('id', 'rName')            //Id
-        nameInput.setAttribute('placeholder', 'Un nombre bonito') //Placeholder
+        let nameGroup = document.createElement("div")             //Creamos GRUPO               NOMBRE
+        nameGroup.setAttribute('class', 'form-group')             //clase
 
-        nameGroup.appendChild(nameLabel)
+        let nameLabel = document.createElement("label")           //Creamos ETIQUETA            NOMBRE
+        nameLabel.setAttribute('for', 'rName')                    //for                         NOMBRE
+        nameLabel.innerText = 'Nombre: '                          //Conteindo                   NOMBRE
+
+        let nameInput = document.createElement("input")           //Creamos INPUT               NOMBRE
+        nameInput.setAttribute('type', 'text')                    //Type                        NOMBRE
+        nameInput.setAttribute('class', 'form-control')           //Class                       NOMBRE
+        nameInput.setAttribute('id', 'rName')                     //Id                          NOMBRE
+        nameInput.setAttribute('placeholder', 'Un nombre bonito') //Placeholder                 NOMBRE
+
+            //añadimos label y nombre al formulario
+        nameGroup.appendChild(nameLabel)     
         nameGroup.appendChild(nameInput)
         formulario.appendChild(nameGroup)
         //NOMBRE
@@ -312,9 +341,11 @@ function pagCrearReceta() {
         //DESCRIPCION
         let descGroup = document.createElement("div")
         descGroup.setAttribute('class', 'form-group') 
+
         let descLabel = document.createElement("label") //ETIQUETA DE LA DESCRIPCION
         descLabel.setAttribute('for', 'rDesc')  
-        descLabel.innerText = 'Descripción: '    
+        descLabel.innerText = 'Descripción: ' 
+
         let descInput = document.createElement("textarea") //CAMPO DE LA DESCRIPCION
         descInput.setAttribute('type', 'text')          //Type
         descInput.setAttribute('class', 'form-control') //Class
@@ -356,14 +387,14 @@ function pagCrearReceta() {
         pasosInput.setAttribute('id', 'rPasos')            //Id
         pasosInput.setAttribute('placeholder', 'Paso 1')   //Placeholder
 
-        //SUBMIT PASO
+            //SUBMIT PASO
         let submitPaso = document.createElement("button")
         submitPaso.setAttribute('id', 'pasosBtn')
         submitPaso.setAttribute('type', 'button')
         submitPaso.setAttribute('class', 'btn btn-default inputBg')  
         submitPaso.setAttribute('onclick', 'crearPaso(0)')  
         submitPaso.innerText = 'Enviar paso 1'
-        //SUBMIT PASO
+            //SUBMIT PASO
 
             //lista de pasos
         let pasos = document.createElement("ol")
@@ -417,183 +448,37 @@ function pagCrearReceta() {
         submitButton.setAttribute('id', 'btnSubmitRec') 
         submitButton.innerText = 'Enviar'
         
-        //SUBMIT
         formulario.appendChild(submitButton)
+        //SUBMIT
 
         content.appendChild(formulario)
-        
-
-
-
     }
 }
 
-function incrementarPaso(i){
-    let pasosActualizar = document.getElementById('pasosList').children
-    let siguientePaso = pasosActualizar.length + 1
-    if (siguientePaso===undefined){siguientePaso=1}
-    if (i===undefined){ siguientePaso++}
-    //cambiar label
-    let pLabel = document.getElementById('pasosLabel')
-    pLabel.innerText = 'Introduce el paso '+(siguientePaso)+' de la receta'
-
-    //cambiar button
-    let pBtn = document.getElementById('pasosBtn')
-    pBtn.innerText = 'Enviar paso '+(siguientePaso)
-    pBtn.setAttribute('onclick', 'crearPaso('+(siguientePaso-1)+')')
-
-    //Modificar <input>
-    let inpPasos = document.getElementById('rPasos')
-    inpPasos.setAttribute('placeholder','Paso '+ (siguientePaso))
-
-    //modificar botones de los pasos existentes si estamos eliminando
-    /////////////////////////////////////////////////////////////////////////////////////DANGER
-    //asdfhgsdhsfjsfdgjfsg, Si meto 6 elementos, y borro el cuarto y luego el quinto, no lo hace bien, porque al borrar el quinto borra el paso que esté en la posición 5,
-    //pero como hemos borrado antes el cuarto, no debe borrar el quinto, sino el cuarto. Para que esto funcione, debemos actualizar los botones
-    //para que llamen a la función con los parámetros adecuados.
-    
-    if (i!=undefined){
-        for (let n=0;n<pasosActualizar.length;n++){  ////////////igual se puede optimizar haciendo que cambie solo los que tengan indice superior al elemento eliminado
-            var li = pasosActualizar.item(n)
-            li.setAttribute('id', 'idPaso'+n)
-            li.firstElementChild.setAttribute('onclick','borrarPaso('+n+')')
-            li.firstElementChild.innerText = 'Borar paso ' + (n+1)
-            li.children.item(1).setAttribute('onclick','modificarPaso('+n+')')
-            li.children.item(1).innerText = 'Modificar paso ' + (n+1)
-        }
-
-    }
-    console.log('break')
-
-}
-
-function crearPaso(i,valor){
-    
-    let inpPasos = document.getElementById('rPasos')
-    if (valor === undefined && inpPasos.value === ''){alert('El paso a introducir no puede ser vacío');return} 
-
-    incrementarPaso()
-
-    //añadir el paso i a la ordered list
-    let listaPasos = document.getElementById('pasosList')
-    let pasoI = document.createElement('li')
-    pasoI.setAttribute('id','idPaso'+i)
-    if (valor===undefined){
-        pasoI.innerText = inpPasos.value 
-    } else {pasoI.innerText = valor}
-    
-    let btnBorrarPasoI = document.createElement('button')
-    btnBorrarPasoI.setAttribute('onclick','borrarPaso('+i+')')
-    btnBorrarPasoI.setAttribute('type','button')
-    btnBorrarPasoI.setAttribute('class', 'btn btn-default')  
-    btnBorrarPasoI.innerText = 'Borrar paso '+ (i+1) //igual queda mejor solo 'borrar'
-
-    let btnModificarPasoI = document.createElement('button')
-    btnModificarPasoI.setAttribute('onclick','modificarPaso('+i+')')
-    btnModificarPasoI.setAttribute('type','button')
-    btnModificarPasoI.setAttribute('class', 'btn btn-default')  
-    btnModificarPasoI.innerText = 'Modificar paso '+ (i+1) //igual queda mejor solo 'borrar'
-
-    pasoI.appendChild(btnBorrarPasoI)
-    pasoI.appendChild(btnModificarPasoI)
-    listaPasos.appendChild(pasoI)
-
-    let inpToReset = document.getElementById('rPasos')
-    inpToReset.value=''
-}
-
-function modificarPaso(i){
-    let listaPasos = document.getElementById('pasosList')
-    let paso = listaPasos.children.item(i)
-
-    let inpPaso = document.createElement('input')
-    inpPaso.setAttribute('type','text')
-    inpPaso.setAttribute('id','inpPasos')
-    inpPaso.setAttribute('value',paso.firstChild.wholeText)
-
-    let inpBtnEnviar = document.createElement('button')
-    inpBtnEnviar.setAttribute('id','inpBtnEnviar')
-    inpBtnEnviar.setAttribute('type','button')
-    inpBtnEnviar.setAttribute('onclick','sendModifiedPaso('+i+',1)')
-    inpBtnEnviar.innerText = 'Guardar cambios'
-
-    let inpBtnCancelar = document.createElement('button')
-    inpBtnCancelar.setAttribute('type','button')
-    inpBtnCancelar.setAttribute('id','inpBtnCancelar')
-    inpBtnCancelar.setAttribute('onclick','sendModifiedPaso('+i+',0)')
-    inpBtnCancelar.innerText = 'Cancelar'
-
-    listaPasos.insertBefore(inpPaso,paso)
-    listaPasos.insertBefore(inpBtnEnviar,paso)
-    listaPasos.insertBefore(inpBtnCancelar,paso)
-
-    placeholderString = paso.firstChild.wholeText //guardamos el contenido en una variable global por si quiere cancelar
-
-    listaPasos.removeChild(paso)
-
-}
-
-function sendModifiedPaso(i,send){
-    let listaPasos = document.getElementById('pasosList')
-    let pasoI = document.createElement('li')
-    let valor = 'Error al modificar'
-    if (send===1){valor = document.getElementById('inpPasos').value}
-    else {valor = placeholderString}
-    pasoI.setAttribute('id','idPaso'+i) // not sure this is the right id, need to verify
-    pasoI.innerText = valor
-
-    let btnBorrarPasoI = document.createElement('button')
-    btnBorrarPasoI.setAttribute('onclick','borrarPaso('+i+')')
-    btnBorrarPasoI.setAttribute('type','button')
-    btnBorrarPasoI.setAttribute('class', 'btn btn-default')  
-    btnBorrarPasoI.innerText = 'Borrar paso '+ (i+1) //igual queda mejor solo 'borrar'
-
-    let btnModificarPasoI = document.createElement('button')
-    btnModificarPasoI.setAttribute('onclick','modificarPaso('+i+')')
-    btnModificarPasoI.setAttribute('type','button')
-    btnModificarPasoI.setAttribute('class', 'btn btn-default')  
-    btnModificarPasoI.innerText = 'Modificar paso '+ (i+1) //igual queda mejor solo 'borrar'
-
-    pasoI.appendChild(btnBorrarPasoI)
-    pasoI.appendChild(btnModificarPasoI)
-    listaPasos.insertBefore(pasoI,document.getElementById('inpPasos'))
-
-    borrarFormPaso()
-}
-
-function borrarFormPaso(){
-    let listaPasos = document.getElementById('pasosList')
-    listaPasos.removeChild(document.getElementById('inpPasos'))
-    listaPasos.removeChild(document.getElementById('inpBtnEnviar'))
-    listaPasos.removeChild(document.getElementById('inpBtnCancelar'))
-}
-
-function borrarPaso(i) {
-    let listaPasos = document.getElementById('pasosList')
-    //let paso = document.getElementById('idPaso'+i) estaba puesto con esto, y luego listaPasos.removeChild(paso)
-    listaPasos.removeChild(listaPasos.children.item(i))
-    incrementarPaso(i)
-}
-
+//Toma los valores del formulario y los guarda en la posición i de la listaRecetas (sirve tanto para crear como para modificar)
 function guardarReceta(i){
+    //cojemos los valores del formulario
     let nombre = document.getElementById('rName').value
     let descripcion = document.getElementById('rDesc').value
     let foto = document.getElementById('rFoto').value
     let pasos = []
     let ingredientes = []
     
-
+    //si no han metido nada en el campo de la foto, ponemos una predefinida
     if (foto === '' || foto === undefined){
         foto = undefinedLocation 
     }
 
+    //Si hay otra receta con el mismo nombre, avisamos
     for (rec of listaRecetas){
         if (rec.getName()===nombre) {
             if (!confirm('Ya existe una receta con ese nombre, ¿seguro que quieres crear otra?')){
-            return}
+                return}
         }
     }
 
+    //Guardamos los ingredientes marcados (los ingredientes son una checkbox)
+    //Para ello, iteramos por las checkboxes, y, si está checkeada, guardamos el valor en la posición n, y sumamos uno a n
     let n=0
     for (let ingIndex=0;ingIndex<listaIngredientes.length;ingIndex++){
         var ingrediente = document.getElementById('ing'+ingIndex)
@@ -603,20 +488,19 @@ function guardarReceta(i){
         }
     }
 
-    //PASOS
+    //Iteramos por los pasos que haya añadido el usuario, guardando su valor en la lista (los pasos son li dentro de una ol)
     let pasosArray = document.getElementById('pasosList').children
-    if (pasosArray.length === 0 || pasosArray.length === undefined) {alert('La receta debe tener al menos un paso'); return}
+    if (pasosArray.length === 0 || pasosArray.length === undefined) {alert('La receta debe tener al menos un paso'); return} //Si no hay pasos, cancelamos el guardado
     for (let ind = 0; ind<pasosArray.length;ind++){
         pasos[ind] = pasosArray.item(ind).firstChild.wholeText
     }
 
-    resetPasos() //Se podría poner más abajo para que solo resetee al enviar los datos, por comodidad
-
+    //Comprobamos que haya metido nombre, descripción, e ingredientes, y, si los ha metido, guardamos los valores
     if (nombre==='' || descripcion==='' ){
         alert('Debe haber tanto nombre como descripción')
     } else if (ingredientes.length==0){alert('La receta debe tener al menos un ingrediente')
     } else {
-        console.log(nombre)
+        resetPasos() //borra los pasos y resetea el input
         let receta = new objReceta(nombre,descripcion, ingredientes, foto, pasos)
         listaRecetas[i] = receta
         
@@ -624,26 +508,186 @@ function guardarReceta(i){
 
 }
 
+//////////////////////// PASOS ////////////////////////
+//////////////////////// PASOS ////////////////////////
+
+//Toma el valor del input (o del parámetro valor), y añade un li a la ol con ese valor, y botones para modificarlo y borrarlo
+//Además, cambia el input, su label, y su botón, para aumentar el paso en el que están. i es el índice del paso en el que estamos (0 indexed)
+function crearPaso(i,valor){
+    
+    let inpPasos = document.getElementById('rPasos')
+    if (valor === undefined && inpPasos.value === ''){alert('El paso a introducir no puede ser vacío');return} 
+
+    incrementarPaso() //actualiza el input, label, y botón
+
+    //añadir el paso i a la ordered list
+    let listaPasos = document.getElementById('pasosList')
+    let pasoI = document.createElement('li')
+    pasoI.setAttribute('id','idPaso'+i)
+    if (valor===undefined){
+        pasoI.innerText = inpPasos.value 
+    } else {pasoI.innerText = valor}
+    
+    //Crear boton de borrar paso
+    let btnBorrarPasoI = document.createElement('button')
+    btnBorrarPasoI.setAttribute('onclick','borrarPaso('+i+')')
+    btnBorrarPasoI.setAttribute('type','button')
+    btnBorrarPasoI.setAttribute('class', 'btn btn-default')  
+    btnBorrarPasoI.innerText = 'Borrar paso '+ (i+1) 
+
+    //Crear boton de modificar paso
+    let btnModificarPasoI = document.createElement('button')
+    btnModificarPasoI.setAttribute('onclick','modificarPaso('+i+')')
+    btnModificarPasoI.setAttribute('type','button')
+    btnModificarPasoI.setAttribute('class', 'btn btn-default')  
+    btnModificarPasoI.innerText = 'Modificar paso '+ (i+1)
+
+    //añadir botones al paso, y el paso a la lista
+    pasoI.appendChild(btnBorrarPasoI)
+    pasoI.appendChild(btnModificarPasoI)
+    listaPasos.appendChild(pasoI)
+
+    inpPasos.value='' //reseteamos el valor del input
+}
+
+//borra el paso con índice i de la ol
+function borrarPaso(i) {
+    let listaPasos = document.getElementById('pasosList')
+    listaPasos.removeChild(listaPasos.children.item(i))
+    incrementarPaso(i) //como hemos borrado un paso, hay que actualizar el formulario, restándole uno
+}
+
+//Actualiza los campos del formulario para que muestren el paso adecuado. Para añadir pasos, i se deja undefined.
+//Si pasamos i es porque estamos borrando un paso.
+function incrementarPaso(i){
+    let pasosActualizar = document.getElementById('pasosList').children //Hijos de la ol; los li
+    let siguientePaso = pasosActualizar.length + 1
+    if (siguientePaso===undefined){siguientePaso=1}
+    if (i===undefined){siguientePaso++} //hace falta sumarle 2 porque al crear un paso actualizamos antes de meter el paso nuevo
+
+    //cambiar label
+    let pLabel = document.getElementById('pasosLabel')
+    pLabel.innerText = 'Introduce el paso '+(siguientePaso)+' de la receta'
+
+    //cambiar button
+    let pBtn = document.getElementById('pasosBtn')
+    pBtn.innerText = 'Enviar paso '+(siguientePaso)
+    pBtn.setAttribute('onclick', 'crearPaso('+(siguientePaso-1)+')') //es siguientePaso-1 porque queremos que sea el index
+
+    //Modificar <input>
+    let inpPasos = document.getElementById('rPasos')
+    inpPasos.setAttribute('placeholder','Paso '+ (siguientePaso))
+
+    //Si han pasado una i -> Estamos eliminando -> debemos actualizar los botones porque su indice ha cambiado
+    //Iteramos por todos los pasos, y en cada paso le cambiamos a los botones la id, onclick, y contenido para que coincida con su posición
+    if (i!=undefined){
+        for (let n=0;n<pasosActualizar.length;n++){ 
+            var li = pasosActualizar.item(n)
+            li.setAttribute('id', 'idPaso'+n)
+            li.firstElementChild.setAttribute('onclick','borrarPaso('+n+')')
+            li.firstElementChild.innerText = 'Borar paso ' + (n+1)
+            li.children.item(1).setAttribute('onclick','modificarPaso('+n+')')
+            li.children.item(1).innerText = 'Modificar paso ' + (n+1)
+        }
+    }
+}
+
+//Al darle al boton de modificar un paso, borramos el li, y lo sustituimos por un input con sus botones de enviar y cancelar
+function modificarPaso(i){
+    let listaPasos = document.getElementById('pasosList')
+    let paso = listaPasos.children.item(i)
+
+    //Input contenido
+    let inpPaso = document.createElement('input')
+    inpPaso.setAttribute('type','text')
+    inpPaso.setAttribute('id','inpPasos')
+    inpPaso.setAttribute('value',paso.firstChild.wholeText)
+
+    //Botón Enviar
+    let inpBtnEnviar = document.createElement('button')
+    inpBtnEnviar.setAttribute('id','inpBtnEnviar')
+    inpBtnEnviar.setAttribute('type','button')
+    inpBtnEnviar.setAttribute('onclick','sendModifiedPaso('+i+',1)')
+    inpBtnEnviar.innerText = 'Guardar cambios'
+
+    //Botón Cancelar
+    let inpBtnCancelar = document.createElement('button')
+    inpBtnCancelar.setAttribute('type','button')
+    inpBtnCancelar.setAttribute('id','inpBtnCancelar')
+    inpBtnCancelar.setAttribute('onclick','sendModifiedPaso('+i+',0)')
+    inpBtnCancelar.innerText = 'Cancelar'
+
+    //Usamos insertBefore para mantener el orden
+    listaPasos.insertBefore(inpPaso,paso)
+    listaPasos.insertBefore(inpBtnEnviar,paso)
+    listaPasos.insertBefore(inpBtnCancelar,paso)
+
+    placeholderString = paso.firstChild.wholeText //guardamos el contenido del paso en una variable global por si quiere cancelar
+
+    listaPasos.removeChild(paso)
+}
+
+//Es la función que se llama cuando le das a cualquier botón al modificar paso.
+//Crea un li, le mete el valor original si cancelas, o lo que ponga en el input si envías, y llama a borrarFormPaso()
+// i es el índice del paso que estamos modificando.
+// send toma valores de 0 o 1, donde 0 es cancelar y 1 guardar
+function sendModifiedPaso(i,send){
+    let listaPasos = document.getElementById('pasosList')
+    let pasoI = document.createElement('li')
+    let valor = 'Error al modificar' //Inicializamos valor en el bloque de la función para poder utilizarlo más adelante
+
+    if (send===1){valor = document.getElementById('inpPasos').value}
+    else {valor = placeholderString}
+
+    pasoI.setAttribute('id','idPaso'+i) 
+    pasoI.innerText = valor
+
+    //crear boton de borrar
+    let btnBorrarPasoI = document.createElement('button')
+    btnBorrarPasoI.setAttribute('onclick','borrarPaso('+i+')')
+    btnBorrarPasoI.setAttribute('type','button')
+    btnBorrarPasoI.setAttribute('class', 'btn btn-default')  
+    btnBorrarPasoI.innerText = 'Borrar paso '+ (i+1)
+
+    //crear boton de modificar
+    let btnModificarPasoI = document.createElement('button')
+    btnModificarPasoI.setAttribute('onclick','modificarPaso('+i+')')
+    btnModificarPasoI.setAttribute('type','button')
+    btnModificarPasoI.setAttribute('class', 'btn btn-default')  
+    btnModificarPasoI.innerText = 'Modificar paso '+ (i+1)
+
+    pasoI.appendChild(btnBorrarPasoI)
+    pasoI.appendChild(btnModificarPasoI)
+    listaPasos.insertBefore(pasoI,document.getElementById('inpPasos'))
+
+    borrarFormPaso() //borramos el formulario
+}
+
+//Borra el formulario que se crea para modificar los pasos
+function borrarFormPaso(){
+    let listaPasos = document.getElementById('pasosList')
+    listaPasos.removeChild(document.getElementById('inpPasos'))
+    listaPasos.removeChild(document.getElementById('inpBtnEnviar'))
+    listaPasos.removeChild(document.getElementById('inpBtnCancelar'))
+}
+
+//Vacía la ol De los pasos, y reinicia el valor del formulario (para que vuelva a decir paso 1)
 function resetPasos(){
     let listaPasos = document.getElementById('pasosList')
     listaPasos.innerHTML = ''
 
-
-    let pasosLabel = document.getElementById("pasosLabel") //ETIQUETA DE LA DESCRIPCION
-    pasosLabel.innerText = 'Introduce el paso 1 de la receta: '    
-    let pasosInput = document.getElementById("rPasos")   //CAMPO DE LA DESCRIPCION
-    pasosInput.setAttribute('placeholder', 'Paso 1')   //Placeholder
-
-    let submitPaso = document.getElementById("pasosBtn")
-    submitPaso.setAttribute('onclick', 'crearPaso(1)')  
-    submitPaso.innerText = 'Enviar paso 1'
-
+    incrementarPaso(0)
 }
+//////////////////////// PASOS ////////////////////////
+//////////////////////// PASOS ////////////////////////
+
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR RECETA////////////////////////////////////////////////////////////////
+
+//Confirma que quiere borrar, borra la receta en la posición dada, y recarga la pagina de recetas
 function borrarReceta(i){
     if (confirm('¿Seguro que quieres borrar esta receta?')){
         listaRecetas.splice(i,1)
@@ -651,6 +695,10 @@ function borrarReceta(i){
     }
 }
 
+//Usa pagCrearReceta para crear el formulario, y modifica el .value de cada campo para que coincidan con los valores almacenados para ellos
+//Itera por los checkboxes de los ingredientes, seleccionando los que tenga la receta
+//Utiliza crearPaso para añadir los pasos de la receta.
+//Por último, añade botones de confirmar y cancelar
 function modificarReceta(i){
     pagCrearReceta()
     document.getElementById('rName').value = listaRecetas[i].getName()
@@ -684,6 +732,7 @@ function modificarReceta(i){
     
 }
 
+//Como al modificar recetas es necesario que vuelva a la vista de la receta modificada, primero guardamos la receta, y luego cargamos su información
 function guardarYVolveraLaReceta(i){
     guardarReceta(i)
     mostrarReceta(i)
@@ -693,6 +742,8 @@ function guardarYVolveraLaReceta(i){
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR INGREDIENTE////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR INGREDIENTE////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////BORRAR/MODIFICAR INGREDIENTE////////////////////////////////////////////////////////////////
+
+//Confirma que quiere borrar, borra el ingrediente en la posición dada, y recarga la pagina de ingredientes
 function borrarIngrediente(i){
     if (confirm('¿Seguro que quieres borrar este ingrediente?')){
         listaIngredientes.splice(i,1)
@@ -700,6 +751,8 @@ function borrarIngrediente(i){
     }
 }
 
+//Usa pagCrearIngrediente para crear el formulario, y modifica el .value de cada campo para que coincidan con los valores almacenados para ellos
+//Crea y añade botones de confirmar y cancelar
 function modificarIngrediente(i){
     pagCrearIngrediente()
     document.getElementById('iName').value = listaIngredientes[i].getName()
@@ -726,6 +779,8 @@ function modificarIngrediente(i){
 ////////////////////////////////////////////////////////////////CREAR INGREDIENTE////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////CREAR INGREDIENTE////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////CREAR INGREDIENTE////////////////////////////////////////////////////////////////
+
+//Crea y carga el formulario utilizado para crear ingredientes nuevos
 function pagCrearIngrediente() {
     let tab = document.getElementById('crearIngrediente') 
     
@@ -734,7 +789,6 @@ function pagCrearIngrediente() {
     
         //making the active nav-tab show properly
         setActiveNavTab('crearIngrediente')
-        //making the active nav-tab show properly
 
         let content = document.getElementById('content')
         content.innerHTML = ""
@@ -794,9 +848,7 @@ function pagCrearIngrediente() {
         descGroup.appendChild(descLabel)
         descGroup.appendChild(descInput)
         formulario.appendChild(descGroup)
-        formulario.appendChild(submitButton) //por qué lo metemos al grupo este en vez de al formulario directamente?
-
-        
+        formulario.appendChild(submitButton) 
         
         //Metemos el formulario en el HTML
         content.appendChild(formulario)
@@ -804,6 +856,7 @@ function pagCrearIngrediente() {
     }
 }
 
+//Toma los valores del formulario y los guarda en la posición i de la listaIngredientes (sirve tanto para crear como para modificar)
 function guardarIngrediente(i){
     let nombre = document.getElementById('iName').value
     let descripcion = document.getElementById('iDesc').value
@@ -828,6 +881,7 @@ function guardarIngrediente(i){
 ////////////////////////////////////////////////////////////////BUSCAR////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////BUSCAR////////////////////////////////////////////////////////////////
 
+//Crea una página con un formulario para buscar recetas o ingredientes
 function pagBuscar() {
     let tab = document.getElementById('buscar') 
 
@@ -895,6 +949,7 @@ function pagBuscar() {
        }
 }
 
+//Toma el valor del input de pagBuscar, y muestra recetas e ingredientes con nombres iguales al input
 function busqueda(){
 
         let input = document.getElementById("busq").value;  
@@ -952,8 +1007,11 @@ function busqueda(){
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
+
+//definimos una imagen por si no ponen ninguna
 let undefinedLocation = 'fotos/undefined.jpeg'
 
+//Inicializamos los valores ejemplo
 let miel = new objIngrediente("Miel","dulce, pegajosa")
 let curry = new objIngrediente("Curry","to rico, ligeramente picante")
 let pollo = new objIngrediente("Pollo","genérico. Incinera cualquier cosa que toque mientras esté crudo")
@@ -973,5 +1031,5 @@ let d = new objReceta("Bistec con patatas","Recomendamos acompañarlo de alguna 
 let listaRecetas = [a,b,c,d]
 
 
-
+//Creamos un placeholder para poder volver al valor original si cancelan al modificar un paso
 let placeholderString = ''

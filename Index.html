@@ -3,11 +3,8 @@
     <head>
         <meta charset="utf-8" /> <!-- Permite que haya tildes entre otras cosas -->
         <title>Tu recetario to guapo</title>
-        <!-- <script src='app.js'> </script> -->
-        
 
         <!-- JQuery Implementation -->
-        
         <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
         <!-- JQuery Implementation -->
 
@@ -17,29 +14,30 @@
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <!-- Bootstrap Implementation -->
 
+        <!-- Descarga de fuentes personalizadas  -->
         <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet"> <!-- descarga Patrick Hand-->
         <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet"> <!-- descarga Cookie-->
-        <link rel="stylesheet" href="style.css">
-        <script src="app.js"></script>
+        <!-- Descarga de fuentes personalizadas -->
 
-
+        <link rel="stylesheet" href="style.css"> <!-- Cargamos el .CSS  -->
+        <script src="app.js"></script>           <!-- Cargamos el .js -->
 
     </head>
 
     <body>
         <h1 class="tituloPpal">Bienvenido a tu recetario favorito</h1>
 
-        
+        <!-- Botones de navegación -->
         <ul class="nav nav-tabs inputBg">
-            <li id="recetas" class="inactive" onclick="pagRecetas()"> <a> Recetas  </a></li> <!-- Igual puedo poner aquí la dirección en memoria del puntero -->
+            <li id="recetas" class="inactive" onclick="pagRecetas()"> <a> Recetas  </a></li>
             <li id="ingredientes" class="inactive" onclick="pagIngredientes()"> <a> Ingredientes </a></li>
             <li id="crearReceta" class="inactive" onclick="pagCrearReceta()"> <a> Crear Receta </a></li>
             <li id="crearIngrediente" class="inactive" onclick="pagCrearIngrediente()"> <a> Crear Ingrediente </a></li>
             <li id="buscar" class="inactive" onclick="pagBuscar()"> <a><span class="glyphicon glyphicon-search"></span>  Buscar</a> </li>
         </ul>
-        <div id="content">  
-            
+        <!-- Botones de navegación -->
 
-        </div> <!-- para que se vean las recetas al cargar la pagina, debemos usar el operador $, que llame a pagRecetas-->
+        <div id="content"></div> <!-- Este div es el que utilizaremos para mostrar los elementos  -->
+
     </body>
 </html>
