@@ -1,0 +1,127 @@
+
+body {
+  background-image: url("fotos/bodyBG.jpg");
+  margin-left: 10px;
+  font-family: 'Patrick Hand', Helvetica, sans-serif;
+  color: rgb(0, 0, 0);
+  text-shadow: 4px 4px 3px rgba(0,0,0,0.1); 
+} 
+
+
+h1 {
+  text-align: center;
+}
+
+/* Distingue el título principal de los títulos de cada sección */
+.tituloPpal {
+  font-size: 42px;
+  text-align: left;
+}
+
+/* Aplica fuentes personalizadas a algunos títulos */
+h2, h3 {font-family: 'cookie'}
+
+/* Aplica una versión más oscura del fondo de la web. Usado en buttons */
+.inputBg {
+  background-image: url("fotos/inputBG.jpg");
+  font-weight: bold;
+ } 
+
+/* El wrapper será un div que contendrá las recetas. La idea es que muestre 3 recetas en una fila como máximo,
+   dándole el mismo espacio a cada una, pero si no hay suficientes recetas para que ocupen en una línea,
+   querremos centrar las recetas que estén. Para ello necesitamos que haya columnas de más */
+.wrapper { 
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+  border: 1px solid;
+  padding: 10px;
+  margin-left: 50PX;
+  margin-right: 50px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+/* Son los elementos del wrapper. Ocupan un span de 2, de forma que en una fila podrá haber 3 como máximo*/
+.receta {
+  grid-column: span 2;
+  background: rgb(191, 170, 140);
+}
+
+/* Cambia el color de las nav-tabs, para que sean más legibles */
+li a {
+  color: black;
+  font-weight: bold;
+  font-size: 16;
+}
+
+/* Aplican formato para las cajas que contienen los ingredientes */
+.item-a {
+  grid-area: header;
+}
+
+/* Aplican formato para las cajas que contienen los ingredientes */
+.item-d {
+  grid-area: footer;
+}
+
+/* Contiene item-a y item-d, aplica formato a las cajas de ingredientes */
+#ingredientBox{
+  border-style: solid;
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-color: peru;
+  display: grid;
+    grid-template-columns: 7fr 1fr;
+    grid-template-rows: 1fr minmax(1fr, 3fr);
+    grid-auto-flow: row;
+    grid-template-areas: 
+      "header header"
+      "footer footer";
+}
+
+/* Aplica estilo al div que contiene todos los ingredientes  */
+.container{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-between;  
+}
+
+/* Aplica estilo a la scrollbar de la página de ingredientes */
+.scrollbarList{
+  margin: 20px;
+  border: 5px solid;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 650px;
+  border-color: peru;
+}
+
+/* Aplica estilo a la scrollbar de la página de crear recetas */
+.scrollbar{
+  margin: 20px;
+  border: 5px solid;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 400px;
+  width: 30%;
+}
+
+/* Aplica estilo a las imagenes. El alto está fijado para que todas las imágenes ocupen lo mismo */
+.image{
+  width: 100%;
+  height: 250px;
+  display: block;
+}
+
+/* Es necesario para que el wrapper funcione adecuadamente cuando no hay suficientes elementos para llenar una línea */
+.transparent {
+  background-color: transparent;
+}
+
+/* Aplica márgenes a distintos elementos, para que no estén pegados a sus contenedores */
+h1, h2, h3, p, input[type=checkbox] {
+  margin-left: 10px;
+}
