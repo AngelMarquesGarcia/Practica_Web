@@ -1,4 +1,4 @@
-let mapaIngredientes = new Map();
+export let mapaIngredientes = new Map();
 
 class objIngrediente {
 
@@ -14,7 +14,7 @@ class objIngrediente {
     }
 }
 
-    //Inicializamos los valores ejemplo
+//Inicializamos los valores ejemplo
 let miel = new objIngrediente("Miel","dulce, pegajosa")
 let curry = new objIngrediente("Curry","to rico, ligeramente picante")
 let pollo = new objIngrediente("Pollo","genérico. Incinera cualquier cosa que toque mientras esté crudo")
@@ -35,7 +35,7 @@ mapaIngredientes.set('5', harina);
 mapaIngredientes.set('6', leche);
 mapaIngredientes.set('7', patatasFritas);
 
-export function añadirIngrediente(){
+export function nuevoIngrediente(){
     let ingrediente = new objIngrediente(nombre, descripcion)
     mapaIngredientes.set('mapaIngredientes.size', ingrediente)
 }
@@ -44,7 +44,7 @@ export function borrarIngrediente(clave){
     mapaIngredientes.delete(clave)
 }
 
-export function editarIngrediente(clave, cambios){
+export function modificarIngrediente(clave, cambios){
     let ingrediente = mapaIngredientes.get(clave)
     if (ingrediente.getName() != cambios.getName()){
         ingrediente.getName() = cambios.getName()    

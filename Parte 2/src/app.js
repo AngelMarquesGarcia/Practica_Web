@@ -5,18 +5,17 @@ import { __dirname } from './dirname.js';
 
 const app = express();
 
+//Configuración de Mustache
 app.set('views', __dirname + '/views');
 app.set('view engine', 'mustache');
 app.engine('mustache', mustacheExpress());
 
+//Configuración del analizador del body
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//Configuración de carpeta pública
 app.use(express.static(__dirname + '/public'));
 
-app.get('/', (req, res) => {
-    res.render('index', {
-        name: "World"
-    });
-});
+
 
 app.listen(3000, () => console.log('Listening on port 3000!'));

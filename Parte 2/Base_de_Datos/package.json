@@ -1,0 +1,6 @@
+{
+  "name": "base_de_datos",
+  "version": "1.0.0",
+  "description": "Consta de tres archivos que contendrán las recetas, sus ingredientes, y sus pasos",
+  "type":"module"
+}
