@@ -35,9 +35,22 @@ mapaIngredientes.set('5', harina);
 mapaIngredientes.set('6', leche);
 mapaIngredientes.set('7', patatasFritas);
 
-añadirIngrediente(){
-    let ingrediente = new objIngrediente(nombre, descripcion);
+export function añadirIngrediente(){
+    let ingrediente = new objIngrediente(nombre, descripcion)
     mapaIngredientes.set('mapaIngredientes.size', ingrediente)
 }
 
+export function borrarIngrediente(clave){
+    mapaIngredientes.delete(clave)
+}
 
+export function editarIngrediente(clave, cambios){
+    let ingrediente = mapaIngredientes.get(clave)
+    if (ingrediente.getName() != cambios.getName()){
+        ingrediente.getName() = cambios.getName()    
+    }
+    if (ingrediente.getDescripcion() != cambios.getDescripcion()){
+        ingrediente.getDescripcion() = cambios.getDescripcion()    
+    }
+    
+}
