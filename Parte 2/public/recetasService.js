@@ -1,4 +1,8 @@
-
+//nombre:       string
+//descripcion:  string
+//ingredientes: array of integer 
+//foto:         string
+//pasos:        array of string 
 class objReceta {
     constructor(n, d, i, f, p){
         this.nombre=n
@@ -52,7 +56,7 @@ let d = new objReceta("Bistec con patatas","Recomendamos acompañarlo de alguna 
 
 let e = new objReceta("Bistec con comida","Recomendamos acompañarlo de alguna salsa sencillita",[4,7], 'fotos/undefined.jpeg', ['Paso 1', 'Paso 2', 'Paso 3', '...', 'Paso n'])
 
-let mapaRecetas = new Map
+export let mapaRecetas = new Map
 
 let key = 0
 
