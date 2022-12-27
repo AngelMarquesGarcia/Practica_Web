@@ -58,21 +58,29 @@
                 <input type="text" class="form-control" id="rPasos" placeholder="Paso 1">
                 <button id="pasosBtn" type="button" class="btn btn-default inputBg" onclick="crearPaso(0)">Enviar paso 1</button>
                 <ol id=pasosList>
-                    {{#pasos}}
-                        <li>{{pasos.nombre}} <button></button><button></button></li>
-                    {{/pasos}}
+                <!--objPasos = {length:n, lista:[{indice:0,valor:"Hello"}, {1:"World"}]} -->
+                    {{#objPasos.lista}}
+                        <li id="idPaso{{indice}}">{{valor}} <button type="button" class="btn btn-default" onclick="modificarPaso({{indice}})">Modificar Paso {{indice}}</button><button type="button" class="btn btn-default" onclick="borrarPaso({{indice}})">Borrar Paso {{indice}}</button></li>
+                    {{/objPasos.lista}}
                 </ol>
             </div>
             
+            <p style="font-weight:700">Ingredientes: </p>
+            <div class="form-group">
+                <div class="container scrollbar"> <!--posiblemente solo scrollbar, en el original sobreescribe (creo) a container -->
+                <!-- objListaIngrediente = [{indiceOG:3,indiceActual:0,nombre:"juan"},{indiceOG:4,indiceActual:1,nombre:"a"}] -->
+                    {{#objListaIngrediente}}
+                        <label id="ingLabel{{indiceActual}}">{{nombre}}</label>
+                        <input type="checkbox" id="ing{{indiceActual}}" value="indiceOG">
+                    {{/objListaIngrediente}}
+                </div>
+            </div>
 
-            {{#ingredientes}}
-
-            {{/ingredientes}}
-
-            <button type="submit" class="btn btn-default inputBg" onclick="busqueda()">Enviar</button>
+            <button id="btnSubmitRec" type="submit" class="btn btn-default inputBg" onclick="busqueda()">Enviar</button>
         </form>
 
         <div id="content"></div> <!-- Este div es el que utilizaremos para mostrar los elementos  -->
 
     </body>
 </html>
+
