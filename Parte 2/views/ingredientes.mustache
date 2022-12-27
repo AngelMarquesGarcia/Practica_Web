@@ -36,6 +36,16 @@
             <li id="buscar" class="inactive" onclick="pagBuscar()"> <a><span class="glyphicon glyphicon-search"></span>  Buscar</a> </li>
         </ul>
         <!-- Botones de navegación -->
+        <div class="scrollbartList container">
+        <div class="infrediente" id="ingredientBox">
+            
+            <h3>{{Nombre}}</h3>
+            <button class="btn btn-default inputBg" onclick="modificarIngrediente(i)">Modificar Ingrediente</button>
+            <p>{{Descripción}}</p>
+            <button class="btn btn-default inputBg" onclick="borrarIngrediente(i)">Borrar Ingrediente</button>
+            
+        </div>
+        </div>
 
         <div id="content"></div> <!-- Este div es el que utilizaremos para mostrar los elementos  -->
 
