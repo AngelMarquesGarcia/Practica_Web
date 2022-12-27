@@ -1,5 +1,6 @@
 import express from 'express';
 import { mapaRecetas } from 'recetasService.js'; // formerly ../public/recetasService
+import { mapaIngredientes, objIngrediente } from 'ingredientesService.js';
 
 export const router = express.Router();
 
@@ -11,18 +12,26 @@ router.get('/ingredientes', (req, res) => {
     res.render('ingredientes');
 });
 
+//hay que revisar esto, la lista de ingredientes principalmente
 router.get('/crearReceta', (req, res) => {
-    if (req.query.actualizar){
-        res.render('crearReceta', {titulo: "Actualiza tu maravillosa receta!"})}
-    else {
-        res.render('crearReceta', {titulo: "Crea una nueva receta!"})}
+    let ingredientList = Array.from(mapaIngredientes.values())
+    
+    res.render('crearReceta', {titulo: "Crea una nueva receta!", ingredientes:ingredientList})
 });
 
-router.get('/crearIngrediente', (req, res) => {
-    if (req.query.actualizar){
-        res.render('crearIngrediente', {titulo: "Actualiza tu maravilloso ingrediente!"})}
-    else {
-        res.render('crearIngrediente', {titulo: "Crea un nuevo Ingrediente!"})}
+router.get('/modificarReceta/:id', (req, res) => {
+    let ingredientList = Array.from(mapaIngredientes.values())
+    let recetaModificar = mapaRecetas.get(req.params.id)
+
+    res.render('crearReceta', {titulo: "Actualiza tu maravillosa receta!", ingredientes:ingredientList, receta:recetaModificar})
+});
+
+router.get('/crearIngrediente', (req, res) =>{ 
+    res.render('crearIngrediente', {titulo: "Crea un nuevo Ingrediente!", ingrediente:ingredientePlaceHolder})
+});
+
+router.get('/modificarIngrediente/:id', (req, res) => {
+    res.render('crearIngrediente', {titulo: "Actualiza tu maravilloso ingrediente!", ingrediente:mapaIngredientes.get(req.params.id)})
 });
 
 router.get('/buscar', (req, res) => {

@@ -1,6 +1,6 @@
 export let mapaIngredientes = new Map();
 
-class objIngrediente {
+export class objIngrediente {
 
     constructor(n, d){
         this.nombre=n
