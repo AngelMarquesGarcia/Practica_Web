@@ -38,17 +38,26 @@
         <!-- Botones de navegación -->
 
         <div class="receta">
-            <img src="">
-            <h2>{{Nombre}}</h2>
-            <p>{{Descripción}}</p>
-            <h3>Pasos</h3>
-            <ol>
+            <img src="{{foto}}">
+            <h2>{{nombre}}</h2>
+            <p>{{descripción}}</p>
 
+            <h3>Pasos: </h3>
+            <ol>
+                <!--pasos = ["paso1","paso2","paso3"...]  Cambiar esto a una lista [{nombre:"paso1"},{nombre:"paso2"}] si fuera mal-->
+                {{#pasos}}
+                    <li>{{.}}</li>
+                {{/pasos}}
             </ol>
+
             <h3>Ingredientes</h3>
             <ul>
-                
+                <!-- listaIngredientes = [{nombre:"juan",desc:"whatever"},{nombre:"a",desc:"whatever"}] es literal un array of objIngrediente -->
+                {{#ingredientes}}
+                    <li>{{nombre}}</li>
+                {{/ingredientes}}
             </ul>    
+
         </div>
         <button class="btn btn-default inputBg" onclick="pagRecetas()">Volver</button>
         <button class="btn btn-default inputBg" onclick="modificarReceta(i)">Modificar receta</button>

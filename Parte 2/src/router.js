@@ -1,8 +1,12 @@
 import express from 'express';
-import { mapaRecetas } from 'recetasService.js'; // formerly ../public/recetasService
-import { mapaIngredientes, objIngrediente } from 'ingredientesService.js';
+import { mapaRecetas } from '../public/recetasService.js'; // formerly ../public/recetasService
+import { mapaIngredientes, objIngrediente } from '../public/ingredientesService.js';
 
 export const router = express.Router();
+
+router.get('/', (req, res) => {
+    res.render('bienvenida');
+});
 
 router.get('/recetas', (req, res) => {
     res.render('recetas');
@@ -63,7 +67,7 @@ router.get('/recetas/:id', (req, res) => {
         nombre: `${receta.nombre}`,
         descripcion:`${receta.descripcion}`,
         foto:`${receta.foto}`,
-        ingredientes:`${receta.ingredientes}`,
+        ingredientes:`${receta.ingredientes}`, //igual se habría que mirar esto, confirmar que sea un array de la forma [{nombre:"asd"},{nombre:"asd"}]
         pasos:`${receta.pasos}`
     });
 });
