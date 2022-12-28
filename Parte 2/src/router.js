@@ -9,7 +9,11 @@ router.get('/', (req, res) => {
 });
 
 router.get('/recetas', (req, res) => {
+
+
+
     res.render('recetas');
+
 });
 
 router.get('/ingredientes', (req, res) => {
@@ -71,6 +75,11 @@ router.get('/recetas/:id', (req, res) => {
         pasos:`${receta.pasos}`
     });
 });
+
+
+
+
+
 
 //le hay que poner los router.post de crear y actualizar receta e ingrediente
 

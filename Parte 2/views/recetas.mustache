@@ -37,6 +37,15 @@
         </ul>
         <!-- Botones de navegación -->
 
+        <div class="wrapper">
+            <div class="receta" onclick="mostrarreceta(i)">
+                <img src="{{foto}}">
+                <h2>{{Nombre}}</h2>
+                <p>{{Descripcion}}</p>
+            </div>
+        </div>
+        <button onclick="masRecetas()">Cargar más recetas</button>
+        <button onclick="pagCrearReceta()">Crear nueva receta</button>
 
 
         <div id="content"></div> <!-- Este div es el que utilizaremos para mostrar los elementos  -->
