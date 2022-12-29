@@ -19,8 +19,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet"> <!-- descarga Cookie-->
         <!-- Descarga de fuentes personalizadas -->
 
-        <link rel="stylesheet" href="style.css"> <!-- Cargamos el .CSS  -->
-        <script src="app.js"></script>           <!-- Cargamos el .js -->
+        <link rel="stylesheet" href="{{desplazamiento}}style.css"> <!-- Cargamos el .CSS  -->
+        <script src="{{desplazamiento}}main.js"></script>           <!-- Cargamos el .js -->
 
     </head>
 
@@ -78,7 +78,7 @@
             
             <p style="font-weight:700">Ingredientes: </p>
             <div class="form-group">
-                <div class="scrollbar"> <!--posiblemente solo scrollbar, en el original sobreescribe (creo) a container -->
+                <div class="scrollbar">
                 <!-- objListaIngrediente = [{indiceOG:3,indiceActual:0,nombre:"juan"},{indiceOG:4,indiceActual:1,nombre:"a"}] -->
                     {{#objListaIngrediente}}
                         <input type="checkbox" id="ing{{indiceActual}}" value="{{indiceOG}}">
@@ -89,9 +89,12 @@
             </div>
 
             <button id="btnSubmitRec" type="submit" class="btn btn-default inputBg" onclick="busqueda()">Enviar</button>
+            {{#modificar}}
+                <button id="btnSubmitRec" type="reset" class="btn btn-default inputBg" onclick="busqueda()">Cancelar</button>
+            {{/modificar}}
         </form>
 
-        <div id="content"></div> <!-- Este div es el que utilizaremos para mostrar los elementos  -->
+        
 
     </body>
 </html>

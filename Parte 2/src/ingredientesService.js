@@ -12,6 +12,14 @@ export class objIngrediente {
     getDescripcion(){
         return this.descripcion
     }
+
+    setName(valor){
+        this.nombre=valor
+    }
+    
+    setDescripcion(valor){
+        this.descripcion=valor
+    }
 }
 
 //Inicializamos los valores ejemplo
@@ -25,19 +33,18 @@ let leche = new objIngrediente("Leche","Universal bebida de desayuno")
 let patatasFritas = new objIngrediente("Patatas Fritas","El mejor acompañante jamás creado")
 
 
+nuevoIngrediente(miel)
+nuevoIngrediente(curry)
+nuevoIngrediente(pollo)
+nuevoIngrediente(avena)
+nuevoIngrediente(bistec)
+nuevoIngrediente(harina)
+nuevoIngrediente(leche)
+nuevoIngrediente(patatasFritas)
 
-mapaIngredientes.set('0', miel);
-mapaIngredientes.set('1', curry);
-mapaIngredientes.set('2', pollo);
-mapaIngredientes.set('3', avena);
-mapaIngredientes.set('4', bistec);
-mapaIngredientes.set('5', harina);
-mapaIngredientes.set('6', leche);
-mapaIngredientes.set('7', patatasFritas);
 
-export function nuevoIngrediente(){
-    let ingrediente = new objIngrediente(nombre, descripcion)
-    mapaIngredientes.set('mapaIngredientes.size', ingrediente)
+export function nuevoIngrediente(valor){
+    mapaIngredientes.set(mapaIngredientes.size.toString(), valor)
 }
 
 export function borrarIngrediente(clave){
@@ -47,10 +54,15 @@ export function borrarIngrediente(clave){
 export function modificarIngrediente(clave, cambios){
     let ingrediente = mapaIngredientes.get(clave)
     if (ingrediente.getName() != cambios.getName()){
-        ingrediente.getName() = cambios.getName()    
+        ingrediente.setName(cambios.getName())    
     }
     if (ingrediente.getDescripcion() != cambios.getDescripcion()){
-        ingrediente.getDescripcion() = cambios.getDescripcion()    
+        ingrediente.setDescripcion(cambios.getDescripcion())    
     }
     
 }
+
+`
+for (let pair of mapaIngredientes){
+    console.log(pair)
+}`

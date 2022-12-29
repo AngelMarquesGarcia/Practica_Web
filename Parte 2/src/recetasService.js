@@ -58,11 +58,14 @@ let e = new objReceta("Bistec con comida","Recomendamos acompañarlo de alguna s
 
 export let mapaRecetas = new Map
 
-let key = 0
+nuevaReceta(a)
+nuevaReceta(b)
+nuevaReceta(c)
+nuevaReceta(d)
+nuevaReceta(e)
 
 export function nuevaReceta(valor){
-    mapaRecetas.set(key, valor)
-    key++
+    mapaRecetas.set(mapaRecetas.size, valor)
 }
 
 export function borrarReceta(clave){
@@ -74,27 +77,27 @@ export function modificarReceta(clave, cambios){
 
     //actualizamos el nombre si es necesario
     if (receta.getName != cambios.getName){
-        receta.setName(cambios.getName)
+        receta.setName(cambios.getName())
     }
 
     //actualizamos la descripcion si es necesario
     if (receta.getDescription != cambios.getDescription){
-        receta.setDescription(cambios.getDescription)
+        receta.setDescription(cambios.getDescription())
     }
 
     //actualizamos los ingredientes si es necesario
     if (receta.getIngredientes != cambios.getIngredientes){
-        receta.setIngredientes(cambios.getIngredientes)
+        receta.setIngredientes(cambios.getIngredientes())
     }
 
     //actualizamos la foto si es necesario
     if (receta.getFoto != cambios.getFoto){
-        receta.setFoto(cambios.getFoto)
+        receta.setFoto(cambios.getFoto())
     }
 
     //actualizamos los pasos si es necesario
     if (receta.getPasos != cambios.getPasos){
-        receta.setPasos(cambios.getPasos)
+        receta.setPasos(cambios.getPasos())
     }
 }
 

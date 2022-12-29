@@ -967,7 +967,7 @@ function pagBuscar() {
 
         //Añadimos un event handler, para buscar al pulsar intro (más bien al soltar la tecla).
         //Si quitamos el if, ocurre al soltar cada tecla, es decir, te van apareciendo las recetas e ingredientes según escribes.
-        $('#busq').keyup(function(e) {if (e.which == 13){busqueda()}}) 
+        $('#busq').keyup(function(e) {busqueda()}) //if (e.which == 13){
        }
 }
 
