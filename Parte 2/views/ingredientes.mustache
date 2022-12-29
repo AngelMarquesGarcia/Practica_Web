@@ -29,23 +29,26 @@
 
         <!-- Botones de navegación -->
         <ul class="nav nav-tabs inputBg">
-            <li id="recetas" class="inactive" onclick="pagRecetas()"> <a> Recetas  </a></li>
-            <li id="ingredientes" class="inactive" onclick="pagIngredientes()"> <a> Ingredientes </a></li>
-            <li id="crearReceta" class="inactive" onclick="pagCrearReceta()"> <a> Crear Receta </a></li>
-            <li id="crearIngrediente" class="inactive" onclick="pagCrearIngrediente()"> <a> Crear Ingrediente </a></li>
-            <li id="buscar" class="inactive" onclick="pagBuscar()"> <a><span class="glyphicon glyphicon-search"></span>  Buscar</a> </li>
+            <li id="recetas" class="inactive"> <a href="/recetas"> Recetas  </a></li>
+            <li id="ingredientes" class="active"> <a href="/ingredientes"> Ingredientes </a></li>
+            <li id="crearReceta" class="inactive"> <a href="/crearReceta"> Crear Receta </a></li>
+            <li id="crearIngrediente" class="inactive"> <a href="/crearIngrediente"> Crear Ingrediente </a></li>
+            <li id="buscar" class="inactive"> <a href="/buscar"><span class="glyphicon glyphicon-search"></span>  Buscar</a> </li>
         </ul>
         <!-- Botones de navegación -->
         
         <div class="scrollbarList container">
-        <div class="ingrediente" id="ingredientBox">
+        
+            {{#listaIngredientes}}
+                <div class="ingrediente" id="ingredientBox">
+                    <h3>{{nombre}}</h3>
+                    <button class="btn btn-default inputBg" onclick="modificarIngrediente({{indice}})">Modificar Ingrediente</button>
+                    <p>{{descripcion}}</p>
+                    <button class="btn btn-default inputBg" onclick="borrarIngrediente({{indice}})">Borrar Ingrediente</button>
+                </div>
+            {{/listaIngredientes}}
             
-            <h3>{{Nombre}}</h3>
-            <button class="btn btn-default inputBg" onclick="modificarIngrediente(i)">Modificar Ingrediente</button>
-            <p>{{Descripción}}</p>
-            <button class="btn btn-default inputBg" onclick="borrarIngrediente(i)">Borrar Ingrediente</button>
-            
-        </div>
+        
         </div>
 
         <div id="content"></div> <!-- Este div es el que utilizaremos para mostrar los elementos  -->
