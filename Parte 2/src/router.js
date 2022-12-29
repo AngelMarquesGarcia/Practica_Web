@@ -10,11 +10,26 @@ router.get('/', (req, res) => {
 
 router.get('/recetas', (req, res) => {
 
+    const recetas = devolverRecetas(0,4);
 
-
-    res.render('recetas');
+    res.render('recetas',{
+        recetas: recetas
+    });
 
 });
+
+router.get('/recetasService', (req, res) => {
+
+    const from = parseInt(req.query.from);
+    const to = parseInt(req.query.to);
+
+    const recetas = devolverRecetas(from,to);
+
+    res.render('recetas', {
+        recetas: recetas
+    });
+});
+
 
 router.get('/ingredientes', (req, res) => {
     res.render('ingredientes');

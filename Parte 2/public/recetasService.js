@@ -98,6 +98,22 @@ export function modificarReceta(clave, cambios){
     }
 }
 
+export function devolverReceta(key) {
+    return mapaRecetas.get(key);
+}
+
+export function devolverRecetas(from, to) {
+    let values = [...mapaRecetas.values()];
+    if (from !== undefined) {
+        return values.slice(from, to);
+    } else {
+        return values;
+    }
+}
+
+
+
+
 `
 nuevaReceta('hola')
 nuevaReceta('adios')
