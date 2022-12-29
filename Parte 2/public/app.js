@@ -1,3 +1,5 @@
+import { mapaIngredientes } from "./ingredientesService"
+
 const RecetasMostradas = 5;
 const CargarRecetas = 0;
 
@@ -17,3 +19,12 @@ async function masRecetas(){
 CargarRecetas++
 }
 
+
+
+function borrarIngrediente(i){
+    console.log('Hola')
+    if (confirm('¿Seguro que quieres borrar este ingrediente?')){
+        mapaIngredientes.delete(i)
+        location.reload()
+    }
+}

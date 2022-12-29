@@ -1,6 +1,7 @@
 import express from 'express';
-import { mapaRecetas } from '../public/recetasService.js'; // formerly ../public/recetasService
-import { mapaIngredientes, objIngrediente } from '../public/ingredientesService.js';
+import { mapaRecetas, objReceta, devolverRecetas } from './recetasService.js'; // formerly ../public/recetasService
+import { mapaIngredientes, objIngrediente } from './ingredientesService.js';
+
 
 export const router = express.Router();
 
@@ -9,13 +10,11 @@ router.get('/', (req, res) => {
 });
 
 router.get('/recetas', (req, res) => {
-
     const recetas = devolverRecetas(0,4);
 
     res.render('recetas',{
         recetas: recetas
     });
-
 });
 
 router.get('/recetasService', (req, res) => {
@@ -30,20 +29,35 @@ router.get('/recetasService', (req, res) => {
     });
 });
 
-
 router.get('/ingredientes', (req, res) => {
-    res.render('ingredientes');
+    let lista = []
+    let c = 0
+    for (let pair of mapaIngredientes){
+        lista[c]= {indice:pair[0],nombre:pair[1].getName(),descripcion:pair[1].getDescripcion()}
+        c++
+    }
+    res.render('ingredientes', {listaIngredientes:lista});
 });
 
 //hay que revisar esto, la lista de ingredientes principalmente
 router.get('/crearReceta', (req, res) => {
-    let ingredientList = Array.from(mapaIngredientes.values())
+    //let ingredientList = Array.from(mapaIngredientes.values())
     
-    res.render('crearReceta', {titulo: "Crea una nueva receta!", ingredientes:ingredientList})
+    let objPasosVacio = {length:0, lengthPlusOne:1, lista:[]}
+
+    let recetaVacia = ""
+    let listaIngredientes = []
+    let c=0
+    for (let [key,value] of mapaIngredientes){
+        listaIngredientes[c] = {indiceOG:key,indiceActual:c,nombre:value.getName()}
+        c++
+    }
+
+    res.render('crearReceta', {titulo: "Crea una nueva receta!", receta:recetaVacia,objPasos:objPasosVacio,objListaIngrediente:listaIngredientes})
 });
 
 router.get('/modificarReceta/:id', (req, res) => {
-    let ingredientList = Array.from(mapaIngredientes.values())
+    //let ingredientList = Array.from(mapaIngredientes.values())
     let recetaModificar = mapaRecetas.get(req.params.id)
 
     let pasos = mapaRecetas.get(req.params.id).pasos
@@ -51,7 +65,7 @@ router.get('/modificarReceta/:id', (req, res) => {
     for (let c=0;c<pasos.length;c++){
         listaP[c] = {indice:c,valor:pasos[c]}}
     
-    let listaPasos = {length:pasos.length, lista:listaP}
+    let listaPasos = {length:pasos.length, lengthPlusOne:pasos-length+1 ,lista:listaP}
 
     let listaIngredientes = []
     let c=0
@@ -61,7 +75,7 @@ router.get('/modificarReceta/:id', (req, res) => {
     }
     
 
-    res.render('crearReceta', {titulo: "Actualiza tu maravillosa receta!", ingredientes:ingredientList, receta:recetaModificar,objPasos:listaPasos,objListaIngrediente:listaIngredientes})
+    res.render('crearReceta', {titulo: "Actualiza tu maravillosa receta!", receta:recetaModificar,objPasos:listaPasos,objListaIngrediente:listaIngredientes})
 });
 
 //objPasos = {length:n, lista:[{indice:0,valor:"Hello"}, {1:"World"}]}
@@ -69,6 +83,7 @@ router.get('/modificarReceta/:id', (req, res) => {
 
 
 router.get('/crearIngrediente', (req, res) =>{ 
+    let ingredientePlaceHolder = new objIngrediente("Un nombre bonito","Una descripción detallada")
     res.render('crearIngrediente', {titulo: "Crea un nuevo Ingrediente!", ingrediente:ingredientePlaceHolder})
 });
 
@@ -90,11 +105,6 @@ router.get('/recetas/:id', (req, res) => {
         pasos:`${receta.pasos}`
     });
 });
-
-
-
-
-
 
 //le hay que poner los router.post de crear y actualizar receta e ingrediente
 
