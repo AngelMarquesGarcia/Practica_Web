@@ -126,6 +126,15 @@ router.get('/receta/guardar/:id', (req, res) => {
     res.redirect('/recetas')
 });
 
+router.get('/getIngredients/:id', (req, res) => {
+    let listaIngredientes = rec.mapaRecetas.get(req.params.id).ingredientes
+        
+    let resultToSend = JSON.stringify({lista:listaIngredientes})
+    
+    res.send(resultToSend)
+})
+
+
 //objPasos = {length:n, lista:[{indice:0,valor:"Hello"}, {1:"World"}]}
 //objListaIngrediente = [{indiceOG:3,indiceActual:0,nombre:"juan"},{indiceOG:4,indiceActual:1,nombre:"a"}]
 

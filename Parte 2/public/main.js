@@ -4,6 +4,30 @@ let undefinedLocation = 'fotos/undefined.jpeg'
 const RecetasMostradas = 5;
 const CargarRecetas = 0;
 
+window.onload = async function(){
+    if (window.location.href.includes('/recetas/modificar')){
+        let splitLocation = window.location.href.split("/") 
+        let clave = splitLocation[splitLocation.length-1] 
+
+        let response = await fetch(`/getIngredients/${clave}`)
+        let texto = await response.text()
+      
+        let ingredientsInRecipe = JSON.parse(texto).lista
+
+
+        let ingredientes = document.getElementById('scrollbarIngredientes')
+        let labelID = ingredientes.lastChild.previousSibling.previousSibling.previousSibling.id
+        let max = parseInt(labelID.slice(8,labelID.length))+1
+
+        for(let n=0; n<max; n++ ){
+            console.log(n)
+            if(ingredientsInRecipe.includes(n)){
+                var ing = document.getElementById('ing'+n)
+                ing.checked = true
+            } 
+        }
+}};
+
 async function masRecetas(){
 
     const from = (CargarRecetas+1) * RecetasMostradas;
