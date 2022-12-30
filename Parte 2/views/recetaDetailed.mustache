@@ -38,9 +38,9 @@
         <!-- Botones de navegación -->
 
         <div class="receta">
-            <img src="{{foto}}">
+            <img src="{{desplazamiento}}{{foto}}">
             <h2>{{nombre}}</h2>
-            <p>{{descripción}}</p>
+            <p>{{descripcion}}</p>
 
             <h3>Pasos: </h3>
             <ol>
@@ -54,14 +54,16 @@
             <ul>
                 <!-- listaIngredientes = [{nombre:"juan",desc:"whatever"},{nombre:"a",desc:"whatever"}] es literal un array of objIngrediente -->
                 {{#ingredientes}}
-                    <li>{{nombre}}</li>
+                    <li>{{valor}}</li>
                 {{/ingredientes}}
             </ul>    
 
         </div>
-        <button class="btn btn-default inputBg" onclick="pagRecetas()">Volver</button>
-        <button class="btn btn-default inputBg" onclick="modificarReceta(i)">Modificar receta</button>
-        <button class="btn btn-default inputBg" onclick="borrarReceta(i)">Borrar receta</button>
+        <form action="/recetas">
+            <button class="btn btn-default inputBg">Volver</button>
+            <button class="btn btn-default inputBg" type ="button" onclick="modificarReceta({{indice}})">Modificar receta</button>
+            <button class="btn btn-default inputBg" type ="button" onclick="borrarReceta({{indice}})">Borrar receta</button> 
+        </form>
 
         <div id="content"></div> <!-- Este div es el que utilizaremos para mostrar los elementos  -->
 

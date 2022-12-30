@@ -15,7 +15,7 @@ router.get('/buscar', (req, res) => {
 
 
 router.get('/recetas', (req, res) => {
-    const recetas = rec.devolverRecetas(0,4);
+    let recetas = rec.devolverRecetas(0,4);
 
     res.render('recetas',{
         recetas: recetas
@@ -49,29 +49,81 @@ router.get('/crearReceta', (req, res) => {
         c++
     }
 
-    res.render('crearReceta', {titulo: "Crea una nueva receta!", receta:recetaVacia,objPasos:objPasosVacio,objListaIngrediente:listaIngredientes})
+    res.render('crearReceta', {titulo: "Crea una nueva receta!", 
+    receta:recetaVacia,
+    objPasos:objPasosVacio,
+    objListaIngrediente:listaIngredientes, 
+    check:"cheked",
+    ingredientSize:ing.mapaIngredientes.size})
 });
 
-router.get('/modificarReceta/:id', (req, res) => {
+router.get('/recetas/borrar/:id', (req, res) => {
+    rec.borrarReceta(req.params.id)
+    res.redirect('/recetas')
+});
+
+router.get('/recetas/modificar/:id', (req, res) => {
     //let ingredientList = Array.from(ing.mapaIngredientes.values())
     let recetaModificar = rec.mapaRecetas.get(req.params.id)
 
-    let pasos = rec.mapaRecetas.get(req.params.id).pasos
+    let pasos = recetaModificar.getPasos()
     let listaP = []
     for (let c=0;c<pasos.length;c++){
         listaP[c] = {indice:c,valor:pasos[c]}}
     
-    let listaPasos = {length:pasos.length, lengthPlusOne:pasos-length+1 ,lista:listaP}
+    let listaPasos = {length:pasos.length, lengthPlusOne:pasos.length+1 ,lista:listaP}
 
     let listaIngredientes = []
     let c=0
-    for ([key,value] of rec.mapaRecetas){
-        listaIngredientes[c] = {indiceOG:key,indiceActual:c,nombre:value}
+    for (let [key,value] of ing.mapaIngredientes){
+        listaIngredientes[c] = {indiceOG:key,indiceActual:c,nombre:value.getName()}
         c++
     }
     
 
-    res.render('crearReceta', {titulo: "Actualiza tu maravillosa receta!", receta:recetaModificar,objPasos:listaPasos,objListaIngrediente:listaIngredientes})
+    res.render('crearReceta', {
+        titulo: "Actualiza tu maravillosa receta!", 
+        receta:recetaModificar,
+        objPasos:listaPasos,
+        objListaIngrediente:listaIngredientes,
+        desplazamiento:'../../',
+        modificar:"True",
+        indiceReceta:'/'+req.params.id,
+        ingredientSize:ing.mapaIngredientes.size
+    })
+});
+
+router.get('/recetas/:id', (req, res) => {
+    
+    let receta = rec.mapaRecetas.get(req.params.id)
+    let listaIng = []
+    for (let key of receta.ingredientes){
+        listaIng.push({valor:ing.mapaIngredientes.get(key.toString()).getName()})
+    }
+
+    res.render('recetaDetailed', {
+        nombre: receta.nombre,
+        descripcion:receta.descripcion,
+        foto:receta.foto,
+        ingredientes:listaIng, //igual se habría que mirar esto, confirmar que sea un array de la forma [{nombre:"asd"},{nombre:"asd"}]
+        pasos:receta.pasos,
+        desplazamiento:'../',
+        indice:req.params.id
+    
+    });
+});
+
+router.get('/receta/guardar', (req, res) => {
+
+    rec.nuevaReceta(JSON.parse(req.query.receta))
+
+    res.redirect('/recetas')
+})
+
+router.get('/receta/guardar/:id', (req, res) => {
+    rec.modificarReceta(req.params.id, JSON.parse(req.query.receta))
+
+    res.redirect('/recetas')
 });
 
 //objPasos = {length:n, lista:[{indice:0,valor:"Hello"}, {1:"World"}]}
@@ -126,16 +178,7 @@ router.post('/ingredientes/guardar/:id', (req, res) => {
 })
 
 
-router.get('/recetas/:id', (req, res) => {
-    let receta = rec.mapaRecetas.get(req.params.id)
-    res.render('recetaDetailed', {
-        nombre: `${receta.nombre}`,
-        descripcion:`${receta.descripcion}`,
-        foto:`${receta.foto}`,
-        ingredientes:`${receta.ingredientes}`, //igual se habría que mirar esto, confirmar que sea un array de la forma [{nombre:"asd"},{nombre:"asd"}]
-        pasos:`${receta.pasos}`
-    });
-});
+
 
 //le hay que poner los router.post de crear y actualizar receta e ingrediente
 

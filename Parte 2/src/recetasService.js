@@ -41,11 +41,13 @@ export class objReceta {
         this.foto = valor
     }
     setPasos(valor){
-        for (pair of valor){
-            if (this.pasos.get(pair[0]) != pair[1]){
-                this.pasos.set(pair[0],pair[1])
-            }
-        }
+
+        this.pasos = valor.slice(0,valor.length)
+        //for (let pair of valor){
+        //    if (this.pasos[pair[0]] != pair[1]){
+        //        this.pasos[pair[0]] = pair[1]
+        //    }
+        //}
     }
 }
 
@@ -58,14 +60,18 @@ let e = new objReceta("Bistec con comida","Recomendamos acompañarlo de alguna s
 
 export let mapaRecetas = new Map
 
+let contador = 0
+
 nuevaReceta(a)
 nuevaReceta(b)
 nuevaReceta(c)
 nuevaReceta(d)
 nuevaReceta(e)
 
+
 export function nuevaReceta(valor){
-    mapaRecetas.set(mapaRecetas.size, valor)
+    mapaRecetas.set(contador.toString(), valor)
+    contador++
 }
 
 export function borrarReceta(clave){
@@ -76,28 +82,28 @@ export function modificarReceta(clave, cambios){
     let receta = mapaRecetas.get(clave) 
 
     //actualizamos el nombre si es necesario
-    if (receta.getName != cambios.getName){
-        receta.setName(cambios.getName())
+    if (receta.getName() != cambios.nombre){
+        receta.setName(cambios.nombre)
     }
 
     //actualizamos la descripcion si es necesario
-    if (receta.getDescription != cambios.getDescription){
-        receta.setDescription(cambios.getDescription())
+    if (receta.getDescription() != cambios.descripcion){
+        receta.setDescription(cambios.descripcion)
     }
 
     //actualizamos los ingredientes si es necesario
-    if (receta.getIngredientes != cambios.getIngredientes){
-        receta.setIngredientes(cambios.getIngredientes())
+    if (receta.getIngredientes() != cambios.ingredientes){
+        receta.setIngredientes(cambios.ingredientes)
     }
 
     //actualizamos la foto si es necesario
-    if (receta.getFoto != cambios.getFoto){
-        receta.setFoto(cambios.getFoto())
+    if (receta.getFoto() != cambios.foto){
+        receta.setFoto(cambios.foto)
     }
 
     //actualizamos los pasos si es necesario
-    if (receta.getPasos != cambios.getPasos){
-        receta.setPasos(cambios.getPasos())
+    if (receta.getPasos() != cambios.pasos){
+        receta.setPasos(cambios.pasos)
     }
 }
 
@@ -106,7 +112,11 @@ export function devolverReceta(key) {
 }
 
 export function devolverRecetas(from, to) {
-    let values = [...mapaRecetas.values()];
+    let values = []
+    for (let pair of mapaRecetas){
+        values.push({indice:pair[0],receta:pair[1]})
+    }
+    //let values = [...mapaRecetas.values()];
     if (from !== undefined) {
         return values.slice(from, to);
     } else {

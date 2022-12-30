@@ -33,6 +33,8 @@ let leche = new objIngrediente("Leche","Universal bebida de desayuno")
 let patatasFritas = new objIngrediente("Patatas Fritas","El mejor acompañante jamás creado")
 
 
+let c = 0
+
 nuevoIngrediente(miel)
 nuevoIngrediente(curry)
 nuevoIngrediente(pollo)
@@ -42,9 +44,9 @@ nuevoIngrediente(harina)
 nuevoIngrediente(leche)
 nuevoIngrediente(patatasFritas)
 
-
 export function nuevoIngrediente(valor){
-    mapaIngredientes.set(mapaIngredientes.size.toString(), valor)
+    mapaIngredientes.set(c.toString(), valor)
+    c++
 }
 
 export function borrarIngrediente(clave){

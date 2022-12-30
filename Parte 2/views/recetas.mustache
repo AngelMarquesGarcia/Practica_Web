@@ -36,18 +36,23 @@
             <li id="buscar" class="inactive"> <a href="/buscar"><span class="glyphicon glyphicon-search"></span>  Buscar</a> </li>
         </ul>
         <!-- Botones de navegación -->
+        <h1>¡He aquí tus preciadas recetas!</h1>
 
-        <div class="wrapper">
-            <div class="receta" onclick="mostrarReceta(i)">
-                {{#recetas}}
-                    <img src="{{foto}}">
-                    <h2>{{Nombre}}</h2>
-                    <p>{{Descripcion}}</p>
-                {{/recetas}}
-            </div>
+        <div class="wrapper" >
+            {{#recetas}}
+                <div class="receta" onclick="window.location='/recetas/{{indice}}'">
+                    <img src="{{receta.foto}}" class="image">
+                    <h2>{{receta.nombre}}</h2>
+                    <p>{{receta.descripcion}}</p>
+                </div>
+            {{/recetas}}
+            
         </div>
-        <button onclick="masRecetas()">Cargar más recetas</button>
-        <button onclick="pagCrearReceta()">Crear nueva receta</button>
+        <form action="/crearReceta">
+            <button type="button" class="btn btn-default inputBg" onclick="masRecetas()">Cargar más recetas</button>
+        
+            <button class="btn btn-default inputBg">Crear nueva receta</button>
+        </form>
 
 
         <div id="content"></div> <!-- Este div es el que utilizaremos para mostrar los elementos  -->
