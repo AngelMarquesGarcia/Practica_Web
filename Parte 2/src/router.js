@@ -70,13 +70,12 @@ router.get('/recetas/borrar/:id', (req, res) => {
 });
 
 router.get('/recetas/modificar/:id', (req, res) => {
-    //let ingredientList = Array.from(ing.mapaIngredientes.values())
     let recetaModificar = rec.mapaRecetas.get(req.params.id)
 
     let pasos = recetaModificar.getPasos()
     let listaP = []
     for (let c=0;c<pasos.length;c++){
-        listaP[c] = {indice:c+1,valor:pasos[c]}}
+        listaP[c] = {indice:c+1, indiceMenosUno:c, valor:pasos[c]}}
     
     let listaPasos = {length:pasos.length, lengthPlusOne:pasos.length+1 ,lista:listaP}
 

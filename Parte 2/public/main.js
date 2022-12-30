@@ -20,7 +20,6 @@ window.onload = async function(){
         let max = parseInt(labelID.slice(8,labelID.length))+1
 
         for(let n=0; n<max; n++ ){
-            console.log(n)
             if(ingredientsInRecipe.includes(n)){
                 var ing = document.getElementById('ing'+n)
                 ing.checked = true
@@ -102,9 +101,6 @@ async function busqueda(){
 
 
 
-
-
-
 function guardarIngrediente(i){
 
     let nombre = document.getElementById('iName').value
@@ -115,7 +111,6 @@ function guardarIngrediente(i){
         alert('La receta debe tener tanto nombre como descripción')
     } else {
         if (i===undefined){i=""}        
-        console.log(i)
         window.location.href = `/ingredientes/guardar${i}?iName=${nombre}&iDesc=${descripcion}`
     }
 }
@@ -369,6 +364,7 @@ function incrementarPaso(i){
 
 //Al darle al boton de modificar un paso, borramos el li, y lo sustituimos por un input con sus botones de enviar y cancelar
 function modificarPaso(i){
+    //i--
     let listaPasos = document.getElementById('pasosList')
     let paso = listaPasos.children.item(i)
 
