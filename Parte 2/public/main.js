@@ -2,7 +2,7 @@
 let undefinedLocation = 'fotos/undefined.jpeg'
 
 const RecetasMostradas = 5;
-const CargarRecetas = 0;
+let CargarRecetas = 0;
 
 window.onload = async function(){
     if (window.location.href.includes('/recetas/modificar')){
@@ -76,7 +76,7 @@ async function busqueda(){
         if (listaRecetas[i].nombre.toLowerCase() === input.toLowerCase()){  
             var recFound = document.createElement("li")
             recFound.innerText=listaRecetas[i].nombre
-            recFound.setAttribute('onclick', `function(){window.location.href = /recetas/${listaRecetas[i].indice}}`)            
+            recFound.setAttribute('onclick', `window.location.href = '/recetas/${listaRecetas[i].indice}'`)            
             recFound.setAttribute('style', 'cursor:pointer')     //para que se vea que es un 'link'
             receta.appendChild(recFound)              
         } }
@@ -136,15 +136,55 @@ async function masRecetas(){
     const from = (CargarRecetas+1) * RecetasMostradas;
     const to = from + RecetasMostradas;
 
-    const response = await fetch(`/public/recetasService?from=${from}&to=${to}`)
+    const response = await fetch(`/receta/mostrarMas?from=${from}&to=${to}`) //you were fetching /public/recetasService, no existe un get para esa dirección
     
     const nuevasRecetas = await response.json()
 
-    const recetasDiv = document.getElementById("receta")
+    if (nuevasRecetas.length === 0){alert('No hay más recetas que cargar')} else{
 
-    recetasDiv.innerHTML += nuevasRecetas
+    const recetasDiv = document.getElementById("contenedorRecetas")
 
-CargarRecetas++
+    //recetasDiv.innerHTML += nuevasRecetas
+
+    for (let i = 0; i < nuevasRecetas.length; i++){
+
+        var elemento = document.createElement("div")               //Div contenedor
+        elemento.setAttribute("class",  "receta")                  //Clase   
+        elemento.setAttribute("onclick",  `window.location='/recetas/${from+i}`)  //onclick
+
+        let foto = document.createElement("img")                   //imagen
+        foto.setAttribute('src',nuevasRecetas[i].receta.foto)              //source
+        foto.setAttribute('class', 'image')                        //clase
+
+        let nombre = document.createElement("h2")                 //nombre
+        nombre.innerText = nuevasRecetas[i].receta.nombre              //contenidos
+  
+        let desc = document.createElement("p")                    //descripcion
+        desc.innerText = nuevasRecetas[i].receta.descripcion             //contenidos
+
+        //añadimos todos los elementos de la receta al div contenedor, y este al que contiene todas las recetas
+        elemento.appendChild(foto)                                 
+        elemento.appendChild(nombre)
+        elemento.appendChild(desc)
+        recetasDiv.appendChild(elemento)
+
+        //Si no hay suficientes elementos para llenar la última fila, centramos los elementos que haya
+        //Para ello, si sólo hay un elemento, añadimos antes de él un elemento vacío transparente (span 2)
+        //Si hay dos elementos, añadimos antes de ambos y después suya, dos div vacíos transparentes (span 1)
+        //if ( listaRecetas.length%3==1 && i == listaRecetas.length-2) {
+        //    var extra = document.createElement("div")
+        //    extra.setAttribute("class",  "receta transparent")
+        //    elementos.appendChild(extra)
+        //}
+
+        //if (listaRecetas.length%3==2 && (i == listaRecetas.length-3 || i == listaRecetas.length-1)){
+        //    var extra1 = document.createElement('div')
+        //    elementos.appendChild(extra1)
+        //}
+    }
+
+    CargarRecetas++ //esto era const, wtf dude
+    }
 }
 
 

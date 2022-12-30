@@ -142,7 +142,7 @@ export function devolverRecetas(from, to) {
     for (let pair of mapaRecetas){
         values.push({indice:pair[0],receta:pair[1]})
     }
-    //let values = [...mapaRecetas.values()];
+
     if (from !== undefined) {
         return values.slice(from, to);
     } else {

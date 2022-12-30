@@ -31,16 +31,14 @@ router.get('/recetas', (req, res) => {
     }
 });
 
-router.get('/recetasService', (req, res) => {
+router.get('/receta/mostrarMas', (req, res) => {
 
     const from = parseInt(req.query.from);
     const to = parseInt(req.query.to);
 
     const recetas = rec.devolverRecetas(from,to);
-
-    res.render('recetas', {
-        recetas: recetas
-    });
+    //let valorADevolver = {lista:recetas}
+    res.send(JSON.stringify(recetas));
 });
 
 
