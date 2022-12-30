@@ -28,6 +28,109 @@ window.onload = async function(){
         }
 }};
 
+
+
+async function busqueda(){
+
+    let response = await fetch('/getIngredients')
+    let texto = await response.text()
+
+    let listaIngredientes = JSON.parse(texto).lista
+
+    response = await fetch('/getRecetas')
+    texto = await response.text()
+
+    let listaRecetas = JSON.parse(texto).lista
+
+    //Borramos los resultados de búsquedas previas
+    var resultados = document.getElementById('result')
+    resultados.innerHTML = ''
+
+    //Guardamos el elemento a buscar
+    let input = document.getElementById("busq").value;  
+
+    //Creamos listas y títulos para las recetas e ingredientes encontrados
+    let ingrediente = document.createElement("ul")
+    let receta = document.createElement("ul")
+    let titIngredientes = document.createElement('h3');
+    titIngredientes.innerText = 'Ingredientes:'
+    let titRecetas = document.createElement('h3');
+    titRecetas.innerText = 'Recetas:'
+
+    //Iteramos por los ingredientes, y si encontramos alguno que coincida exactamente (not case sensitive) con el input del usuario, 
+    //añadimos el ingrediente (tanto nombre como descripción) a la ul ingrediente
+    for (i=0; i<listaIngredientes.length; i++) {  
+        if (listaIngredientes[i].nombre.toLowerCase() === input.toLowerCase()){
+                var ingFound = document.createElement("li")
+                var ingDesc = document.createElement('p')
+                ingFound.innerText=listaIngredientes[i].nombre
+                ingDesc.innerText=listaIngredientes[i].descripcion
+                ingFound.appendChild(ingDesc)
+                ingrediente.appendChild(ingFound)
+            }                
+        }  
+    
+    //Iteramos por las recetas, y si encontramos alguna que coincida exactamente (not case sensitive) con el input del usuario, 
+    //añadimos el nombre de la receta (con un link a la vista de esa receta) a la ul receta
+    for (i=0; i<listaRecetas.length; i++) {   
+        if (listaRecetas[i].nombre.toLowerCase() === input.toLowerCase()){  
+            var recFound = document.createElement("li")
+            recFound.innerText=listaRecetas[i].nombre
+            recFound.setAttribute('onclick', `function(){window.location.href = /recetas/${listaRecetas[i].indice}}`)            
+            recFound.setAttribute('style', 'cursor:pointer')     //para que se vea que es un 'link'
+            receta.appendChild(recFound)              
+        } }
+    
+    //Añadimos la ul ingrediente a resultados sólo si contiene algún ingrediente
+    if (ingrediente.hasChildNodes()){
+        resultados.appendChild(titIngredientes)  
+        resultados.appendChild(ingrediente)
+    }
+
+    //Añadimos la ul receta a resultados sólo si contiene alguna receta
+    if (receta.hasChildNodes()){
+        resultados.appendChild(titRecetas) 
+        resultados.appendChild(receta)
+    }
+
+    //Si no hemos introducido receta ni ingrediente a resultados, significa que no hay ingredientes con el nombre buscado, así que se lo comunicamos al usuario
+    if (!resultados.hasChildNodes()){
+        noExisten = document.createElement('h3')
+        noExisten.innerText = 'No hay ninguna receta ni ingrediente con ese nombre!'
+        resultados.appendChild(noExisten)}
+}
+
+
+
+
+
+
+function guardarIngrediente(i){
+
+    let nombre = document.getElementById('iName').value
+    let descripcion = document.getElementById('iDesc').value
+
+    //Si ha metido tanto nombre como descripción, añadimos el ingrediente a listaIngredientes en la posición i (sustituyendo lo que hubiera antes)
+    if (nombre==='' || descripcion===''){
+        alert('La receta debe tener tanto nombre como descripción')
+    } else {
+        if (i===undefined){i=""}        
+        console.log(i)
+        window.location.href = `/ingredientes/guardar${i}?iName=${nombre}&iDesc=${descripcion}`
+    }
+}
+
+function borrarTodasLasRecetas(){
+    if (confirm('¿Seguro que quieres borrar TODAS las recetas?')){
+        if (confirm('¿Pero seguro seguro?')){
+            alert('Ok, tu sabrás')
+            window.location.href = '/borrarTodasLasRecetas'
+            
+        }
+    }
+}
+
+
 async function masRecetas(){
 
     const from = (CargarRecetas+1) * RecetasMostradas;
@@ -46,10 +149,19 @@ CargarRecetas++
 
 
 
-function borrarIngrediente(i){    
+async function borrarIngrediente(i){   
+    
+    let response = await fetch('/getIngredientesUsadosEnRecetas')
+    let texto = await response.text()
 
-    if (confirm('¿Seguro que quieres borrar este ingrediente?')){
-        window.location.href = `/ingredientes/borrar/${i}`
+    let ingredientesEnUso = JSON.parse(texto).lista
+
+    if (ingredientesEnUso.includes(i)){
+        alert('No se puede borrar ese ingrediente porque se usa en alguna receta')
+    } else{
+        if (confirm('¿Seguro que quieres borrar este ingrediente?')){
+            window.location.href = `/ingredientes/borrar/${i}`
+        }
     }
 }
 

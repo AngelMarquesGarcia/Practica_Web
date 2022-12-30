@@ -13,13 +13,22 @@ router.get('/buscar', (req, res) => {
     res.render('buscar')
 });
 
+router.get('/borrarTodasLasRecetas', (req, res) => {
+    rec.mapaRecetas.clear()
+    res.redirect('/recetas')
+});
+
 
 router.get('/recetas', (req, res) => {
     let recetas = rec.devolverRecetas(0,4);
 
-    res.render('recetas',{
-        recetas: recetas
-    });
+    if (recetas.length === 0){
+        res.render('noRecipes')
+    } else{
+        res.render('recetas',{
+            recetas: recetas
+        });
+    }
 });
 
 router.get('/recetasService', (req, res) => {
@@ -69,7 +78,7 @@ router.get('/recetas/modificar/:id', (req, res) => {
     let pasos = recetaModificar.getPasos()
     let listaP = []
     for (let c=0;c<pasos.length;c++){
-        listaP[c] = {indice:c,valor:pasos[c]}}
+        listaP[c] = {indice:c+1,valor:pasos[c]}}
     
     let listaPasos = {length:pasos.length, lengthPlusOne:pasos.length+1 ,lista:listaP}
 
@@ -126,10 +135,42 @@ router.get('/receta/guardar/:id', (req, res) => {
     res.redirect('/recetas')
 });
 
+router.get('/getIngredientesUsadosEnRecetas', (req, res) => {
+    let listaIngredientesUsados = []
+    for (let receta of rec.mapaRecetas){
+        for (let ingrediente of receta[1].ingredientes){
+            listaIngredientesUsados.push(ingrediente)
+        }
+    }
+    listaIngredientesUsados = [... new Set(listaIngredientesUsados)]
+    let resultToSend = JSON.stringify({lista:listaIngredientesUsados})
+    
+    res.send(resultToSend)
+})
+
 router.get('/getIngredients/:id', (req, res) => {
     let listaIngredientes = rec.mapaRecetas.get(req.params.id).ingredientes
         
     let resultToSend = JSON.stringify({lista:listaIngredientes})
+    
+    res.send(resultToSend)
+})
+
+router.get('/getIngredients', (req, res) => {
+    let listaIngredientes = [... ing.mapaIngredientes.values()]
+        
+    let resultToSend = JSON.stringify({lista:listaIngredientes})
+    
+    res.send(resultToSend)
+})
+
+router.get('/getRecetas', (req, res) => {
+    let listaRecetas = []
+    for (let pair of rec.mapaRecetas){
+        listaRecetas.push({indice:pair[0],nombre:pair[1].nombre})
+    }
+        
+    let resultToSend = JSON.stringify({lista:listaRecetas})
     
     res.send(resultToSend)
 })
@@ -174,16 +215,20 @@ router.get('/ingredientes/modificar/:id', (req, res) => {
     res.render('crearIngrediente', {indice:'/'+req.params.id,modificar:"True", desplazamiento:"../../", titulo: "Actualiza tu maravilloso ingrediente!", ingrediente:ing.mapaIngredientes.get(req.params.id)})
 })
 
-router.post('/ingredientes/guardar', (req, res) => {
-    let ingToSave = new ing.objIngrediente(req.body.iName,req.body.iDesc)
+router.get('/ingredientes/guardar', (req, res) => {
+    
+    let ingToSave = new ing.objIngrediente(req.query.iName,req.query.iDesc)
     ing.nuevoIngrediente(ingToSave)
     res.redirect('/ingredientes')
+    
 })
 
-router.post('/ingredientes/guardar/:id', (req, res) => {
-    let ingToSave = new ing.objIngrediente(req.body.iName,req.body.iDesc)
+router.get('/ingredientes/guardar/:id', (req, res) => {
+
+    let ingToSave = new ing.objIngrediente(req.query.iName,req.query.iDesc)
     ing.modificarIngrediente(req.params.id, ingToSave)
     res.redirect('/ingredientes')
+    
 })
 
 

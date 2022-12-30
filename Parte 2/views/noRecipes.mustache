@@ -24,17 +24,24 @@
     </head>
 
     <body>
-    <!-- Estaría guay centrarlo en la página y todo eso -->
         <h1 class="tituloPpal">Bienvenido a tu recetario favorito</h1>
-        <form action="/recetas">
-            <h2>Pulsa este botón para continuar!</h2>
-            <div class="form-group">
-                <button type="submit">Continuar</button>
-            </div>
-            <button type="submit" class="btn btn-default inputBg" >Continuar</button>
+
+        <!-- Botones de navegación -->
+        <ul class="nav nav-tabs inputBg">
+            <li id="recetas" class="active"> <a href="/recetas"> Recetas  </a></li>
+            <li id="ingredientes" class="inactive"> <a href="/ingredientes"> Ingredientes </a></li>
+            <li id="crearReceta" class="inactive"> <a href="/crearReceta"> Crear Receta </a></li>
+            <li id="crearIngrediente" class="inactive"> <a href="/crearIngrediente"> Crear Ingrediente </a></li>
+            <li id="buscar" class="inactive"> <a href="/buscar"><span class="glyphicon glyphicon-search"></span>  Buscar</a> </li>
+        </ul>
+        <!-- Botones de navegación -->
+
+        <h2>No tienes ninguna receta! Haz click en el botón debajo para crear una nueva!</h2>
+
+
+        <form action="/crearReceta">
+            <button class="btn btn-default inputBg">Crear nueva receta</button>
         </form>
-
-
     </body>
 
 </html>

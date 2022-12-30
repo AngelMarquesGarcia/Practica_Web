@@ -38,7 +38,7 @@
         <!-- Botones de navegación -->
 
         <h2 id="iTit">{{titulo}}</h2>
-        <form role="form" id="ingForm" action="/ingredientes/guardar{{indice}}">
+        <form role="form" id="ingForm" action="/ingredientes">
             <div class="form-group">
                 <label>Nombre: </label>
                 <input type="text" class="form-control" name="iName" id="iName" placeholder="Un nombre bonito" value="{{ingrediente.nombre}}">
@@ -48,9 +48,9 @@
                 <input type="text" class="form-control" name="iDesc" id="iDesc" placeholder="Una descripción detallada" value="{{ingrediente.descripcion}}">
             </div>
 
-            <button type="submit" formmethod="POST" class="btn btn-default inputBg" onclick="busqueda()" id="btnSubmitIng">Enviar</button>
+            <button type="button"  class="btn btn-default inputBg" onclick="guardarIngrediente('{{indice}}')" id="btnSubmitIng">Enviar</button>
             {{#modificar}}
-                <button formmethod="GET" id="btnCancelIng" type="submit" formaction="/ingredientes"  class="btn btn-default inputBg" onclick="busqueda()">Cancelar</button>
+                <button formmethod="GET" id="btnCancelIng" type="submit"  class="btn btn-default inputBg" onclick="busqueda()">Cancelar</button>
             {{/modificar}}
         </form>
 

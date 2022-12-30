@@ -1030,7 +1030,7 @@ function busqueda(){
         noExisten = document.createElement('h3')
         noExisten.innerText = 'No hay ninguna receta ni ingrediente con ese nombre!'
         resultados.appendChild(noExisten)}
-    content.appendChild(resultados)
+    //content.appendChild(resultados)
 }
 
 ////////////////////////////////////////////////////////////////INICIALIZACION DE VARIABLES////////////////////////////////////////////////////////////////
