@@ -37,20 +37,27 @@
         </ul>
         <!-- Botones de navegación -->
 
+        <!-- Título que mandamos desde el router con mustache dependiendo de si estamos modificando o creando un ingrediente -->
         <h2 id="iTit">{{titulo}}</h2>
-        <form role="form" id="ingForm" action="/ingredientes">
+        <form role="form" id="ingForm" action="/ingredientes/guardar{{indice}}">
+
+            <!-- Le damos la clase form-group para estilizar con bootstrap -->
             <div class="form-group">
                 <label>Nombre: </label>
                 <input type="text" class="form-control" name="iName" id="iName" placeholder="Un nombre bonito" value="{{ingrediente.nombre}}">
             </div>
+            
             <div class="form-group">
                 <label>Descripción: </label>
                 <input type="text" class="form-control" name="iDesc" id="iDesc" placeholder="Una descripción detallada" value="{{ingrediente.descripcion}}">
             </div>
+            
+            <!-- Editamos o creamos un nuevo ingrediente basado en los campos descripción y nombre -->
+            <button type="submit" formmethod="POST" class="btn btn-default inputBg" id="btnSubmitIng">Enviar</button>
 
-            <button type="button"  class="btn btn-default inputBg" onclick="guardarIngrediente('{{indice}}')" id="btnSubmitIng">Enviar</button>
+            <!-- Habilitamos este botón solo si estamos modificando -->
             {{#modificar}}
-                <button formmethod="GET" id="btnCancelIng" type="submit"  class="btn btn-default inputBg" onclick="busqueda()">Cancelar</button>
+                <button formmethod="GET" id="btnCancelIng" type="submit" formaction="/ingredientes"  class="btn btn-default inputBg" onclick="busqueda()">Cancelar</button>
             {{/modificar}}
         </form>
 

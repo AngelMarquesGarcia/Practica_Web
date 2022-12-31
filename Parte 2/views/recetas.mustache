@@ -38,7 +38,10 @@
         <!-- Botones de navegación -->
         <h1>¡He aquí tus preciadas recetas!</h1>
 
-        <div class="wrapper" id="contenedorRecetas">
+        <!-- Le damos la clase del grid que contiene las recetas -->
+        <div class="wrapper" >
+
+            <!-- Usamos mustache para que el contenido de cada div sea concorde a cada elemento del mapa de recetas -->
             {{#recetas}}
                 <div class="receta" onclick="window.location='/recetas/{{indice}}'">
                     <img src="{{receta.foto}}" class="image">
@@ -48,11 +51,18 @@
             {{/recetas}}
             
         </div>
+
         <form action="/crearReceta">
+
+            <!-- Usamos una función de main para cargar más recetas dentro del wrapper -->
             <button type="button" class="btn btn-default inputBg" onclick="masRecetas()">Cargar más recetas</button>
-        
+
+            <!-- Botón que te lleva al formulario donde puedes crear recetas con la ruta establecida previamente en el formulario -->
             <button class="btn btn-default inputBg">Crear nueva receta</button>
-            <button class="btn btn-default inputBg" type="button" onclick="borrarTodasLasRecetas()">Borrar TODAS las recetas</button>
         </form>
+
+
+        <div id="content"></div> <!-- Este div es el que utilizaremos para mostrar los elementos  -->
+
     </body>
 </html>
