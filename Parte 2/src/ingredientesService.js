@@ -54,6 +54,8 @@ export function borrarIngrediente(clave){
 }
 
 export function modificarIngrediente(clave, cambios){
+    //No borra el objeto original, cambia sus campos para que coincidan con el objeto nuevo
+
     let ingrediente = mapaIngredientes.get(clave)
     if (ingrediente.getName() != cambios.getName()){
         ingrediente.setName(cambios.getName())    
@@ -63,8 +65,3 @@ export function modificarIngrediente(clave, cambios){
     }
     
 }
-
-`
-for (let pair of mapaIngredientes){
-    console.log(pair)
-}`

@@ -4,15 +4,18 @@ let undefinedLocation = 'fotos/undefined.jpeg'
 const RecetasMostradas = 5;
 
 window.onload = async function(){
+    //Ocurre siempre que se cargue una página nueva. Comprueba si la URL tiene la cadena '/recetas/modificar',
+    //y si la tiene, obtiene los ingredientes de la receta que estemos modificando, y checkea las boxes
+    //que correspondan a esos ingredientes
+
     if (window.location.href.includes('/recetas/modificar')){
         let splitLocation = window.location.href.split("/") 
         let clave = splitLocation[splitLocation.length-1] 
 
         let response = await fetch(`/getIngredients/${clave}`)
-        let texto = await response.text()
-      
+        let ingredientsInRecipe = await response.JSON()   //let texto = await response.text()
 
-        let ingredientsInRecipe = JSON.parse(texto).lista
+        //let ingredientsInRecipe = JSON.parse(texto).lista
 
         let ingredientes = document.getElementById('scrollbarIngredientes')
         //let labelID = ingredientes.lastChild.previousSibling.previousSibling.previousSibling.id
@@ -37,14 +40,14 @@ window.onload = async function(){
 async function busqueda(){
 
     let response = await fetch('/getIngredients')
-    let texto = await response.text()
+    let listaIngredientes = await response.JSON()   //let texto = await response.text()
 
-    let listaIngredientes = JSON.parse(texto).lista
+    //let listaIngredientes = JSON.parse(texto).lista
 
     response = await fetch('/getRecetas')
-    texto = await response.text()
+    let listaRecetas = await response.JSON() //texto = await response.text()
 
-    let listaRecetas = JSON.parse(texto).lista
+    //let listaRecetas = JSON.parse(texto).lista
 
     //Borramos los resultados de búsquedas previas
     var resultados = document.getElementById('result')
@@ -80,7 +83,7 @@ async function busqueda(){
         if (listaRecetas[i].nombre.toLowerCase() === input.toLowerCase()){  
             var recFound = document.createElement("li")
             recFound.innerText=listaRecetas[i].nombre
-            recFound.setAttribute('onclick', `window.location.href = '/recetas/${listaRecetas[i].indice}'`)            
+            recFound.setAttribute('onclick', `window.location.href = '/recetas/${listaRecetas[i].clave}'`)            
             recFound.setAttribute('style', 'cursor:pointer')     //para que se vea que es un 'link'
             receta.appendChild(recFound)              
         } }

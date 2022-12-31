@@ -106,6 +106,8 @@ export function borrarReceta(clave){
 }
 
 export function modificarReceta(clave, cambios){
+    //No borra el objeto original, cambia sus campos para que coincidan con el objeto nuevo
+
     let receta = mapaRecetas.get(clave) 
     
     //actualizamos el nombre si es necesario

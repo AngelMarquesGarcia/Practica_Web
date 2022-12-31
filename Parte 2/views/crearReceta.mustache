@@ -37,55 +37,58 @@
         </ul>
         <!-- Botones de navegación -->
 
+
+
         <h2>Crea una nueva receta!</h2>
-        <form role="form" id="recForm"> <!-- action="/recetas/guardar{{indiceReceta}}" -->
-            <div class="form-group">
+        <form role="form" id="recForm">
+
+            <div class="form-group"> <!-- Campo de Nombre -->
                 <label>Nombre: </label>
                 <input type="text" class="form-control" id="rName" placeholder="Un nombre bonito" value="{{receta.nombre}}">
             </div>
-            <div class="form-group">
+
+            <div class="form-group"> <!-- Campo de Descripción -->
                 <label>Descripción: </label>
                 <input type="text" class="form-control" id="rDesc" placeholder="Una descripción detallada" value="{{receta.descripcion}}">
             </div>
 
-            <div class="form-group">
+            <div class="form-group"> <!-- Campo de Foto -->
                 <label>Introduzca la URL de una foto (opcional): </label>
                 <input type="text" class="form-control" id="rFoto" value="{{receta.foto}}" placeholder="https://imagenes.20minutos.es/uploads/imagenes/2020/06/19/rick-astley-en-su-cancion-never-gonna-give-you-up.gif">
             </div>
 
-            <div class="form-group">
+            <div class="form-group"> <!-- Campo de Pasos -->
                 <label id="pasosLabel">Introduce el paso {{objPasos.lengthPlusOne}} de la receta: </label>
                 <input type="text" class="form-control" id="rPasos" placeholder="Paso {{objPasos.lengthPlusOne}}">
                 <button id="pasosBtn" type="button" class="btn btn-default inputBg" onclick="crearPaso({{objPasos.length}})">Enviar paso {{objPasos.lengthPlusOne}}</button>
                 <ol id=pasosList>
-                <!--objPasos = {length:n, lista:[{indice:0,valor:"Hello"}, {1:"World"}]} -->
+                    <!-- objPasos tiene los atributos siguientes: 
+                            objPasos = {length:int, lengthPlusOne:int, lista:[ {indice:int, indiceMenosUno:int, valor:String},  ...]} -->
                     {{#objPasos.lista}}
                         <li id="idPaso{{indiceMenosUno}}">{{valor}}<button onclick="borrarPaso({{indiceMenosUno}})" type="button" class="btn btn-default" >Borrar Paso {{indice}}</button><button onclick="modificarPaso({{indiceMenosUno}})" type="button" class="btn btn-default" >Modificar Paso {{indice}}</button></li>
                     {{/objPasos.lista}}
                 </ol>
             </div>
             
-            
+            <!-- Campo de Ingredientes -->
             <p style="font-weight:700">Ingredientes: </p>
             <div class="form-group">
                 <div class="scrollbar" id="scrollbarIngredientes">
-                <!-- objListaIngrediente = [{indiceOG:3,indiceActual:0,nombre:"juan"},{indiceOG:4,indiceActual:1,nombre:"a"}] -->
+                    <!-- objListaIngrediente tiene los atributos siguientes: 
+                            objListaIngrediente = [{clave:int, indiceActual:int, nombre:String}, ...] -->
                     {{#objListaIngrediente}}
-                        <input type="checkbox" id="ing{{indiceActual}}" value="{{indiceOG}}">
+                        <input type="checkbox" id="ing{{indiceActual}}" value="{{clave}}">
                         <label id="ingLabel{{indiceActual}}">{{nombre}}</label>
                         <br>
                     {{/objListaIngrediente}}
                 </div>
             </div>
-
+            <!-- Botones de enviar/cancelar. El botón de cancelar sólo aparecerá si modificar es una string no vacía -->
             <button id="btnSubmitRec" type="button" class="btn btn-default inputBg" onclick="guardarReceta('{{indiceReceta}}','{{ingredientSize}}')">Enviar</button>
             {{#modificar}}
                 <button id="btnSubmitRec" type="submit" formmethod="GET" formaction="/recetas{{indiceReceta}}" class="btn btn-default inputBg">Cancelar</button>
             {{/modificar}}
         </form>
-
-        
-
     </body>
 </html>
 

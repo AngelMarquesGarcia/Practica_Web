@@ -37,35 +37,33 @@
         </ul>
         <!-- Botones de navegación -->
 
+
         <div class="receta">
-            <img src="{{desplazamiento}}{{foto}}">
-            <h2>{{nombre}}</h2>
-            <p>{{descripcion}}</p>
+            <img src="{{desplazamiento}}{{receta.foto}}">
+            <h2>{{receta.nombre}}</h2>
+            <p>{{receta.descripcion}}</p>
 
             <h3>Pasos: </h3>
             <ol>
-                <!--pasos = ["paso1","paso2","paso3"...]  Cambiar esto a una lista [{nombre:"paso1"},{nombre:"paso2"}] si fuera mal-->
-                {{#pasos}}
+                <!--receta.pasos = ["paso1","paso2","paso3"...] -->
+                {{#receta.pasos}}
                     <li>{{.}}</li>
-                {{/pasos}}
+                {{/receta.pasos}}
             </ol>
 
             <h3>Ingredientes</h3>
             <ul>
-                <!-- listaIngredientes = [{nombre:"juan",desc:"whatever"},{nombre:"a",desc:"whatever"}] es literal un array of objIngrediente -->
+                <!-- ingredientes = [{valor:String}, ...] valor guarda el nombre de cada uno de los ingredientes que tenga la receta-->
                 {{#ingredientes}}
                     <li>{{valor}}</li>
                 {{/ingredientes}}
             </ul>    
-
         </div>
+
         <form action="/recetas">
             <button class="btn btn-default inputBg">Volver</button>
             <button class="btn btn-default inputBg" type ="button" onclick="modificarReceta({{indice}})">Modificar receta</button>
             <button class="btn btn-default inputBg" type ="button" onclick="borrarReceta({{indice}})">Borrar receta</button> 
         </form>
-
-        <div id="content"></div> <!-- Este div es el que utilizaremos para mostrar los elementos  -->
-
     </body>
 </html>
