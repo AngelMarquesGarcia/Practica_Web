@@ -96,7 +96,8 @@ nuevaReceta(r20)
 
 
 export function nuevaReceta(valor){
-    mapaRecetas.set(contador.toString(), valor)
+    let receta = new objReceta(valor.nombre, valor.descripcion, valor.ingredientes, valor.foto, valor.pasos)
+    mapaRecetas.set(contador.toString(), receta)
     contador++
 }
 
@@ -106,9 +107,9 @@ export function borrarReceta(clave){
 
 export function modificarReceta(clave, cambios){
     let receta = mapaRecetas.get(clave) 
-
+    
     //actualizamos el nombre si es necesario
-    if (receta.getName() != cambios.nombre){
+    if (receta.getName != cambios.nombre){
         receta.setName(cambios.nombre)
     }
 
@@ -149,18 +150,3 @@ export function devolverRecetas(from, to) {
         return values;
     }
 }
-
-
-
-
-`
-nuevaReceta('hola')
-nuevaReceta('adios')
-nuevaReceta('mundo')
-
-borrarReceta(1)
-
-for (pair of mapaRecetas){
-    console.log(pair)
-}
-`

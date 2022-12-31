@@ -2,7 +2,6 @@
 let undefinedLocation = 'fotos/undefined.jpeg'
 
 const RecetasMostradas = 5;
-let CargarRecetas = 0;
 
 window.onload = async function(){
     if (window.location.href.includes('/recetas/modificar')){
@@ -12,14 +11,19 @@ window.onload = async function(){
         let response = await fetch(`/getIngredients/${clave}`)
         let texto = await response.text()
       
+
         let ingredientsInRecipe = JSON.parse(texto).lista
 
-
         let ingredientes = document.getElementById('scrollbarIngredientes')
-        let labelID = ingredientes.lastChild.previousSibling.previousSibling.previousSibling.id
+        //let labelID = ingredientes.lastChild.previousSibling.previousSibling.previousSibling.id
+        let labelID = ingredientes.lastElementChild.previousElementSibling.id
+
+
         let max = parseInt(labelID.slice(8,labelID.length))+1
 
+
         for(let n=0; n<max; n++ ){
+
             if(ingredientsInRecipe.includes(n)){
                 var ing = document.getElementById('ing'+n)
                 ing.checked = true
@@ -28,7 +32,8 @@ window.onload = async function(){
 }};
 
 
-
+//Función llamada al buscar. Muy similar a la de la parte 1. Busca ingredientes/recetas que coincidan con el input del usuario,
+//y los muestra por pantalla. Para los ingredientes, los muestra enteros. Para las recetas, muestra el nombre, con un link a la vista de la receta
 async function busqueda(){
 
     let response = await fetch('/getIngredients')
@@ -99,22 +104,8 @@ async function busqueda(){
         resultados.appendChild(noExisten)}
 }
 
-
-
-function guardarIngrediente(i){
-
-    let nombre = document.getElementById('iName').value
-    let descripcion = document.getElementById('iDesc').value
-
-    //Si ha metido tanto nombre como descripción, añadimos el ingrediente a listaIngredientes en la posición i (sustituyendo lo que hubiera antes)
-    if (nombre==='' || descripcion===''){
-        alert('La receta debe tener tanto nombre como descripción')
-    } else {
-        if (i===undefined){i=""}        
-        window.location.href = `/ingredientes/guardar${i}?iName=${nombre}&iDesc=${descripcion}`
-    }
-}
-
+//Funciones de la página principal
+//Funciones de la página principal
 function borrarTodasLasRecetas(){
     if (confirm('¿Seguro que quieres borrar TODAS las recetas?')){
         if (confirm('¿Pero seguro seguro?')){
@@ -125,65 +116,53 @@ function borrarTodasLasRecetas(){
     }
 }
 
-
 async function masRecetas(){
 
-    const from = (CargarRecetas+1) * RecetasMostradas;
+    //obtenemos el wrapper que contiene las recetas. Guardamos el número de recetas que contiene en from
+    const recetasDiv = document.getElementById("contenedorRecetas")
+    from = recetasDiv.childElementCount
+
     const to = from + RecetasMostradas;
 
-    const response = await fetch(`/receta/mostrarMas?from=${from}&to=${to}`) //you were fetching /public/recetasService, no existe un get para esa dirección
-    
+    //pedimos al router una lista de objetos {indice:n, receta:objReceta}, y la guardamos en nuevasRecetas
+    const response = await fetch(`/receta/mostrarMas?from=${from}&to=${to}`)
     const nuevasRecetas = await response.json()
 
-    if (nuevasRecetas.length === 0){alert('No hay más recetas que cargar')} else{
+    //Si no hubiera nuevas recetas, avisamos al usuario y acaba la función
+    if (nuevasRecetas.length === 0){alert('No hay más recetas que cargar')} 
 
-    const recetasDiv = document.getElementById("contenedorRecetas")
+    //Si hay recetas nuevas, iteramos por ellas, creando un nuevo div clase receta, rellenándolo con la información pertinente, y añadiendolo al wrapper
+    else{
+        for (let i = 0; i < nuevasRecetas.length; i++){
 
-    //recetasDiv.innerHTML += nuevasRecetas
+            var elemento = document.createElement("div")                                //Div contenedor
+            elemento.setAttribute("class",  "receta")                                   //Clase   
+            elemento.setAttribute("onclick",  `window.location='/recetas/${from+i}'`)   //onclick
 
-    for (let i = 0; i < nuevasRecetas.length; i++){
+            let foto = document.createElement("img")                                    //imagen
+            foto.setAttribute('src',nuevasRecetas[i].receta.foto)                       //source
+            foto.setAttribute('class', 'image')                                         //clase
 
-        var elemento = document.createElement("div")               //Div contenedor
-        elemento.setAttribute("class",  "receta")                  //Clase   
-        elemento.setAttribute("onclick",  `window.location='/recetas/${from+i}`)  //onclick
+            let nombre = document.createElement("h2")                                   //nombre
+            nombre.innerText = nuevasRecetas[i].receta.nombre                           //contenidos
+        
+            let desc = document.createElement("p")                                      //descripcion
+            desc.innerText = nuevasRecetas[i].receta.descripcion                        //contenidos
 
-        let foto = document.createElement("img")                   //imagen
-        foto.setAttribute('src',nuevasRecetas[i].receta.foto)              //source
-        foto.setAttribute('class', 'image')                        //clase
-
-        let nombre = document.createElement("h2")                 //nombre
-        nombre.innerText = nuevasRecetas[i].receta.nombre              //contenidos
-  
-        let desc = document.createElement("p")                    //descripcion
-        desc.innerText = nuevasRecetas[i].receta.descripcion             //contenidos
-
-        //añadimos todos los elementos de la receta al div contenedor, y este al que contiene todas las recetas
-        elemento.appendChild(foto)                                 
-        elemento.appendChild(nombre)
-        elemento.appendChild(desc)
-        recetasDiv.appendChild(elemento)
-
-        //Si no hay suficientes elementos para llenar la última fila, centramos los elementos que haya
-        //Para ello, si sólo hay un elemento, añadimos antes de él un elemento vacío transparente (span 2)
-        //Si hay dos elementos, añadimos antes de ambos y después suya, dos div vacíos transparentes (span 1)
-        //if ( listaRecetas.length%3==1 && i == listaRecetas.length-2) {
-        //    var extra = document.createElement("div")
-        //    extra.setAttribute("class",  "receta transparent")
-        //    elementos.appendChild(extra)
-        //}
-
-        //if (listaRecetas.length%3==2 && (i == listaRecetas.length-3 || i == listaRecetas.length-1)){
-        //    var extra1 = document.createElement('div')
-        //    elementos.appendChild(extra1)
-        //}
-    }
-
-    CargarRecetas++ //esto era const, wtf dude
+            //añadimos todos los elementos de la receta al div contenedor, y este al que contiene todas las recetas
+            elemento.appendChild(foto)                                 
+            elemento.appendChild(nombre)
+            elemento.appendChild(desc)
+            recetasDiv.appendChild(elemento)
+        }
     }
 }
+//Funciones de la página principal
+//Funciones de la página principal
 
 
-
+//Funciones de pagIngredientes
+//Funciones de pagIngredientes
 async function borrarIngrediente(i){   
     
     let response = await fetch('/getIngredientesUsadosEnRecetas')
@@ -203,7 +182,12 @@ async function borrarIngrediente(i){
 function modificarIngrediente(i){
     window.location.href = `/ingredientes/modificar/${i}`
 }
+//Funciones de pagIngredientes
+//Funciones de pagIngredientes
 
+
+//Funciones de Vista concreta de receta
+//Funciones de Vista concreta de receta
 function borrarReceta(i){    
     if (confirm('¿Seguro que quieres borrar esta receta?')){
         window.location.href = `/recetas/borrar/${i}`
@@ -213,19 +197,25 @@ function borrarReceta(i){
 function modificarReceta(i){
     window.location.href = `/recetas/modificar/${i}`
 }
+//Funciones de Vista concreta de receta
+//Funciones de Vista concreta de receta
 
 
-function guardarRecetaEnMapa(i,receta){
-    if (i!=''){
-        i = i.slice(1,2)
-        window.location.href = `/receta/guardar/${i}?receta=${JSON.stringify(receta)}`
+//Funciones de guardar receta/ingrediente
+//Funciones de guardar receta/ingrediente
+function guardarIngrediente(i){
+
+    let nombre = document.getElementById('iName').value
+    let descripcion = document.getElementById('iDesc').value
+
+    //Si ha metido tanto nombre como descripción, añadimos el ingrediente a listaIngredientes en la posición i (sustituyendo lo que hubiera antes)
+    if (nombre==='' || descripcion===''){
+        alert('La receta debe tener tanto nombre como descripción')
     } else {
-        window.location.href = `/receta/guardar?receta=${JSON.stringify(receta)}`
+        if (i===undefined){i=""}        
+        window.location.href = `/ingredientes/guardar${i}?iName=${nombre}&iDesc=${descripcion}`
     }
 }
-
-//Funciones de main
-//Funciones de main
 
 function guardarReceta(i, ingredientSize){
     //cojemos los valores del formulario
@@ -240,21 +230,13 @@ function guardarReceta(i, ingredientSize){
         foto = undefinedLocation 
     }
 
-    //Si hay otra receta con el mismo nombre, avisamos
-    //for (rec of listaRecetas){
-    //    if (rec.getName()===nombre) {
-    //        if (!confirm('Ya existe una receta con ese nombre, ¿seguro que quieres crear otra?')){
-    //            return}
-    //    }
-    //}
-
     //Guardamos los ingredientes marcados (los ingredientes son una checkbox)
     //Para ello, iteramos por las checkboxes, y, si está checkeada, guardamos el valor en la posición n, y sumamos uno a n
     let n=0
     for (let ingIndex=0;ingIndex<ingredientSize;ingIndex++){
         var ingrediente = document.getElementById('ing'+ingIndex)
         if (ingrediente.checked){
-            ingredientes[n] = ingrediente.value
+            ingredientes[n] = parseInt(ingrediente.value)
             n++
         }
     }
@@ -273,10 +255,32 @@ function guardarReceta(i, ingredientSize){
         alert('Debe haber tanto nombre como descripción')
     } else if (ingredientes.length==0){alert('La receta debe tener al menos un ingrediente')
     } else {
-        let receta = {nombre:nombre,descripcion:descripcion, ingredientes:ingredientes, foto:foto, pasos:pasos}
+        let receta = {nombre:nombre, descripcion:descripcion, ingredientes:ingredientes, foto:foto, pasos:pasos}
         guardarRecetaEnMapa(i,receta)
     }
 }
+
+function guardarRecetaEnMapa(i,receta){
+    if (i!=''){
+        i = i.slice(1,i.length)
+        window.location.href = `/receta/guardar/${i}?receta=${JSON.stringify(receta)}`
+    } else {
+        window.location.href = `/receta/guardar?receta=${JSON.stringify(receta)}`
+    }
+}
+//Funciones de guardar receta/ingrediente
+//Funciones de guardar receta/ingrediente
+
+
+
+
+
+
+
+
+
+
+
 //////////////////////// PASOS ////////////////////////
 //////////////////////// PASOS ////////////////////////
 

@@ -5,20 +5,18 @@ import * as ing from './ingredientesService.js'; //{ ing.mapaIngredientes, ing.o
 
 export const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.render('bienvenida');
-});
-
 router.get('/buscar', (req, res) => {
     res.render('buscar')
 });
+///////////////////////////////////////////////////RECETAS RECETAS RECETAS///////////////////////////////////////////////////
+///////////////////////////////////////////////////RECETAS RECETAS RECETAS///////////////////////////////////////////////////
+///////////////////////////////////////////////////RECETAS RECETAS RECETAS///////////////////////////////////////////////////
+///////////////////////////////////////////////////RECETAS RECETAS RECETAS///////////////////////////////////////////////////
+///////////////////////////////////////////////////RECETAS RECETAS RECETAS///////////////////////////////////////////////////
 
-router.get('/borrarTodasLasRecetas', (req, res) => {
-    rec.mapaRecetas.clear()
-    res.redirect('/recetas')
-});
 
-
+//////////////////////// FUNCIONES PARA LA PÁGINA PRINCIPAL ////////////////////////
+//////////////////////// FUNCIONES PARA LA PÁGINA PRINCIPAL ////////////////////////
 router.get('/recetas', (req, res) => {
     let recetas = rec.devolverRecetas(0,4);
 
@@ -31,37 +29,47 @@ router.get('/recetas', (req, res) => {
     }
 });
 
+//Usa AJAX; no renderiza ninguna view
+//obtiene algunas recetas de la BD y las envía
 router.get('/receta/mostrarMas', (req, res) => {
-
     const from = parseInt(req.query.from);
     const to = parseInt(req.query.to);
 
     const recetas = rec.devolverRecetas(from,to);
-    //let valorADevolver = {lista:recetas}
+
     res.send(JSON.stringify(recetas));
 });
 
+router.get('/borrarTodasLasRecetas', (req, res) => {
+    rec.mapaRecetas.clear()
+    res.redirect('/recetas')
+});
+//////////////////////// FUNCIONES PARA LA PÁGINA PRINCIPAL ////////////////////////
+//////////////////////// FUNCIONES PARA LA PÁGINA PRINCIPAL ////////////////////////
 
-//hay que revisar esto, la lista de ingredientes principalmente
-router.get('/crearReceta', (req, res) => {
-    //let ingredientList = Array.from(ing.mapaIngredientes.values())
+
+
+
+//////////////////////// FUNCIONES PARA LA VISTA DETALLADA DE UNA RECETA ////////////////////////
+//////////////////////// FUNCIONES PARA LA VISTA DETALLADA DE UNA RECETA ////////////////////////
+router.get('/recetas/:id', (req, res) => {
     
-    let objPasosVacio = {length:0, lengthPlusOne:1, lista:[]}
-
-    let recetaVacia = ""
-    let listaIngredientes = []
-    let c=0
-    for (let [key,value] of ing.mapaIngredientes){
-        listaIngredientes[c] = {indiceOG:key,indiceActual:c,nombre:value.getName()}
-        c++
+    let receta = rec.mapaRecetas.get(req.params.id)
+    let listaIng = []
+    for (let key of receta.ingredientes){
+        listaIng.push({valor:ing.mapaIngredientes.get(key.toString()).getName()})
     }
 
-    res.render('crearReceta', {titulo: "Crea una nueva receta!", 
-    receta:recetaVacia,
-    objPasos:objPasosVacio,
-    objListaIngrediente:listaIngredientes, 
-    check:"cheked",
-    ingredientSize:ing.mapaIngredientes.size})
+    res.render('recetaDetailed', {
+        nombre: receta.nombre,
+        descripcion:receta.descripcion,
+        foto:receta.foto,
+        ingredientes:listaIng, //igual se habría que mirar esto, confirmar que sea un array de la forma [{nombre:"asd"},{nombre:"asd"}]
+        pasos:receta.pasos,
+        desplazamiento:'../',
+        indice:req.params.id
+    
+    });
 });
 
 router.get('/recetas/borrar/:id', (req, res) => {
@@ -72,7 +80,7 @@ router.get('/recetas/borrar/:id', (req, res) => {
 router.get('/recetas/modificar/:id', (req, res) => {
     let recetaModificar = rec.mapaRecetas.get(req.params.id)
 
-    let pasos = recetaModificar.getPasos()
+    let pasos = recetaModificar.pasos
     let listaP = []
     for (let c=0;c<pasos.length;c++){
         listaP[c] = {indice:c+1, indiceMenosUno:c, valor:pasos[c]}}
@@ -98,25 +106,33 @@ router.get('/recetas/modificar/:id', (req, res) => {
         ingredientSize:ing.mapaIngredientes.size
     })
 });
+//////////////////////// FUNCIONES PARA LA VISTA DETALLADA DE UNA RECETA ////////////////////////
+//////////////////////// FUNCIONES PARA LA VISTA DETALLADA DE UNA RECETA ////////////////////////
 
-router.get('/recetas/:id', (req, res) => {
+
+
+
+//////////////////////// FUNCIONES PARA CREAR/GUARDAR/MODIFICAR RECETAS ////////////////////////
+//////////////////////// FUNCIONES PARA CREAR/GUARDAR/MODIFICAR RECETAS ////////////////////////
+router.get('/crearReceta', (req, res) => {
+    //let ingredientList = Array.from(ing.mapaIngredientes.values())
     
-    let receta = rec.mapaRecetas.get(req.params.id)
-    let listaIng = []
-    for (let key of receta.ingredientes){
-        listaIng.push({valor:ing.mapaIngredientes.get(key.toString()).getName()})
+    let objPasosVacio = {length:0, lengthPlusOne:1, lista:[]}
+
+    let recetaVacia = ""
+    let listaIngredientes = []
+    let c=0
+    for (let [key,value] of ing.mapaIngredientes){
+        listaIngredientes[c] = {indiceOG:key,indiceActual:c,nombre:value.getName()}
+        c++
     }
 
-    res.render('recetaDetailed', {
-        nombre: receta.nombre,
-        descripcion:receta.descripcion,
-        foto:receta.foto,
-        ingredientes:listaIng, //igual se habría que mirar esto, confirmar que sea un array de la forma [{nombre:"asd"},{nombre:"asd"}]
-        pasos:receta.pasos,
-        desplazamiento:'../',
-        indice:req.params.id
-    
-    });
+    res.render('crearReceta', {titulo: "Crea una nueva receta!", 
+    receta:recetaVacia,
+    objPasos:objPasosVacio,
+    objListaIngrediente:listaIngredientes, 
+    check:"cheked",
+    ingredientSize:ing.mapaIngredientes.size})
 });
 
 router.get('/receta/guardar', (req, res) => {
@@ -129,9 +145,17 @@ router.get('/receta/guardar', (req, res) => {
 router.get('/receta/guardar/:id', (req, res) => {
     rec.modificarReceta(req.params.id, JSON.parse(req.query.receta))
 
-    res.redirect('/recetas')
+    res.redirect(`/recetas/${req.params.id}`)
 });
+//////////////////////// FUNCIONES PARA CREAR/GUARDAR/MODIFICAR RECETAS ////////////////////////
+//////////////////////// FUNCIONES PARA CREAR/GUARDAR/MODIFICAR RECETAS ////////////////////////
 
+
+
+
+//////////////////////// FUNCIONES TIPO FETCH /////////////////////////
+//////////////////////// FUNCIONES TIPO FETCH  //////////////////////// 
+/////////(obtienen datos sobre recetas/ingredientes para main)/////////
 router.get('/getIngredientesUsadosEnRecetas', (req, res) => {
     let listaIngredientesUsados = []
     for (let receta of rec.mapaRecetas){
@@ -171,23 +195,28 @@ router.get('/getRecetas', (req, res) => {
     
     res.send(resultToSend)
 })
+//////////////////////// FUNCIONES TIPO FETCH ////////////////////////
+//////////////////////// FUNCIONES TIPO FETCH ////////////////////////
 
 
 //objPasos = {length:n, lista:[{indice:0,valor:"Hello"}, {1:"World"}]}
 //objListaIngrediente = [{indiceOG:3,indiceActual:0,nombre:"juan"},{indiceOG:4,indiceActual:1,nombre:"a"}]
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////^^^^^^^^^RECETAS RECETAS RECETAS^^^^^^^^^//////////////////////////////////
+//////////////////////////////////^^^^^^^^^RECETAS RECETAS RECETAS^^^^^^^^^//////////////////////////////////
+//////////////////////////////////^^^^^^^^^RECETAS RECETAS RECETAS^^^^^^^^^//////////////////////////////////
+//////////////////////////////////^^^^^^^^^RECETAS RECETAS RECETAS^^^^^^^^^//////////////////////////////////
+//////////////////////////////////^^^^^^^^^RECETAS RECETAS RECETAS^^^^^^^^^//////////////////////////////////
 
+
+/////////////////////////////////////////////////INGREDIENTES INGREDIENTES/////////////////////////////////////////////////
+/////////////////////////////////////////////////INGREDIENTES INGREDIENTES/////////////////////////////////////////////////
+/////////////////////////////////////////////////INGREDIENTES INGREDIENTES/////////////////////////////////////////////////
+/////////////////////////////////////////////////INGREDIENTES INGREDIENTES/////////////////////////////////////////////////
+/////////////////////////////////////////////////INGREDIENTES INGREDIENTES/////////////////////////////////////////////////
+
+//////////////////////// FUNCIONES PARA LA PÁGINA PRINCIPAL ////////////////////////
+//////////////////////// FUNCIONES PARA LA PÁGINA PRINCIPAL ////////////////////////
 router.get('/ingredientes', (req, res) => {
     let lista = []
     let c = 0
@@ -204,13 +233,19 @@ router.get('/ingredientes/borrar/:id', (req, res) => {
     
 })
 
-router.get('/crearIngrediente', (req, res) =>{ 
-    res.render('crearIngrediente', {titulo: "Crea un nuevo Ingrediente!"})
-});
-
 router.get('/ingredientes/modificar/:id', (req, res) => {
     res.render('crearIngrediente', {indice:'/'+req.params.id,modificar:"True", desplazamiento:"../../", titulo: "Actualiza tu maravilloso ingrediente!", ingrediente:ing.mapaIngredientes.get(req.params.id)})
 })
+//////////////////////// FUNCIONES PARA LA PÁGINA PRINCIPAL ////////////////////////
+//////////////////////// FUNCIONES PARA LA PÁGINA PRINCIPAL ////////////////////////
+
+
+
+//////////////////////// FUNCIONES PARA CREAR/GUARDAR/MODIFICAR INGREDIENTES ////////////////////////
+//////////////////////// FUNCIONES PARA CREAR/GUARDAR/MODIFICAR INGREDIENTES ////////////////////////
+router.get('/crearIngrediente', (req, res) =>{ 
+    res.render('crearIngrediente', {titulo: "Crea un nuevo Ingrediente!"})
+});
 
 router.get('/ingredientes/guardar', (req, res) => {
     
@@ -227,10 +262,14 @@ router.get('/ingredientes/guardar/:id', (req, res) => {
     res.redirect('/ingredientes')
     
 })
+//////////////////////// FUNCIONES PARA CREAR/GUARDAR/MODIFICAR INGREDIENTES ////////////////////////
+//////////////////////// FUNCIONES PARA CREAR/GUARDAR/MODIFICAR INGREDIENTES ////////////////////////
 
+//////////////////////////////////^^^^^^^^^INGREDIENTES  INGREDIENTES^^^^^^^^^//////////////////////////////////
+//////////////////////////////////^^^^^^^^^INGREDIENTES  INGREDIENTES^^^^^^^^^//////////////////////////////////
+//////////////////////////////////^^^^^^^^^INGREDIENTES  INGREDIENTES^^^^^^^^^//////////////////////////////////
+//////////////////////////////////^^^^^^^^^INGREDIENTES  INGREDIENTES^^^^^^^^^//////////////////////////////////
+//////////////////////////////////^^^^^^^^^INGREDIENTES  INGREDIENTES^^^^^^^^^//////////////////////////////////
 
-
-
-//le hay que poner los router.post de crear y actualizar receta e ingrediente
 
 export default router;
