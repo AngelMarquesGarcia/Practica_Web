@@ -1,11 +1,11 @@
-
+//si el usuario no pone ninguna foto, se pone esta por defecto
 let undefinedLocation = 'fotos/undefined.jpeg'
 
 const RecetasMostradas = 5;
 
 window.onload = async function(){
     //Ocurre siempre que se cargue una página nueva. Comprueba si la URL tiene la cadena '/recetas/modificar',
-    //y si la tiene, obtiene los ingredientes de la receta que estemos modificando, y checkea las boxes
+    //y si la tiene, obtiene los ingredientes de la receta que estemos modificando, y checkea las checkboxes
     //que correspondan a esos ingredientes
 
     if (window.location.href.includes('/recetas/modificar')){
@@ -13,16 +13,16 @@ window.onload = async function(){
         let clave = splitLocation[splitLocation.length-1] 
 
         let response = await fetch(`/getIngredients/${clave}`)
-        let ingredientsInRecipe = await response.JSON()   //let texto = await response.text()
-
-        //let ingredientsInRecipe = JSON.parse(texto).lista
+        let ingredientsInRecipe = await response.json()   
 
         let ingredientes = document.getElementById('scrollbarIngredientes')
         //let labelID = ingredientes.lastChild.previousSibling.previousSibling.previousSibling.id
         let labelID = ingredientes.lastElementChild.previousElementSibling.id
+        console.log(labelID)
 
 
         let max = parseInt(labelID.slice(8,labelID.length))+1
+        console.log(max)
 
 
         for(let n=0; n<max; n++ ){
@@ -40,12 +40,12 @@ window.onload = async function(){
 async function busqueda(){
 
     let response = await fetch('/getIngredients')
-    let listaIngredientes = await response.JSON()   //let texto = await response.text()
+    let listaIngredientes = await response.json()   //let texto = await response.text()
 
     //let listaIngredientes = JSON.parse(texto).lista
 
     response = await fetch('/getRecetas')
-    let listaRecetas = await response.JSON() //texto = await response.text()
+    let listaRecetas = await response.json() //texto = await response.text()
 
     //let listaRecetas = JSON.parse(texto).lista
 
@@ -110,6 +110,7 @@ async function busqueda(){
 //Funciones de la página principal
 //Funciones de la página principal
 function borrarTodasLasRecetas(){
+    //confirma dos veces que el usuario quiere borrar todas las recetas, y en caso afirmativo, carga la dirección responsable de borrar las recetas
     if (confirm('¿Seguro que quieres borrar TODAS las recetas?')){
         if (confirm('¿Pero seguro seguro?')){
             alert('Ok, tu sabrás')
@@ -119,8 +120,9 @@ function borrarTodasLasRecetas(){
     }
 }
 
+//Usa AJAX. Es la función encargada de mostrar más recetas en la página principal al darle al botón
 async function masRecetas(){
-
+    
     //obtenemos el wrapper que contiene las recetas. Guardamos el número de recetas que contiene en from
     const recetasDiv = document.getElementById("contenedorRecetas")
     from = recetasDiv.childElementCount
@@ -164,14 +166,17 @@ async function masRecetas(){
 //Funciones de la página principal
 
 
-//Funciones de pagIngredientes
-//Funciones de pagIngredientes
-async function borrarIngrediente(i){   
-    
-    let response = await fetch('/getIngredientesUsadosEnRecetas')
-    let texto = await response.text()
+//Funciones de la lista de Ingredientes
+//Funciones de la lista de Ingredientes
+async function borrarIngrediente(i){   //
+    //Pedimos al router todos los ingredientes que estén en al menos una receta.
+    //si el ingrediente a borrar se usa en alguna receta, damos un aviso, y no lo borramos
+    //si el ingrediente a borrar NO se usa en ninguna receta, le pedimos al router que lo borre
 
-    let ingredientesEnUso = JSON.parse(texto).lista
+    let response = await fetch('/getIngredientesUsadosEnRecetas')
+                                            //let texto = await response.text()
+
+    let ingredientesEnUso = await response.json() //let ingredientesEnUso = JSON.parse(texto).lista
 
     if (ingredientesEnUso.includes(i)){
         alert('No se puede borrar ese ingrediente porque se usa en alguna receta')
@@ -185,8 +190,8 @@ async function borrarIngrediente(i){
 function modificarIngrediente(i){
     window.location.href = `/ingredientes/modificar/${i}`
 }
-//Funciones de pagIngredientes
-//Funciones de pagIngredientes
+//Funciones de la lista de Ingredientes
+//Funciones de la lista de Ingredientes
 
 
 //Funciones de Vista concreta de receta
@@ -207,6 +212,8 @@ function modificarReceta(i){
 //Funciones de guardar receta/ingrediente
 //Funciones de guardar receta/ingrediente
 function guardarIngrediente(i){
+    //guardamos el input del usuario en sendas variables. Comprobamos que ninguno de los campos esté vacío, y, asumiendo que eso sea cierto,
+    //pedimos al router que guarde el ingrediente con nombre y descripción introducidos (los mandamos como un formulario)
 
     let nombre = document.getElementById('iName').value
     let descripcion = document.getElementById('iDesc').value
@@ -221,6 +228,10 @@ function guardarIngrediente(i){
 }
 
 function guardarReceta(i, ingredientSize){
+    //creamos un objeto (no objReceta), con los mismos campos que un objReceta. 
+    //La información para rellenar esos campos la sacamos del formulario
+    //Luego llamamos a guardarRecetaEnMapa, que le pide al router que guarde la receta creada
+
     //cojemos los valores del formulario
     let nombre = document.getElementById('rName').value
     let descripcion = document.getElementById('rDesc').value
@@ -251,19 +262,22 @@ function guardarReceta(i, ingredientSize){
         pasos[ind] = pasosArray.item(ind).firstChild.wholeText
     }
 
-    resetPasos() //borra los pasos y resetea el input
+   
 
     //Comprobamos que haya metido nombre, descripción, e ingredientes, y, si los ha metido, guardamos los valores
     if (nombre==='' || descripcion==='' ){
         alert('Debe haber tanto nombre como descripción')
     } else if (ingredientes.length==0){alert('La receta debe tener al menos un ingrediente')
     } else {
+        resetPasos() //borra los pasos y resetea el input
         let receta = {nombre:nombre, descripcion:descripcion, ingredientes:ingredientes, foto:foto, pasos:pasos}
         guardarRecetaEnMapa(i,receta)
     }
 }
 
 function guardarRecetaEnMapa(i,receta){
+    //recibe una receta de guardarReceta, y se la envía al router, para que la guarde en el mapa
+
     if (i!=''){
         i = i.slice(1,i.length)
         window.location.href = `/receta/guardar/${i}?receta=${JSON.stringify(receta)}`

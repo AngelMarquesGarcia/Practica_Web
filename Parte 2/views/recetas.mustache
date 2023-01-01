@@ -39,7 +39,7 @@
         <h1>¡He aquí tus preciadas recetas!</h1>
 
         <!-- Le damos la clase del grid que contiene las recetas -->
-        <div class="wrapper" >
+        <div class="wrapper" id="contenedorRecetas">
 
             <!-- Usamos mustache para que el contenido de cada div sea concorde a cada elemento del mapa de recetas -->
             {{#recetas}}
@@ -59,10 +59,10 @@
 
             <!-- Botón que te lleva al formulario donde puedes crear recetas con la ruta establecida previamente en el formulario -->
             <button class="btn btn-default inputBg">Crear nueva receta</button>
+            <button class="btn btn-default inputBg" type="button" onclick="borrarTodasLasRecetas()">Borrar TODAS las recetas</button>
+            
         </form>
 
-
-        <div id="content"></div> <!-- Este div es el que utilizaremos para mostrar los elementos  -->
 
     </body>
 </html>

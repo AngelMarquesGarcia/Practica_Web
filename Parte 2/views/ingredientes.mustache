@@ -42,17 +42,14 @@
             <!-- Usamos mustache para que cada ingrediente se muestre dependiendo del orden del mapa de ingredientes y pasamos los índices de cada uno a modificar y borrar -->
             {{#listaIngredientes}}
                 <div class="ingrediente" id="ingredientBox">
-                    <h3>{{nombre}}</h3>
-                    <button class="btn btn-default inputBg" onclick="modificarIngrediente({{indice}})">Modificar Ingrediente</button>
-                    <p>{{descripcion}}</p>
-                    <button class="btn btn-default inputBg" onclick="borrarIngrediente({{indice}})">Borrar Ingrediente</button>
+                    <h3>{{ingrediente.nombre}}</h3>
+                    <button class="btn btn-default inputBg" onclick="modificarIngrediente({{clave}})">Modificar Ingrediente</button>
+                    <p>{{ingrediente.descripcion}}</p>
+                    <button class="btn btn-default inputBg" onclick="borrarIngrediente({{clave}})">Borrar Ingrediente</button>
                 </div>
             {{/listaIngredientes}}
             
         
         </div>
-
-        <div id="content"></div> <!-- Este div es el que utilizaremos para mostrar los elementos  -->
-
     </body>
 </html>

@@ -1,5 +1,8 @@
 export let mapaIngredientes = new Map();
 
+
+//nombre:       String
+//descripcion:  String
 export class objIngrediente {
 
     constructor(n, d){

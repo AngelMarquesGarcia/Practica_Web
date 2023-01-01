@@ -185,7 +185,7 @@ router.get('/getIngredientesUsadosEnRecetas', (req, res) => {
         }
     }
     listaIngredientesUsados = [... new Set(listaIngredientesUsados)]
-    let resultToSend = JSON.stringify({lista:listaIngredientesUsados})
+    let resultToSend = JSON.stringify(listaIngredientesUsados)
     
     res.send(resultToSend)
 })
@@ -205,7 +205,7 @@ router.get('/getIngredients', (req, res) => {
 
     let listaIngredientes = [... ing.mapaIngredientes.values()]
         
-    let resultToSend = JSON.stringify({lista:listaIngredientes})
+    let resultToSend = JSON.stringify(listaIngredientes)
     
     res.send(resultToSend)
 })

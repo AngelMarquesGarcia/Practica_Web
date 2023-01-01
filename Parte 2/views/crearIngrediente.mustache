@@ -53,7 +53,7 @@
             </div>
             
             <!-- Editamos o creamos un nuevo ingrediente basado en los campos descripción y nombre -->
-            <button type="submit" formmethod="POST" class="btn btn-default inputBg" id="btnSubmitIng">Enviar</button>
+            <button type="button" class="btn btn-default inputBg" id="btnSubmitIng" onclick="guardarIngrediente('{{indice}}')">Enviar</button>
 
             <!-- Habilitamos este botón solo si estamos modificando -->
             {{#modificar}}
